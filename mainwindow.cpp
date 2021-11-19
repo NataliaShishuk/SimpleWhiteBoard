@@ -39,12 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, &QTimer::timeout, this, &MainWindow::slotTimer);
     timer->start(100);
 
-    connect(ui->pushButton_8, SIGNAL(clicked()), this, SLOT(Cleaner()));
+    connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(Cleaner()));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(setColor()));
     connect(ui->buttonLeft, SIGNAL(clicked()), this, SLOT(prevScene()));
     connect(ui->buttonRigth, SIGNAL(clicked()), this, SLOT(nextScene()));
-    connect(ui->actionClear_canvas, SIGNAL(triggered()), this, SLOT(clearScene()));
-    connect(ui->actionImage, SIGNAL(triggered()), this, SLOT(saveInImage()));
+    connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
+    connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
     connect(ui->action_7, SIGNAL(triggered()), this, SLOT(CleanerVariant()));
     connect(ui->actionSet_background_color, SIGNAL(triggered()), this, SLOT(SetBackgroundColor()));
 
