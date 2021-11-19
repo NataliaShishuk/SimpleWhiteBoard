@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
 
     MainWindow w;
 
-    w.show();
+    w.setWindowTitle("Whiteboard");
+    w.showMaximized();
 
     return a.exec();
 }

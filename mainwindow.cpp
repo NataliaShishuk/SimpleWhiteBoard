@@ -22,39 +22,36 @@ MainWindow::MainWindow(QWidget *parent) :
     Scene()->size = 2;
     Scene()->color = Qt::black;
 
-       ui->graphicsView->setScene(Scene());
-       ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->setScene(Scene());
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
 
-       standart_cursor.load(":/new/cursor/cursor.png");
-       circle_cursor.load(":/new/cursor/circle_cursor.png");
-       cleaner_cursor.load(":/new/cursor/cleaner_cursor.png");
-       rectangle_cursor.load(":/new/cursor/rectangle_cursor.png");
-       line_cursor.load(":/new/cursor/line_cursor.png");
+    standart_cursor.load(":/new/cursor/cursor.png");
+    circle_cursor.load(":/new/cursor/circle_cursor.png");
+    cleaner_cursor.load(":/icons/eraser.png");
+    rectangle_cursor.load(":/new/cursor/rectangle_cursor.png");
+    line_cursor.load(":/new/cursor/line_cursor.png");
 
-       this->setWindowTitle("Whiteboard");
+    custom_cursor = QCursor(QPixmap::fromImage(standart_cursor), 0, 32);
 
-       custom_cursor = QCursor(QPixmap::fromImage(standart_cursor), 0, 32);
+    ui->graphicsView->viewport()->setCursor(custom_cursor);
 
-       ui->graphicsView->viewport()->setCursor(custom_cursor);
+    timer = new QTimer();
+    connect(timer, &QTimer::timeout, this, &MainWindow::slotTimer);
+    timer->start(100);
 
-       timer = new QTimer();
-       connect(timer, &QTimer::timeout, this, &MainWindow::slotTimer);
-       timer->start(100);
+    connect(ui->pushButton_8, SIGNAL(clicked()), this, SLOT(Cleaner()));
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(setColor()));
+    connect(ui->buttonLeft, SIGNAL(clicked()), this, SLOT(prevScene()));
+    connect(ui->buttonRigth, SIGNAL(clicked()), this, SLOT(nextScene()));
+    connect(ui->actionClear_canvas, SIGNAL(triggered()), this, SLOT(clearScene()));
+    connect(ui->actionImage, SIGNAL(triggered()), this, SLOT(saveInImage()));
+    connect(ui->action_7, SIGNAL(triggered()), this, SLOT(CleanerVariant()));
+    connect(ui->actionSet_background_color, SIGNAL(triggered()), this, SLOT(SetBackgroundColor()));
 
-       connect(ui->pushButton_8, SIGNAL(clicked()), this, SLOT(Cleaner()));
-       connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(setColor()));
-       connect(ui->buttonLeft, SIGNAL(clicked()), this, SLOT(prevScene()));
-       connect(ui->buttonRigth, SIGNAL(clicked()), this, SLOT(nextScene()));
-       connect(ui->actionClear_canvas, SIGNAL(triggered()), this, SLOT(clearScene()));
-       connect(ui->actionImage, SIGNAL(triggered()), this, SLOT(saveInImage()));
-       connect(ui->action_7, SIGNAL(triggered()), this, SLOT(CleanerVariant()));
-       connect(ui->actionSet_background_color, SIGNAL(triggered()), this, SLOT(SetBackgroundColor()));
+    connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(Checked(int)));
+    connect(ui->comboBox_2, SIGNAL(activated(int)), this, SLOT(resizePen(int)));
 
-       connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(Checked(int)));
-       connect(ui->comboBox_2, SIGNAL(activated(int)), this, SLOT(resizePen(int)));
-
-       Scene()->setBackgroundBrush(QBrush(QColor(255, 255, 255)));
-
+    Scene()->setBackgroundBrush(QBrush(QColor(255, 255, 255)));
 }
 
 MainWindow::~MainWindow()
@@ -94,7 +91,9 @@ void MainWindow::Cleaner(){
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     timer->start(100);
-    ui->graphicsView->resize(event->size().width() - 20,event->size().height() - 10);
+
+    ui->graphicsView->resize(event->size().width() - 20, event->size().height() - 144);
+
     QWidget::resizeEvent(event);
 }
 

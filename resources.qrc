@@ -11,5 +11,6 @@
         <file>icons/arrow_forward.png</file>
         <file>icons/clear.png</file>
         <file>icons/icon.png</file>
+        <file>icons/eraser.png</file>
     </qresource>
 </RCC>
