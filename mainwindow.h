@@ -64,9 +64,7 @@ private slots:
      void nextScene();
      void prevScene();
      void saveInImage();
-     void saveInImages();
      void Checked(int index);
-     void verification();
      void Cleaner();
      void SetBackgroundColor();
      void CleanerVariant();

@@ -45,53 +45,81 @@
    <widget class="QPushButton" name="buttonLeft">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>50</width>
+      <x>889</x>
+      <y>530</y>
+      <width>31</width>
       <height>23</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+border: none;
+background-color: rgba(255, 255, 255,100);
+}</string>
+    </property>
     <property name="text">
-     <string>&lt;&lt;</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="resources.qrc">
+      <normaloff>:/icons/arrow_back.png</normaloff>:/icons/arrow_back.png</iconset>
+    </property>
+    <property name="default">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonRigth">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>10</y>
-      <width>50</width>
+      <x>950</x>
+      <y>530</y>
+      <width>31</width>
       <height>23</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+border: none;
+background-color: rgba(255, 255, 255,100);
+}</string>
+    </property>
     <property name="text">
-     <string>&gt;&gt;</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="resources.qrc">
+      <normaloff>:/icons/arrow_forward.png</normaloff>:/icons/arrow_forward.png</iconset>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>10</y>
-      <width>110</width>
+      <x>920</x>
+      <y>530</y>
+      <width>31</width>
       <height>20</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Полотно : 1</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>10</y>
-      <width>100</width>
-      <height>20</height>
-     </rect>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Количество : 1</string>
+     <string>1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QComboBox" name="comboBox">
@@ -237,7 +265,7 @@
      <x>0</x>
      <y>0</y>
      <width>1025</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menumenu">
@@ -249,12 +277,8 @@
       <string>Export</string>
      </property>
      <addaction name="actionImage"/>
-     <addaction name="actionImage_list"/>
-     <addaction name="actionPDF_2"/>
     </widget>
     <addaction name="actionCreate_new_project"/>
-    <addaction name="actionOpen_project"/>
-    <addaction name="actionSave_project"/>
     <addaction name="menuExport"/>
    </widget>
    <widget class="QMenu" name="menu_2">
@@ -267,21 +291,8 @@
     <addaction name="actionSet_background_color"/>
     <addaction name="action_7"/>
    </widget>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>Вид</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menu_3">
-    <property name="title">
-     <string>Лицензия</string>
-    </property>
-    <addaction name="action_3"/>
-   </widget>
    <addaction name="menumenu"/>
    <addaction name="menu_2"/>
-   <addaction name="menu"/>
-   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -291,7 +302,6 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="action">
    <property name="text">
     <string>Создать новый проект</string>
@@ -307,39 +317,14 @@
     <string>Набор изображений</string>
    </property>
   </action>
-  <action name="actionPDF">
-   <property name="text">
-    <string>PDF</string>
-   </property>
-  </action>
   <action name="actionCreate_new_project">
    <property name="text">
     <string>Create new project</string>
    </property>
   </action>
-  <action name="actionOpen_project">
-   <property name="text">
-    <string>Open project</string>
-   </property>
-  </action>
-  <action name="actionSave_project">
-   <property name="text">
-    <string>Save project</string>
-   </property>
-  </action>
   <action name="actionImage">
    <property name="text">
     <string>Image</string>
-   </property>
-  </action>
-  <action name="actionImage_list">
-   <property name="text">
-    <string>Image list</string>
-   </property>
-  </action>
-  <action name="actionPDF_2">
-   <property name="text">
-    <string>PDF</string>
    </property>
   </action>
   <action name="actionclear_all">
@@ -367,11 +352,6 @@
     <string>Сглаживание</string>
    </property>
   </action>
-  <action name="action_3">
-   <property name="text">
-    <string>Верифицировать</string>
-   </property>
-  </action>
   <action name="actionSet_background_color">
    <property name="text">
     <string>Цвет фона</string>
@@ -389,6 +369,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

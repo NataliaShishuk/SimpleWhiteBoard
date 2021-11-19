@@ -31,11 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
        rectangle_cursor.load(":/new/cursor/rectangle_cursor.png");
        line_cursor.load(":/new/cursor/line_cursor.png");
 
+       this->setWindowTitle("Whiteboard");
 
-
-       this->setWindowTitle("Доска для лекций");
-
-       custom_cursor = QCursor(QPixmap::fromImage(standart_cursor),0,32);
+       custom_cursor = QCursor(QPixmap::fromImage(standart_cursor), 0, 32);
 
        ui->graphicsView->viewport()->setCursor(custom_cursor);
 
@@ -49,16 +47,13 @@ MainWindow::MainWindow(QWidget *parent) :
        connect(ui->buttonRigth, SIGNAL(clicked()), this, SLOT(nextScene()));
        connect(ui->actionClear_canvas, SIGNAL(triggered()), this, SLOT(clearScene()));
        connect(ui->actionImage, SIGNAL(triggered()), this, SLOT(saveInImage()));
-       connect(ui->actionImage_list, SIGNAL(triggered()), this, SLOT(saveInImages()));
-       connect(ui->actionPDF_2, SIGNAL(triggered()), this, SLOT(saveInPDF()));
-       connect(ui->action_3, SIGNAL(triggered()), this, SLOT(verification()));
        connect(ui->action_7, SIGNAL(triggered()), this, SLOT(CleanerVariant()));
        connect(ui->actionSet_background_color, SIGNAL(triggered()), this, SLOT(SetBackgroundColor()));
 
        connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(Checked(int)));
        connect(ui->comboBox_2, SIGNAL(activated(int)), this, SLOT(resizePen(int)));
 
-       Scene()->setBackgroundBrush(QBrush(QColor(255,255,255)));
+       Scene()->setBackgroundBrush(QBrush(QColor(255, 255, 255)));
 
 }
 
@@ -128,7 +123,6 @@ void MainWindow::clearScene(){
 
     Scene()->clear();
     Scene()->initialize();
-
 }
 
 void MainWindow::nextScene(){
@@ -141,34 +135,26 @@ void MainWindow::nextScene(){
     sceneId++;
 
     if(sceneId >= scene.size()){
-
         scene.push_back(new customScene());
 
         Scene()->size = real;
         Scene()->color = color;
-        Scene()->setSceneRect(rect);
 
+        Scene()->setSceneRect(rect);
         Scene()->setBackgroundBrush(scene.at(sceneId - 1)->backgroundBrush());
 
     }else {
-
         Scene()->size = real;
         Scene()->color = color;
-
     }
 
     Scene()->phigure = phigure;
     ui->graphicsView->setScene(Scene());
 
-
-
-    ui->label_2->setText(tr(("Полотно : " + std::to_string(sceneId+1)).c_str()));
-    ui->label_4->setText(tr(("Количество : " + std::to_string(scene.size())).c_str()));
-
+    ui->label_2->setText(tr((std::to_string(sceneId+1)).c_str()));
 }
+
 void MainWindow::prevScene(){
-
-
 
     if(sceneId > 0){
         QColor color = Scene()->color;
@@ -182,58 +168,44 @@ void MainWindow::prevScene(){
         Scene()->phigure = phigure;
         Scene()->setSceneRect(Scene()->sceneRect());
 
-
         ui->graphicsView->setScene(Scene());
-        ui->label_2->setText(tr(("Полотно : " + std::to_string(sceneId+1)).c_str()));
-        ui->label_4->setText(tr(("Количество : " + std::to_string(scene.size())).c_str()));
-    }
 
+        ui->label_2->setText(tr((std::to_string(sceneId+1)).c_str()));
+    }
 }
 
 void MainWindow::saveInImage(){
 
-    QUrl url = QFileDialog::getSaveFileUrl(this, tr("Save As"));
-    QString fileName = url.toLocalFile();
+    QString fileName = QFileDialog::getSaveFileName(
+                this,
+                tr("Сохранить"),
+                "untitled.png",
+                tr("Images (*.png)")
+    );
 
-    Saver::SaveImage(Scene(),fileName,ui->graphicsView->sizeHint() * 2);
-
-}
-
-void MainWindow::saveInImages(){
-
-    QUrl url = QFileDialog::getSaveFileUrl(this, tr("Save As"));
-    QString fileName = url.toLocalFile();
-
-   Saver::SaveInImages(scene,fileName,ui->graphicsView->sizeHint() * 2);
+    Saver::SaveImage(Scene(), fileName, ui->graphicsView->sizeHint() * 2);
 
 }
 
 void MainWindow::Checked(int index){
-
-
     Scene()->phigure = index;
     reloadCustomCursor();
-
-}
-
-
-void MainWindow::verification(){
-
-    this->setWindowTitle("Доска для лекций");
-
-
-
 }
 
 void MainWindow::closeEvent(QCloseEvent *event){
 
     event->ignore();
 
-   if(QMessageBox::Yes == QMessageBox::question(this,"Выход","Вы дейсвительно хотите выйти?",QMessageBox::Yes | QMessageBox::No)){
+    int result = QMessageBox::question(
+                this,
+                "Выход",
+                "Вы дейсвительно хотите выйти?",
+                QMessageBox::Yes | QMessageBox::No
+    );
 
+   if(result == QMessageBox::Yes) {
        event->accept();
     }
-
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event){

@@ -6,4 +6,10 @@
         <file>line_cursor.png</file>
         <file>rectangle_cursor.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>icons/arrow_back.png</file>
+        <file>icons/arrow_forward.png</file>
+        <file>icons/clear.png</file>
+        <file>icons/icon.png</file>
+    </qresource>
 </RCC>
