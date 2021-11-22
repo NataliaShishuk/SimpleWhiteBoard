@@ -11,7 +11,6 @@
 
 #include <vector>
 
-
 #include "painterscene.h"
 
 using namespace std;
@@ -23,23 +22,24 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    void closeEvent(QCloseEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
     QTimer* timer;
 
     vector<PainterScene*> scene;
 
     size_t sceneId = 0;
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+    void resizeEvent(QResizeEvent * event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+
 private:
     Ui::MainWindow *ui;
-    void resizeEvent(QResizeEvent * event);
     PainterScene* Scene(){
         return  scene.at(sceneId);
     }
@@ -66,8 +66,6 @@ private slots:
      void prevScene();
      void saveInImage();
      void Cleaner();
-     void SetBackgroundColor();
-     void CleanerVariant();
 
      void onDrawPen();
      void onDrawRectangle();

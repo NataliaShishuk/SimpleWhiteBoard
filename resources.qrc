@@ -21,5 +21,6 @@
         <file>icons/circle_dashed.png</file>
         <file>icons/line_dashed.png</file>
         <file>icons/rectangle_dashed.png</file>
+        <file>icons/color.png</file>
     </qresource>
 </RCC>

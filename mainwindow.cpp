@@ -44,9 +44,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->buttonRigth, SIGNAL(clicked()), this, SLOT(nextScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
-    connect(ui->action_7, SIGNAL(triggered()), this, SLOT(CleanerVariant()));
-    connect(ui->actionSet_background_color, SIGNAL(triggered()), this, SLOT(SetBackgroundColor()));
-
     connect(ui->comboBox_2, SIGNAL(activated(int)), this, SLOT(resizePen(int)));
 
     Scene()->setBackgroundBrush(QBrush(Qt::white));
@@ -142,21 +139,6 @@ void MainWindow::slotTimer()
 {
     timer->stop();
     Scene()->setSceneRect(0,0, ui->graphicsView->width() - 20, ui->graphicsView->height() - 20);
-}
-
-void MainWindow::CleanerVariant(){
-
-    Scene()->CleanerVariant = !Scene()->CleanerVariant;
-}
-
-void MainWindow::SetBackgroundColor()
-{
-    auto color = QColorDialog::getColor(Scene()->getColor(),
-                                        this,
-                                        "Background Color",
-                                        QColorDialog::ColorDialogOption::ShowAlphaChannel);
-
-    Scene()->setBackgroundBrush(QBrush(color));
 }
 
 void MainWindow::Cleaner(){
