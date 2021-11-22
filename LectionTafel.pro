@@ -27,12 +27,12 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    customscene.cpp \
+    painterscene.cpp \
     saver.cpp
 
 HEADERS += \
         mainwindow.h \
-    customscene.h \
+    painterscene.h \
     saver.h
 
 FORMS += \

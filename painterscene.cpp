@@ -1,86 +1,105 @@
-#include "customscene.h"
+#include "painterscene.h"
 
-customScene::customScene(QObject *parent) : QGraphicsScene(parent)
+PainterScene::PainterScene(QObject *parent) : QGraphicsScene(parent)
 {
    initialize();
 }
 
-
-customScene::~customScene(){
-
+PainterScene::~PainterScene()
+{
 
 }
 
-void customScene::initialize(){
+Phigure PainterScene::getPhigure()
+{
+    return this->phigure;
+}
 
+int PainterScene::getSize()
+{
+    return this->size;
+}
+
+QColor PainterScene::getColor()
+{
+    return this->color;
+}
+
+void PainterScene::setPhigure(Phigure phigure)
+{
+    this->phigure = phigure;
+}
+
+void PainterScene::setSize(int size)
+{
+    this->size = size;
+}
+
+void PainterScene::setColor(QColor color)
+{
+    this->color = color;
+}
+
+void PainterScene::initialize()
+{
     dashpolyItem = addPolygon(QPolygon(),color);
     polyItem = addPolygon(QPolygon(),color);
     ellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
     dashellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
     lineItem = addLine(0,0,0,0,color);
     dashlineItem = addLine(0,0,0,0,color);
-
 }
 
-void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-
     previousPoint = event->scenePos();
 
-    if(Phigure::rectangle == phigure){
-
+    if(phigure == Phigure::Rectangle)
+    {
         QPolygonF polygon;
+
         polygon.append(QPointF(event->scenePos()));
         polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y()));
         polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y() - 10));
         polygon.append(QPointF(event->scenePos().x(),event->scenePos().y() - 10));
 
         polyItem = addPolygon(polygon,color);
-
     }
 
-    if(Phigure::dash_rectangle == phigure){
+    if(phigure == Phigure::DashRectangle)
+    {
+        QPolygonF polygon;
 
-            QPolygonF polygon;
-            polygon.append(QPointF(event->scenePos()));
-            polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y()));
-            polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y() - 10));
-            polygon.append(QPointF(event->scenePos().x(),event->scenePos().y() - 10));
+        polygon.append(QPointF(event->scenePos()));
+        polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y()));
+        polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y() - 10));
+        polygon.append(QPointF(event->scenePos().x(),event->scenePos().y() - 10));
 
-            dashpolyItem = addPolygon(polygon,color);
-
+        dashpolyItem = addPolygon(polygon, color);
     }
 
-    if(Phigure::circle == phigure){
-
-       ellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
-
-
+    if(phigure == Phigure::Circle)
+    {
+        ellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
     }
 
-    if(Phigure::dash_circle == phigure){
-
-           dashellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
-
-
+    if(phigure == Phigure::DashCircle)
+    {
+        dashellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
     }
 
-    if(Phigure::line == phigure){
-
-       lineItem = addLine(0,0,0,0,color);
-
-
+    if(phigure == Phigure::Line)
+    {
+        lineItem = addLine(0,0,0,0,color);
     }
 
-    if(Phigure::dash_line == phigure){
-
-       dashlineItem = addLine(0,0,0,0,color);
-
-
+    if(phigure == Phigure::DashLine)
+    {
+        dashlineItem = addLine(0,0,0,0,color);
     }
 }
 
-void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QPointF point = event->scenePos() - previousPoint;
     float magnitude;
@@ -88,7 +107,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     switch (phigure) {
 
-    case Phigure::line:
+    case Phigure::Line:
 
         removeItem(lineItem);
 
@@ -97,7 +116,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         break;
 
-    case Phigure::dash_line:
+    case Phigure::DashLine:
 
         removeItem(dashlineItem);
 
@@ -106,7 +125,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         break;
 
-    case Phigure::circle:
+    case Phigure::Circle:
 
         removeItem(ellipse);
 
@@ -116,7 +135,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         break;
 
-    case Phigure::dash_circle:
+    case Phigure::DashCircle:
 
         removeItem(dashellipse);
 
@@ -126,7 +145,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         break;
 
-    case Phigure::pen:
+    case Phigure::Pen:
 
         addLine(previousPoint.x(),
                 previousPoint.y(),
@@ -136,7 +155,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         previousPoint = event->scenePos();
 
         break;
-    case Phigure::rectangle:
+    case Phigure::Rectangle:
 
         removeItem(polyItem);
 
@@ -151,7 +170,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         break;
 
-    case Phigure::dash_rectangle:
+    case Phigure::DashRectangle:
 
         removeItem(dashpolyItem);
 
@@ -167,7 +186,7 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         dashpolyItem = addPolygon(polygon,QPen(color,size,Qt::DashLine));
 
         break;
-    case Phigure::cleaner:
+    case Phigure::Cleaner:
 
 
         if(CleanerVariant){
@@ -206,8 +225,5 @@ void customScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         }
     }
-
-
-
 }
 

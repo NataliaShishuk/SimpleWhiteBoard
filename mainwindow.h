@@ -12,7 +12,7 @@
 #include <vector>
 
 
-#include "customscene.h"
+#include "painterscene.h"
 
 using namespace std;
 
@@ -33,14 +33,14 @@ public:
     ~MainWindow();
     QTimer* timer;
 
-    vector<customScene*> scene;
+    vector<PainterScene*> scene;
 
     size_t sceneId = 0;
 
 private:
     Ui::MainWindow *ui;
     void resizeEvent(QResizeEvent * event);
-    customScene* Scene(){
+    PainterScene* Scene(){
         return  scene.at(sceneId);
     }
     QImage renderImage(size_t index);
@@ -55,6 +55,7 @@ private:
     QImage line_cursor;
     QImage rectangle_cursor;
 
+    void onDraw(Phigure phigure);
 
 private slots:
      void slotTimer();
@@ -64,10 +65,17 @@ private slots:
      void nextScene();
      void prevScene();
      void saveInImage();
-     void Checked(int index);
      void Cleaner();
      void SetBackgroundColor();
      void CleanerVariant();
+
+     void onDrawPen();
+     void onDrawRectangle();
+     void onDrawDashRectangle();
+     void onDrawLine();
+     void onDrawDashLine();
+     void onDrawCircle();
+     void onDrawDashCircle();
 };
 
 #endif // MAINWINDOW_H

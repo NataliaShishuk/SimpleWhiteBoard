@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "customscene.h"
+#include "painterscene.h"
 
 using namespace std;
 

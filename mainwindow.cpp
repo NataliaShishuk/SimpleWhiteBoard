@@ -11,16 +11,15 @@
 
 #include "saver.h"
 
-
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    scene.push_back(new customScene());
-    Scene()->size = 2;
-    Scene()->color = Qt::black;
+    scene.push_back(new PainterScene());
+
+    Scene()->setPhigure(Phigure::Pen);
+    Scene()->setSize(2);
+    Scene()->setColor(Qt::black);
 
     ui->graphicsView->setScene(Scene());
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
@@ -48,15 +47,95 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_7, SIGNAL(triggered()), this, SLOT(CleanerVariant()));
     connect(ui->actionSet_background_color, SIGNAL(triggered()), this, SLOT(SetBackgroundColor()));
 
-    connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(Checked(int)));
     connect(ui->comboBox_2, SIGNAL(activated(int)), this, SLOT(resizePen(int)));
 
-    Scene()->setBackgroundBrush(QBrush(QColor(255, 255, 255)));
+    Scene()->setBackgroundBrush(QBrush(Qt::white));
+
+    QMenu *menu = new QMenu(this);
+
+    menu->addAction(QIcon(":/icons/pen.png"),
+                    "Pen",
+                    this,
+                    SLOT(onDrawBrush()));
+
+    menu->addAction(QIcon(":/icons/rectangle.png"),
+                    "Rectangle",
+                    this,
+                    SLOT(onDrawRectangle()));
+
+    menu->addAction(QIcon(":/icons/rectangle_dashed.png"),
+                    "Dashed rectangle",
+                    this,
+                    SLOT(onDrawDashRectangle()));
+
+    menu->addAction(QIcon(":/icons/line.png"),
+                    "Line",
+                    this,
+                    SLOT(onDrawLine()));
+
+    menu->addAction(QIcon(":/icons/line_dashed.png"),
+                    "Dashed Line",
+                    this,
+                    SLOT(onDrawDashLine()));
+
+    menu->addAction(QIcon(":/icons/circle.png"),
+                    "Circle",
+                    this,
+                    SLOT(onDrawCircle()));
+
+    menu->addAction(QIcon(":/icons/circle_dashed.png"),
+                    "Dashed Circle",
+                    this,
+                    SLOT(onDrawDashCircle()));
+
+    ui->drawButton->setMenu(menu);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::onDraw(Phigure phigure)
+{
+    Scene()->setPhigure(phigure);
+
+    reloadCustomCursor();
+}
+
+void MainWindow::onDrawPen()
+{
+    onDraw(Phigure::Pen);
+}
+
+void MainWindow::onDrawRectangle()
+{
+    onDraw(Phigure::Rectangle);
+}
+
+void MainWindow::onDrawDashRectangle()
+{
+    onDraw(Phigure::DashRectangle);
+}
+
+void MainWindow::onDrawLine()
+{
+    onDraw(Phigure::Line);
+}
+
+void MainWindow::onDrawDashLine()
+{
+    onDraw(Phigure::DashLine);
+}
+
+void MainWindow::onDrawCircle()
+{
+    onDraw(Phigure::Circle);
+}
+
+void MainWindow::onDrawDashCircle()
+{
+    onDraw(Phigure::DashCircle);
 }
 
 void MainWindow::slotTimer()
@@ -68,24 +147,23 @@ void MainWindow::slotTimer()
 void MainWindow::CleanerVariant(){
 
     Scene()->CleanerVariant = !Scene()->CleanerVariant;
-
 }
 
-void MainWindow::SetBackgroundColor(){
+void MainWindow::SetBackgroundColor()
+{
+    auto color = QColorDialog::getColor(Scene()->getColor(),
+                                        this,
+                                        "Background Color",
+                                        QColorDialog::ColorDialogOption::ShowAlphaChannel);
 
-
-    QColor _color = QColorDialog::getColor(Scene()->color,this,tr("Color"),QColorDialog::ColorDialogOption::ShowAlphaChannel);
-
-    Scene()->setBackgroundBrush(QBrush(_color));
-
+    Scene()->setBackgroundBrush(QBrush(color));
 }
 
 void MainWindow::Cleaner(){
 
-    Scene()->phigure = Phigure::cleaner;
+    Scene()->setPhigure(Phigure::Cleaner);
 
     reloadCustomCursor();
-
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -97,74 +175,75 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
-void MainWindow::setColor(){
+void MainWindow::setColor()
+{
+    QColor color = QColorDialog::getColor(Scene()->getColor(),
+                                          this,
+                                          "Color",
+                                          QColorDialog::ColorDialogOption::ShowAlphaChannel);
 
-    Scene()->color = QColorDialog::getColor(Scene()->color,this,tr("Color"),QColorDialog::ColorDialogOption::ShowAlphaChannel);
+    Scene()->setColor(color);
 
-    QString red = std::to_string(Scene()->color.red()).c_str();
-    QString green = std::to_string(Scene()->color.green()).c_str();
-    QString blue = std::to_string(Scene()->color.blue()).c_str();
-
-    std::string style = "rgb(" + red.toStdString() + "," + green.toStdString() + "," + blue.toStdString() + ")";
-
-    ui->pushButton->setStyleSheet(("background-color: " + style).c_str());
-
+    ui->pushButton->setStyleSheet("background-color: " + color.name());
 }
 
-void MainWindow::resizePen(int value){
+void MainWindow::resizePen(int value)
+{
+    auto size = ui->comboBox_2->itemText(value).toInt();
 
-    Scene()->size = ui->comboBox_2->itemText(value).toInt();
-
-
+    Scene()->setSize(size);
 }
 
-void MainWindow::clearScene(){
-
+void MainWindow::clearScene()
+{
     Scene()->clear();
     Scene()->initialize();
 }
 
-void MainWindow::nextScene(){
-
-    QColor color = Scene()->color;
-    qreal real = Scene()->size;
+void MainWindow::nextScene()
+{
+    QColor color = Scene()->getColor();
+    int real = Scene()->getSize();
     QRectF rect = Scene()->sceneRect();
-    int phigure = Scene()->phigure;
+    Phigure phigure = Scene()->getPhigure();
 
     sceneId++;
 
-    if(sceneId >= scene.size()){
-        scene.push_back(new customScene());
+    if(sceneId >= scene.size())
+    {
+        scene.push_back(new PainterScene());
 
-        Scene()->size = real;
-        Scene()->color = color;
+        Scene()->setSize(real);
+        Scene()->setColor(color);
 
         Scene()->setSceneRect(rect);
         Scene()->setBackgroundBrush(scene.at(sceneId - 1)->backgroundBrush());
-
-    }else {
-        Scene()->size = real;
-        Scene()->color = color;
+    }
+    else
+    {
+        Scene()->setSize(real);
+        Scene()->setColor(color);
     }
 
-    Scene()->phigure = phigure;
+    Scene()->setPhigure(phigure);
     ui->graphicsView->setScene(Scene());
 
     ui->label_2->setText(tr((std::to_string(sceneId+1)).c_str()));
 }
 
-void MainWindow::prevScene(){
-
-    if(sceneId > 0){
-        QColor color = Scene()->color;
-        qreal real = Scene()->size;
-        int phigure = Scene()->phigure;
+void MainWindow::prevScene()
+{
+    if(sceneId > 0)
+    {
+        QColor color = Scene()->getColor();
+        int real = Scene()->getSize();
+        Phigure phigure = Scene()->getPhigure();
 
         sceneId--;
 
-        Scene()->size = real;
-        Scene()->color = color;
-        Scene()->phigure = phigure;
+        Scene()->setSize(real);
+        Scene()->setColor(color);
+        Scene()->setPhigure(phigure);
         Scene()->setSceneRect(Scene()->sceneRect());
 
         ui->graphicsView->setScene(Scene());
@@ -173,88 +252,82 @@ void MainWindow::prevScene(){
     }
 }
 
-void MainWindow::saveInImage(){
-
-    QString fileName = QFileDialog::getSaveFileName(
-                this,
-                tr("Сохранить"),
-                "untitled.png",
-                tr("Images (*.png)")
-    );
+void MainWindow::saveInImage()
+{
+    auto fileName = QFileDialog::getSaveFileName(this,
+                                                 "Сохранить",
+                                                 "untitled.png",
+                                                 "Images (*.png)");
 
     Saver::SaveImage(Scene(), fileName, ui->graphicsView->sizeHint() * 2);
-
 }
 
-void MainWindow::Checked(int index){
-    Scene()->phigure = index;
-    reloadCustomCursor();
-}
-
-void MainWindow::closeEvent(QCloseEvent *event){
-
-    event->ignore();
-
-    int result = QMessageBox::question(
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    auto result = QMessageBox::question(
                 this,
                 "Выход",
                 "Вы дейсвительно хотите выйти?",
-                QMessageBox::Yes | QMessageBox::No
-    );
+                QMessageBox::Yes | QMessageBox::No);
 
-   if(result == QMessageBox::Yes) {
+    if(result == QMessageBox::Yes)
+    {
        event->accept();
+    }
+    else
+    {
+        event->ignore();
     }
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event){
 
-    if(event->key() == Qt::Key_Control){
+//    if(event->key() == Qt::Key_Control){
 
-      Scene()->phigure = Phigure::cleaner;
+//      Scene()->phigure = Phigure::cleaner;
 
-    }else
-    if(event->key() == Qt::Key_Z){
+//    }else
+//    if(event->key() == Qt::Key_Z){
 
-      Scene()->phigure = Phigure::pen;
-      ui->comboBox->setCurrentIndex(Scene()->phigure);
-    }else
-    if(event->key() == Qt::Key_X){
+//      Scene()->phigure = Phigure::pen;
+//      ui->comboBox->setCurrentIndex(Scene()->phigure);
+//    }else
+//    if(event->key() == Qt::Key_X){
 
-      Scene()->phigure = Phigure::rectangle;
-      ui->comboBox->setCurrentIndex(Scene()->phigure);
+//      Scene()->phigure = Phigure::rectangle;
+//      ui->comboBox->setCurrentIndex(Scene()->phigure);
 
-    }else
-    if(event->key() == Qt::Key_S){
+//    }else
+//    if(event->key() == Qt::Key_S){
 
-      Scene()->phigure = Phigure::dash_rectangle;
-      ui->comboBox->setCurrentIndex(Scene()->phigure);
+//      Scene()->phigure = Phigure::dash_rectangle;
+//      ui->comboBox->setCurrentIndex(Scene()->phigure);
 
-    }else
-    if(event->key() == Qt::Key_C){
+//    }else
+//    if(event->key() == Qt::Key_C){
 
-      Scene()->phigure = Phigure::line;
-      ui->comboBox->setCurrentIndex(Scene()->phigure);
+//      Scene()->phigure = Phigure::line;
+//      ui->comboBox->setCurrentIndex(Scene()->phigure);
 
-    }else
-    if(event->key() == Qt::Key_D){
+//    }else
+//    if(event->key() == Qt::Key_D){
 
-      Scene()->phigure = Phigure::dash_line;
-      ui->comboBox->setCurrentIndex(Scene()->phigure);
+//      Scene()->phigure = Phigure::dash_line;
+//      ui->comboBox->setCurrentIndex(Scene()->phigure);
 
-    }else
-    if(event->key() == Qt::Key_V){
+//    }else
+//    if(event->key() == Qt::Key_V){
 
-      Scene()->phigure = Phigure::circle;
-      ui->comboBox->setCurrentIndex(Scene()->phigure);
+//      Scene()->phigure = Phigure::circle;
+//      ui->comboBox->setCurrentIndex(Scene()->phigure);
 
-    }else
-    if(event->key() == Qt::Key_F){
+//    }else
+//    if(event->key() == Qt::Key_F){
 
-      Scene()->phigure = Phigure::dash_circle;
-      ui->comboBox->setCurrentIndex(Scene()->phigure);
+//      Scene()->phigure = Phigure::dash_circle;
+//      ui->comboBox->setCurrentIndex(Scene()->phigure);
 
-    }else
+//    }else
     if(event->key() == Qt::Key_Left){
 
         prevScene();
@@ -263,14 +336,15 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event){
 
         nextScene();
 
-    }else
-    if(event->key() >= 49 && event->key() < 55){
-
-        int index = event->key() - 49;
-
-        Scene()->size = ui->comboBox_2->itemText(index).toDouble();
-        ui->comboBox_2->setCurrentIndex(index);
     }
+//    else
+//    if(event->key() >= 49 && event->key() < 55){
+
+//        int index = event->key() - 49;
+
+//        Scene()->size = ui->comboBox_2->itemText(index).toDouble();
+//        ui->comboBox_2->setCurrentIndex(index);
+//    }
 
 
     reloadCustomCursor();
@@ -278,30 +352,30 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event){
 }
 
 void MainWindow::reloadCustomCursor(){
-    switch (Scene()->phigure) {
+    switch (Scene()->getPhigure()) {
 
-    case Phigure::pen:
+    case Phigure::Pen:
         custom_cursor = QCursor(QPixmap::fromImage(standart_cursor),0,32);
         break;
-    case Phigure::circle:
+    case Phigure::Circle:
         custom_cursor = QCursor(QPixmap::fromImage(circle_cursor),16,16);
         break;
-    case Phigure::cleaner:
+    case Phigure::Cleaner:
         custom_cursor = QCursor(QPixmap::fromImage(cleaner_cursor),0,0);
         break;
-    case Phigure::dash_circle:
+    case Phigure::DashCircle:
         custom_cursor = QCursor(QPixmap::fromImage(circle_cursor),16,16);
         break;
-    case Phigure::line:
+    case Phigure::Line:
         custom_cursor = QCursor(QPixmap::fromImage(line_cursor),2,2);
         break;
-    case Phigure::dash_line:
+    case Phigure::DashLine:
         custom_cursor = QCursor(QPixmap::fromImage(line_cursor),2,2);
         break;
-    case Phigure::rectangle:
+    case Phigure::Rectangle:
         custom_cursor = QCursor(QPixmap::fromImage(rectangle_cursor),0,0);
         break;
-    case Phigure::dash_rectangle:
+    case Phigure::DashRectangle:
         custom_cursor = QCursor(QPixmap::fromImage(rectangle_cursor),0,0);
         break;
 
