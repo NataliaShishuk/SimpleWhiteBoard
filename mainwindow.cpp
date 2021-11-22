@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     timer->start(100);
 
     connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(Cleaner()));
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(setColor()));
+    connect(ui->colorButton, SIGNAL(clicked()), this, SLOT(setColor()));
     connect(ui->buttonLeft, SIGNAL(clicked()), this, SLOT(prevScene()));
     connect(ui->buttonRigth, SIGNAL(clicked()), this, SLOT(nextScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     menu->addAction(QIcon(":/icons/pen.png"),
                     "Pen",
                     this,
-                    SLOT(onDrawBrush()));
+                    SLOT(onDrawPen()));
 
     menu->addAction(QIcon(":/icons/rectangle.png"),
                     "Rectangle",
@@ -165,8 +165,6 @@ void MainWindow::setColor()
                                           QColorDialog::ColorDialogOption::ShowAlphaChannel);
 
     Scene()->setColor(color);
-
-    ui->pushButton->setStyleSheet("background-color: " + color.name());
 }
 
 void MainWindow::resizePen(int value)
