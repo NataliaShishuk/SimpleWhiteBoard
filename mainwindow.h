@@ -44,29 +44,23 @@ private:
         return  scene.at(sceneId);
     }
     QImage renderImage(size_t index);
+
     void reloadCustomCursor();
 
-
-    QCursor custom_cursor;
-
-    QImage standart_cursor;
-    QImage cleaner_cursor;
-    QImage circle_cursor;
-    QImage line_cursor;
-    QImage rectangle_cursor;
-
+    void setDrawMenu();
+    void setSizeMenu();
     void onDraw(Phigure phigure);
 
 private slots:
      void slotTimer();
      void setColor();
-     void resizePen(int value);
      void clearScene();
      void nextScene();
      void prevScene();
      void saveInImage();
      void Cleaner();
 
+     // draw
      void onDrawPen();
      void onDrawRectangle();
      void onDrawDashRectangle();
@@ -74,6 +68,12 @@ private slots:
      void onDrawDashLine();
      void onDrawCircle();
      void onDrawDashCircle();
+
+     // size
+     void onSmallSize();
+     void onNormalSize();
+     void onMediumSize();
+     void onLargeSize();
 };
 
 #endif // MAINWINDOW_H

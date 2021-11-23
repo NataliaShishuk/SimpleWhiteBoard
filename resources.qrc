@@ -1,26 +1,23 @@
 <RCC>
-    <qresource prefix="/new/cursor">
-        <file>cursor.png</file>
-        <file>circle_cursor.png</file>
-        <file>cleaner_cursor.png</file>
-        <file>line_cursor.png</file>
-        <file>rectangle_cursor.png</file>
-    </qresource>
     <qresource prefix="/">
         <file>icons/arrow_back.png</file>
         <file>icons/arrow_forward.png</file>
         <file>icons/icon.png</file>
-        <file>icons/eraser.png</file>
         <file>icons/clear.png</file>
         <file>icons/save.png</file>
         <file>icons/draw.png</file>
-        <file>icons/line.png</file>
-        <file>icons/rectangle.png</file>
-        <file>icons/pen.png</file>
-        <file>icons/circle.png</file>
-        <file>icons/circle_dashed.png</file>
-        <file>icons/line_dashed.png</file>
-        <file>icons/rectangle_dashed.png</file>
         <file>icons/color.png</file>
+        <file>cursors/eraser.png</file>
+        <file>cursors/pen.png</file>
+        <file>cursors/target.png</file>
+        <file>icons/draw/circle.png</file>
+        <file>icons/draw/line.png</file>
+        <file>icons/draw/pen.png</file>
+        <file>icons/draw/rectangle.png</file>
+        <file>icons/draw/rectangle_dashed.png</file>
+        <file>icons/size.png</file>
+        <file>icons/eraser.png</file>
+        <file>icons/draw/circle_dashed.png</file>
+        <file>icons/draw/line_dashed.png</file>
     </qresource>
 </RCC>

@@ -189,18 +189,37 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     case Phigure::Cleaner:
 
 
-        if(CleanerVariant){
+//        if(CleanerVariant){
 
-            addLine(previousPoint.x(),
-                    previousPoint.y(),
-                    event->scenePos().x(),
-                    event->scenePos().y(),
-                    QPen(this->backgroundBrush().color(),size * 3,Qt::SolidLine,Qt::RoundCap));
-            previousPoint = event->scenePos();
+//            addLine(previousPoint.x(),
+//                    previousPoint.y(),
+//                    event->scenePos().x(),
+//                    event->scenePos().y(),
+//                    QPen(this->backgroundBrush().color(),size * 3,Qt::SolidLine,Qt::RoundCap));
+//            previousPoint = event->scenePos();
 
-        }
-        else
-        {
+//        }
+//        else
+//        {
+
+//        cleanerLine = addLine(previousPoint.x(),
+//                 previousPoint.y(),
+//                 event->scenePos().x(),
+//                 event->scenePos().y(),
+//                 QPen(QColor(255,255,255,255),size * 2,Qt::SolidLine,Qt::RoundCap));
+
+//       QList<QGraphicsItem*> colliding = cleanerLine->collidingItems();
+
+//       for(qsizetype i = 0; i < colliding.size();i++){
+
+//           removeItem(colliding.at(i));
+
+//       }
+//      previousPoint = event->scenePos();
+//
+//      break;
+//
+//       }
 
         cleanerLine = addLine(previousPoint.x(),
                  previousPoint.y(),
@@ -215,15 +234,12 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
            removeItem(colliding.at(i));
 
        }
+      previousPoint = event->scenePos();
 
-       removeItem(cleanerLine);
+      break;
 
 
-       previousPoint = event->scenePos();
 
-       break;
-
-        }
     }
 }
 
