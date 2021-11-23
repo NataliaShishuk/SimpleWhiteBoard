@@ -58,10 +58,10 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         QPolygonF polygon;
 
-        polygon.append(QPointF(event->scenePos()));
-        polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y()));
-        polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y() - 10));
-        polygon.append(QPointF(event->scenePos().x(),event->scenePos().y() - 10));
+        polygon.append(QPointF(previousPoint));
+        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
+        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
+        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
 
         polyItem = addPolygon(polygon,color);
     }
@@ -70,32 +70,32 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         QPolygonF polygon;
 
-        polygon.append(QPointF(event->scenePos()));
-        polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y()));
-        polygon.append(QPointF(event->scenePos().x() + 10,event->scenePos().y() - 10));
-        polygon.append(QPointF(event->scenePos().x(),event->scenePos().y() - 10));
+        polygon.append(QPointF(previousPoint));
+        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
+        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
+        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
 
         dashpolyItem = addPolygon(polygon, color);
     }
 
     if(phigure == Phigure::Circle)
     {
-        ellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
+        ellipse = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, color);
     }
 
     if(phigure == Phigure::DashCircle)
     {
-        dashellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
+        dashellipse = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, color);
     }
 
     if(phigure == Phigure::Line)
     {
-        lineItem = addLine(0,0,0,0,color);
+        lineItem = addLine(0, 0, 0, 0, color);
     }
 
     if(phigure == Phigure::DashLine)
     {
-        dashlineItem = addLine(0,0,0,0,color);
+        dashlineItem = addLine(0, 0, 0, 0, color);
     }
 }
 
