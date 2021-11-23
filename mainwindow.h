@@ -54,13 +54,15 @@ private:
 private slots:
      void slotTimer();
      void setColor();
-     void clearScene();
      void nextScene();
      void prevScene();
      void saveInImage();
-     void Cleaner();
+
+     // eraser
+     void clearScene();
 
      // draw
+     void onClean();
      void onDrawPen();
      void onDrawRectangle();
      void onDrawDashRectangle();

@@ -101,91 +101,105 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPointF point = event->scenePos() - previousPoint;
-    float magnitude;
-    QPolygonF polygon;
+    auto currentPosition = event->scenePos();
+    auto point = currentPosition - previousPoint;
 
-    switch (phigure) {
+    auto isShiftPressed = event->modifiers() == Qt::ShiftModifier;
+
+    switch (phigure)
+    {
 
     case Phigure::Line:
-
+    {
         removeItem(lineItem);
 
-        lineItem = addLine(previousPoint.x(),previousPoint.y(),event->scenePos().x(),event->scenePos().y(),QPen(color,size,Qt::SolidLine,Qt::RoundCap));
-
+        lineItem = addLine(previousPoint.x(),
+                           previousPoint.y(),
+                           currentPosition.x(),
+                           currentPosition.y(),
+                           QPen(color,size, Qt::SolidLine, Qt::RoundCap));
 
         break;
+    }
 
     case Phigure::DashLine:
-
+    {
         removeItem(dashlineItem);
 
-        dashlineItem = addLine(previousPoint.x(),previousPoint.y(),event->scenePos().x(),event->scenePos().y(),QPen(color,size,Qt::DashLine,Qt::RoundCap));
-
+        dashlineItem = addLine(previousPoint.x(),
+                               previousPoint.y(),
+                               currentPosition.x(),
+                               currentPosition.y(),
+                               QPen(color, size, Qt::DashLine, Qt::RoundCap));
 
         break;
+    }
 
     case Phigure::Circle:
-
+    {
         removeItem(ellipse);
 
-        magnitude = sqrt(point.x() * point.x() + point.y() * point.y());
-
-        ellipse = addEllipse(previousPoint.x() - magnitude/2,previousPoint.y() - magnitude/2,magnitude,magnitude,QPen(color,size,Qt::SolidLine,Qt::RoundCap));
+        ellipse = addEllipse(previousPoint.x(),
+                             previousPoint.y(),
+                             point.x(),
+                             isShiftPressed ? point.x() : point.y(),
+                             QPen(color, size, Qt::SolidLine, Qt::RoundCap));
 
         break;
+    }
 
     case Phigure::DashCircle:
-
+    {
         removeItem(dashellipse);
 
-        magnitude = sqrt(point.x() * point.x() + point.y() * point.y());
-
-        dashellipse = addEllipse(previousPoint.x() - magnitude/2,previousPoint.y() - magnitude/2,magnitude,magnitude,QPen(color,size,Qt::DashLine,Qt::RoundCap));
+        dashellipse = addEllipse(previousPoint.x(),
+                                 previousPoint.y(),
+                                 point.x(),
+                                 isShiftPressed ? point.x() : point.y(),
+                                 QPen(color, size, Qt::DashLine, Qt::RoundCap));
 
         break;
+    }
 
     case Phigure::Pen:
-
+    {
         addLine(previousPoint.x(),
                 previousPoint.y(),
-                event->scenePos().x(),
-                event->scenePos().y(),
-                QPen(color,size,Qt::SolidLine,Qt::RoundCap));
-        previousPoint = event->scenePos();
+                currentPosition.x(),
+                currentPosition.y(),
+                QPen(color, size, Qt::SolidLine, Qt::RoundCap));
+
+        previousPoint = currentPosition;
 
         break;
-    case Phigure::Rectangle:
+    }
 
+    case Phigure::Rectangle:
+    {
         removeItem(polyItem);
 
-        polygon.append(QPointF(previousPoint));
-        polygon.append(QPointF(previousPoint.x() + point.x(),previousPoint.y()));
-        polygon.append(QPointF(previousPoint.x() + point.x(),previousPoint.y() + point.y()));
-        polygon.append(QPointF(previousPoint.x(),previousPoint.y() + point.y()));
-
-
-
-        polyItem = addPolygon(polygon,QPen(color,size,Qt::SolidLine));
+        polyItem = addPolygon(QPolygonF(QRectF(previousPoint.x(),
+                                               previousPoint.y(),
+                                               point.x(),
+                                               isShiftPressed ? point.x() : point.y())),
+                              QPen(color, size, Qt::SolidLine));
 
         break;
+    }
 
     case Phigure::DashRectangle:
-
+    {
         removeItem(dashpolyItem);
 
-
-
-        polygon.append(QPointF(previousPoint));
-        polygon.append(QPointF(previousPoint.x() + point.x(),previousPoint.y()));
-        polygon.append(QPointF(previousPoint.x() + point.x(),previousPoint.y() + point.y()));
-        polygon.append(QPointF(previousPoint.x(),previousPoint.y() + point.y()));
-
-
-
-        dashpolyItem = addPolygon(polygon,QPen(color,size,Qt::DashLine));
+        dashpolyItem = addPolygon(QPolygonF(QRectF(previousPoint.x(),
+                                                   previousPoint.y(),
+                                                   point.x(),
+                                                   isShiftPressed ? point.x() : point.y())),
+                                  QPen(color, size, Qt::DashLine));
 
         break;
+    }
+
     case Phigure::Cleaner:
 
 
@@ -223,18 +237,20 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         cleanerLine = addLine(previousPoint.x(),
                  previousPoint.y(),
-                 event->scenePos().x(),
-                 event->scenePos().y(),
-                 QPen(QColor(255,255,255,255),size * 2,Qt::SolidLine,Qt::RoundCap));
+                 currentPosition.x(),
+                 currentPosition.y(),
+                 QPen(QColor(255, 255, 255, 255), size * 2, Qt::SolidLine, Qt::RoundCap));
+
 
        QList<QGraphicsItem*> colliding = cleanerLine->collidingItems();
 
-       for(qsizetype i = 0; i < colliding.size();i++){
+       for(qsizetype i = 0; i < colliding.size(); i++){
 
            removeItem(colliding.at(i));
 
        }
-      previousPoint = event->scenePos();
+
+      previousPoint = currentPosition;
 
       break;
 

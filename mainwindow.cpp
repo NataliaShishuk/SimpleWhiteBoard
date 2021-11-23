@@ -31,10 +31,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(timer, &QTimer::timeout, this, &MainWindow::slotTimer);
     timer->start(100);
 
-    connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(Cleaner()));
+    connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(onClean()));
     connect(ui->colorButton, SIGNAL(clicked()), this, SLOT(setColor()));
-    connect(ui->buttonLeft, SIGNAL(clicked()), this, SLOT(prevScene()));
-    connect(ui->buttonRigth, SIGNAL(clicked()), this, SLOT(nextScene()));
+    connect(ui->previousSceneButton, SIGNAL(clicked()), this, SLOT(prevScene()));
+    connect(ui->nextSceneButton, SIGNAL(clicked()), this, SLOT(nextScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
 
@@ -125,6 +125,11 @@ void MainWindow::onDraw(Phigure phigure)
     reloadCustomCursor();
 }
 
+void MainWindow::onClean()
+{
+    onDraw(Phigure::Cleaner);
+}
+
 void MainWindow::onDrawPen()
 {
     onDraw(Phigure::Pen);
@@ -186,13 +191,6 @@ void MainWindow::slotTimer()
     Scene()->setSceneRect(0,0, ui->graphicsView->width() - 20, ui->graphicsView->height() - 20);
 }
 
-void MainWindow::Cleaner(){
-
-    Scene()->setPhigure(Phigure::Cleaner);
-
-    reloadCustomCursor();
-}
-
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     timer->start(100);
@@ -214,8 +212,17 @@ void MainWindow::setColor()
 
 void MainWindow::clearScene()
 {
-    Scene()->clear();
-    Scene()->initialize();
+    auto result = QMessageBox::question(
+                this,
+                "Clear",
+                "Do you really want to clear the current scene?",
+                QMessageBox::Yes | QMessageBox::No);
+
+    if(result == QMessageBox::Yes)
+    {
+        Scene()->clear();
+        Scene()->initialize();
+    }
 }
 
 void MainWindow::nextScene()
@@ -246,7 +253,7 @@ void MainWindow::nextScene()
     Scene()->setPhigure(phigure);
     ui->graphicsView->setScene(Scene());
 
-    ui->label_2->setText(tr((std::to_string(sceneId+1)).c_str()));
+    ui->sceneLabel->setText(tr((std::to_string(sceneId + 1)).c_str()));
 }
 
 void MainWindow::prevScene()
@@ -266,7 +273,7 @@ void MainWindow::prevScene()
 
         ui->graphicsView->setScene(Scene());
 
-        ui->label_2->setText(tr((std::to_string(sceneId+1)).c_str()));
+        ui->sceneLabel->setText(tr((std::to_string(sceneId+1)).c_str()));
     }
 }
 
