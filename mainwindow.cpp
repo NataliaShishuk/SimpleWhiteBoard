@@ -3,6 +3,7 @@
 #include <string>
 #include <QPainter>
 #include <QFileDialog>
+#include <QActionGroup>
 #include <qmessagebox.h>
 
 #include "saver.h"
@@ -11,21 +12,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    scenes.push_back(new PainterScene());
+    auto scene = new PainterScene(this);
 
-    onDrawPen();
-    onNormalSize();
+    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-    //Scene()->setPhigure(Phigure::Pen);
-    //Scene()->setSize(2);
-    getCurrentScene()->setColor(Qt::black);
+    scenes.push_back(scene);
 
-    ui->graphicsView->setScene(getCurrentScene());
+    ui->graphicsView->setScene(scene);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground);
+    ui->graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 
-    timer = new QTimer();
-    connect(timer, &QTimer::timeout, this, &MainWindow::slotTimer);
-    timer->start(100);
+    scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
+
+    reloadCustomCursor();
 
     connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(onClean()));
     connect(ui->colorButton, SIGNAL(clicked()), this, SLOT(setColor()));
@@ -47,69 +47,106 @@ MainWindow::~MainWindow()
 
 void MainWindow::setDrawMenu()
 {
-    QMenu *menu = new QMenu(this);
+    QMenu *menu = new QMenu();
+    QActionGroup *actionGroup = new QActionGroup(menu);
 
-    menu->addAction(QIcon(":/icons/draw/pen.png"),
+    QAction* action = menu->addAction(QIcon(":/icons/draw/pen.png"),
                     "Pen",
                     this,
                     SLOT(onDrawPen()));
 
-    menu->addAction(QIcon(":/icons/draw/rectangle.png"),
+    action->setChecked(true);
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/draw/rectangle.png"),
                     "Rectangle",
                     this,
                     SLOT(onDrawRectangle()));
 
-    menu->addAction(QIcon(":/icons/draw/rectangle_dashed.png"),
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/draw/rectangle_dashed.png"),
                     "Dashed rectangle",
                     this,
                     SLOT(onDrawDashRectangle()));
 
-    menu->addAction(QIcon(":/icons/draw/line.png"),
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/draw/line.png"),
                     "Line",
                     this,
                     SLOT(onDrawLine()));
 
-    menu->addAction(QIcon(":/icons/draw/line_dashed.png"),
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/draw/line_dashed.png"),
                     "Dashed Line",
                     this,
                     SLOT(onDrawDashLine()));
 
-    menu->addAction(QIcon(":/icons/draw/circle.png"),
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/draw/circle.png"),
                     "Circle",
                     this,
                     SLOT(onDrawCircle()));
 
-    menu->addAction(QIcon(":/icons/draw/circle_dashed.png"),
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/draw/circle_dashed.png"),
                     "Dashed Circle",
                     this,
                     SLOT(onDrawDashCircle()));
+
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
 
     ui->drawButton->setMenu(menu);
 }
 
 void MainWindow::setSizeMenu()
 {
-    QMenu *menu = new QMenu(this);
+    QMenu *menu = new QMenu();
+    QActionGroup *actionGroup = new QActionGroup(menu);
 
-    menu->addAction(QIcon(":/icons/size/small.png"),
+    QAction* action = menu->addAction(QIcon(":/icons/size/small.png"),
                     "Small",
                     this,
                     SLOT(onSmallSize()));
 
-    menu->addAction(QIcon(":/icons/size/normal.png"),
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/size/normal.png"),
                     "Normal",
                     this,
                     SLOT(onNormalSize()));
 
-    menu->addAction(QIcon(":/icons/size/medium.png"),
+    action->setChecked(true);
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/size/medium.png"),
                     "Medium",
                     this,
                     SLOT(onMediumSize()));
 
-    menu->addAction(QIcon(":/icons/size/large.png"),
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
+
+    action = menu->addAction(QIcon(":/icons/size/large.png"),
                     "Large",
                     this,
                     SLOT(onLargeSize()));
+
+    action->setCheckable(true);
+    action->setActionGroup(actionGroup);
 
     ui->sizeButton->setMenu(menu);
 }
@@ -163,22 +200,22 @@ void MainWindow::onDrawDashCircle()
 
 void MainWindow::onSmallSize()
 {
-    getCurrentScene()->setSize(1);
+    getCurrentScene()->setPenSize(1);
 }
 
 void MainWindow::onNormalSize()
 {
-    getCurrentScene()->setSize(2);
+    getCurrentScene()->setPenSize(2);
 }
 
 void MainWindow::onMediumSize()
 {
-    getCurrentScene()->setSize(5);
+    getCurrentScene()->setPenSize(5);
 }
 
 void MainWindow::onLargeSize()
 {
-    getCurrentScene()->setSize(10);
+    getCurrentScene()->setPenSize(10);
 }
 
 PainterScene* MainWindow::getCurrentScene()
@@ -186,29 +223,14 @@ PainterScene* MainWindow::getCurrentScene()
     return scenes.at(sceneId);
 }
 
-void MainWindow::slotTimer()
-{
-    timer->stop();
-    getCurrentScene()->setSceneRect(0,0, ui->graphicsView->width() - 20, ui->graphicsView->height() - 20);
-}
-
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-    timer->start(100);
-
-    ui->graphicsView->resize(event->size().width() - 20, event->size().height() - 144);
-
-    QWidget::resizeEvent(event);
-}
-
 void MainWindow::setColor()
 {
-    QColor color = QColorDialog::getColor(getCurrentScene()->getColor(),
+    QColor color = QColorDialog::getColor(getCurrentScene()->getPenColor(),
                                           this,
                                           "Color",
                                           QColorDialog::ColorDialogOption::ShowAlphaChannel);
 
-    getCurrentScene()->setColor(color);
+    getCurrentScene()->setPenColor(color);
 }
 
 void MainWindow::clearScene()
@@ -228,8 +250,8 @@ void MainWindow::clearScene()
 
 void MainWindow::nextScene()
 {
-    QColor color = getCurrentScene()->getColor();
-    int real = getCurrentScene()->getSize();
+    QColor color = getCurrentScene()->getPenColor();
+    int real = getCurrentScene()->getPenSize();
     QRectF rect = getCurrentScene()->sceneRect();
     Phigure phigure = getCurrentScene()->getPhigure();
 
@@ -239,16 +261,16 @@ void MainWindow::nextScene()
     {
         scenes.push_back(new PainterScene());
 
-        getCurrentScene()->setSize(real);
-        getCurrentScene()->setColor(color);
+        getCurrentScene()->setPenSize(real);
+        getCurrentScene()->setPenColor(color);
 
         getCurrentScene()->setSceneRect(rect);
         getCurrentScene()->setBackgroundBrush(scenes.at(sceneId - 1)->backgroundBrush());
     }
     else
     {
-        getCurrentScene()->setSize(real);
-        getCurrentScene()->setColor(color);
+        getCurrentScene()->setPenSize(real);
+        getCurrentScene()->setPenColor(color);
     }
 
     getCurrentScene()->setPhigure(phigure);
@@ -261,14 +283,14 @@ void MainWindow::prevScene()
 {
     if(sceneId > 0)
     {
-        QColor color = getCurrentScene()->getColor();
-        int real = getCurrentScene()->getSize();
+        QColor color = getCurrentScene()->getPenColor();
+        int real = getCurrentScene()->getPenSize();
         Phigure phigure = getCurrentScene()->getPhigure();
 
         sceneId--;
 
-        getCurrentScene()->setSize(real);
-        getCurrentScene()->setColor(color);
+        getCurrentScene()->setPenSize(real);
+        getCurrentScene()->setPenColor(color);
         getCurrentScene()->setPhigure(phigure);
         getCurrentScene()->setSceneRect(getCurrentScene()->sceneRect());
 
@@ -310,71 +332,14 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     auto key = event->key();
 
-    //    if(event->key() == Qt::Key_Control){
-
-    //      Scene()->phigure = Phigure::cleaner;
-
-    //    }else
-    //    if(event->key() == Qt::Key_Z){
-
-    //      Scene()->phigure = Phigure::pen;
-    //      ui->comboBox->setCurrentIndex(Scene()->phigure);
-    //    }else
-    //    if(event->key() == Qt::Key_X){
-
-    //      Scene()->phigure = Phigure::rectangle;
-    //      ui->comboBox->setCurrentIndex(Scene()->phigure);
-
-    //    }else
-    //    if(event->key() == Qt::Key_S){
-
-    //      Scene()->phigure = Phigure::dash_rectangle;
-    //      ui->comboBox->setCurrentIndex(Scene()->phigure);
-
-    //    }else
-    //    if(event->key() == Qt::Key_C){
-
-    //      Scene()->phigure = Phigure::line;
-    //      ui->comboBox->setCurrentIndex(Scene()->phigure);
-
-    //    }else
-    //    if(event->key() == Qt::Key_D){
-
-    //      Scene()->phigure = Phigure::dash_line;
-    //      ui->comboBox->setCurrentIndex(Scene()->phigure);
-
-    //    }else
-    //    if(event->key() == Qt::Key_V){
-
-    //      Scene()->phigure = Phigure::circle;
-    //      ui->comboBox->setCurrentIndex(Scene()->phigure);
-
-    //    }else
-    //    if(event->key() == Qt::Key_F){
-
-    //      Scene()->phigure = Phigure::dash_circle;
-    //      ui->comboBox->setCurrentIndex(Scene()->phigure);
-
-    //    }else
-
-    if(key == Qt::Key_Left){
-
+    if(key == Qt::Key_Left)
+    {
         prevScene();
     }
     else if(key == Qt::Key_Right)
     {
         nextScene();
     }
-    //    else
-    //    if(event->key() >= 49 && event->key() < 55){
-
-    //        int index = event->key() - 49;
-
-    //        Scene()->size = ui->comboBox_2->itemText(index).toDouble();
-    //        ui->comboBox_2->setCurrentIndex(index);
-    //    }
-
-    //    reloadCustomCursor();
 }
 
 void MainWindow::reloadCustomCursor()

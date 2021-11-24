@@ -1,6 +1,10 @@
 #include "painterscene.h"
 
-PainterScene::PainterScene(QObject *parent) : QGraphicsScene(parent)
+PainterScene::PainterScene(QObject *parent)
+    : QGraphicsScene(parent),
+      phigure(Pen),
+      pen_size(2),
+      pen_color(Qt::black)
 {
    initialize();
 }
@@ -10,14 +14,14 @@ Phigure PainterScene::getPhigure()
     return this->phigure;
 }
 
-int PainterScene::getSize()
+int PainterScene::getPenSize()
 {
-    return this->size;
+    return this->pen_size;
 }
 
-QColor PainterScene::getColor()
+QColor PainterScene::getPenColor()
 {
-    return this->color;
+    return this->pen_color;
 }
 
 void PainterScene::setPhigure(Phigure phigure)
@@ -25,28 +29,33 @@ void PainterScene::setPhigure(Phigure phigure)
     this->phigure = phigure;
 }
 
-void PainterScene::setSize(int size)
+void PainterScene::setPenSize(int size)
 {
-    this->size = size;
+    this->pen_size = size;
 }
 
-void PainterScene::setColor(QColor color)
+void PainterScene::setPenColor(QColor color)
 {
-    this->color = color;
+    this->pen_color = color;
 }
 
 void PainterScene::initialize()
 {
-    dashpolyItem = addPolygon(QPolygon(),color);
-    polyItem = addPolygon(QPolygon(),color);
-    ellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
-    dashellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,color);
-    lineItem = addLine(0,0,0,0,color);
-    dashlineItem = addLine(0,0,0,0,color);
+    dashpolyItem = addPolygon(QPolygon(),pen_color);
+    polyItem = addPolygon(QPolygon(),pen_color);
+    ellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,pen_color);
+    dashellipse = addEllipse(previousPoint.x(),previousPoint.y(),0,0,pen_color);
+    lineItem = addLine(0,0,0,0,pen_color);
+    dashlineItem = addLine(0,0,0,0,pen_color);
 }
 
 void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (event->button() != Qt::LeftButton)
+    {
+        return;
+    }
+
     previousPoint = event->scenePos();
 
     if(phigure == Phigure::Rectangle)
@@ -58,7 +67,7 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
         polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
 
-        polyItem = addPolygon(polygon,color);
+        polyItem = addPolygon(polygon,pen_color);
     }
     else if(phigure == Phigure::DashRectangle)
     {
@@ -69,28 +78,33 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
         polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
 
-        dashpolyItem = addPolygon(polygon, color);
+        dashpolyItem = addPolygon(polygon, pen_color);
     }
     else if(phigure == Phigure::Circle)
     {
-        ellipse = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, color);
+        ellipse = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, pen_color);
     }
     else if(phigure == Phigure::DashCircle)
     {
-        dashellipse = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, color);
+        dashellipse = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, pen_color);
     }
     else if(phigure == Phigure::Line)
     {
-        lineItem = addLine(0, 0, 0, 0, color);
+        lineItem = addLine(0, 0, 0, 0, pen_color);
     }
     else if(phigure == Phigure::DashLine)
     {
-        dashlineItem = addLine(0, 0, 0, 0, color);
+        dashlineItem = addLine(0, 0, 0, 0, pen_color);
     }
 }
 
 void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (!(event->buttons() & Qt::LeftButton))
+    {
+        return;
+    }
+
     auto currentPosition = event->scenePos();
     auto point = currentPosition - previousPoint;
 
@@ -107,7 +121,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                            previousPoint.y(),
                            currentPosition.x(),
                            currentPosition.y(),
-                           QPen(color,size, Qt::SolidLine, Qt::RoundCap));
+                           QPen(pen_color,pen_size, Qt::SolidLine, Qt::RoundCap));
 
         break;
     }
@@ -120,7 +134,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                previousPoint.y(),
                                currentPosition.x(),
                                currentPosition.y(),
-                               QPen(color, size, Qt::DashLine, Qt::RoundCap));
+                               QPen(pen_color, pen_size, Qt::DashLine, Qt::RoundCap));
 
         break;
     }
@@ -133,7 +147,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                              previousPoint.y(),
                              point.x(),
                              isShiftPressed ? point.x() : point.y(),
-                             QPen(color, size, Qt::SolidLine, Qt::RoundCap));
+                             QPen(pen_color, pen_size, Qt::SolidLine, Qt::RoundCap));
 
         break;
     }
@@ -146,7 +160,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                  previousPoint.y(),
                                  point.x(),
                                  isShiftPressed ? point.x() : point.y(),
-                                 QPen(color, size, Qt::DashLine, Qt::RoundCap));
+                                 QPen(pen_color, pen_size, Qt::DashLine, Qt::RoundCap));
 
         break;
     }
@@ -157,7 +171,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                 previousPoint.y(),
                 currentPosition.x(),
                 currentPosition.y(),
-                QPen(color, size, Qt::SolidLine, Qt::RoundCap));
+                QPen(pen_color, pen_size, Qt::SolidLine, Qt::RoundCap));
 
         previousPoint = currentPosition;
 
@@ -172,7 +186,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                                previousPoint.y(),
                                                point.x(),
                                                isShiftPressed ? point.x() : point.y())),
-                              QPen(color, size, Qt::SolidLine));
+                              QPen(pen_color, pen_size, Qt::SolidLine));
 
         break;
     }
@@ -185,20 +199,20 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                                    previousPoint.y(),
                                                    point.x(),
                                                    isShiftPressed ? point.x() : point.y())),
-                                  QPen(color, size, Qt::DashLine));
+                                  QPen(pen_color, pen_size, Qt::DashLine));
 
         break;
     }
 
     case Phigure::Cleaner:
     {
-        cleanerLine = addLine(previousPoint.x(),
-                              previousPoint.y(),
-                              currentPosition.x(),
-                              currentPosition.y(),
-                              QPen(QColor(255, 255, 255, 255), size * 2, Qt::SolidLine, Qt::RoundCap));
+        cleanerLine = addPolygon(QPolygonF(QRectF(currentPosition.x() - pen_size,
+                                                   currentPosition.y() - pen_size,
+                                                   pen_size * 2,
+                                                   pen_size * 2)),
+                                  QPen(Qt::white, pen_size, Qt::SolidLine, Qt::RoundCap));
 
-        QList<QGraphicsItem*> colliding = cleanerLine->collidingItems();
+        QList<QGraphicsItem*> colliding = cleanerLine->collidingItems(Qt::IntersectsItemBoundingRect);
 
         for(auto i = 0; i < colliding.size(); i++)
         {

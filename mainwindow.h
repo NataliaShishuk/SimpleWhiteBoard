@@ -27,12 +27,9 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
-    void resizeEvent(QResizeEvent * event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    QTimer* timer;
-
     vector<PainterScene*> scenes;
 
     size_t sceneId = 0;
@@ -41,8 +38,6 @@ private:
 
     PainterScene* getCurrentScene();
 
-    QImage renderImage(size_t index);
-
     void reloadCustomCursor();
 
     void setDrawMenu();
@@ -50,7 +45,6 @@ private:
     void onDraw(Phigure phigure);
 
 private slots:
-     void slotTimer();
      void setColor();
      void nextScene();
      void prevScene();

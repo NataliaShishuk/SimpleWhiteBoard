@@ -26,20 +26,20 @@ public:
     void initialize();
 
     Phigure getPhigure();
-    int getSize();
-    QColor getColor();
+    int getPenSize();
+    QColor getPenColor();
 
     void setPhigure(Phigure phigure);
-    void setSize(int size);
-    void setColor(QColor color);
+    void setPenSize(int size);
+    void setPenColor(QColor color);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    int size;
-    QColor color;
+    int pen_size;
+    QColor pen_color;
     Phigure phigure;
 
     QPointF previousPoint;
@@ -50,7 +50,7 @@ private:
     QGraphicsPolygonItem* dashpolyItem;
     QGraphicsEllipseItem* dashellipse;
     QGraphicsLineItem* dashlineItem;
-    QGraphicsLineItem* cleanerLine;
+    QGraphicsPolygonItem* cleanerLine;
 };
 
 #endif
