@@ -1,11 +1,7 @@
 #include "saver.h"
 
-Saver::Saver(){
-
-}
-
-void Saver::SaveImage(QGraphicsScene* scene,const QString& filename,const QSize& size){
-
+void Saver::SaveImage(QGraphicsScene* scene,const QString& filename,const QSize& size)
+{
     QImage* img = renderScene(scene,size);
 
     img->save((filename.toStdString()).c_str());
@@ -13,8 +9,8 @@ void Saver::SaveImage(QGraphicsScene* scene,const QString& filename,const QSize&
     delete img;
 }
 
-QImage* Saver::renderScene(QGraphicsScene* scene,const QSize& size){
-
+QImage* Saver::renderScene(QGraphicsScene* scene,const QSize& size)
+{
     QImage* img = new QImage(size * 2, QImage::Format_ARGB32);
     QPainter* painter = new QPainter(img);
 
@@ -24,5 +20,4 @@ QImage* Saver::renderScene(QGraphicsScene* scene,const QSize& size){
     delete painter;
 
     return img;
-
 }

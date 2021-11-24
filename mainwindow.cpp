@@ -3,11 +3,7 @@
 #include <string>
 #include <QPainter>
 #include <QFileDialog>
-#include <qpixmap.h>
-#include <qdebug.h>
-#include <qpdfwriter.h>
 #include <qmessagebox.h>
-#include <locale>
 
 #include "saver.h"
 
@@ -15,16 +11,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    scene.push_back(new PainterScene());
+    scenes.push_back(new PainterScene());
 
     onDrawPen();
     onNormalSize();
 
     //Scene()->setPhigure(Phigure::Pen);
     //Scene()->setSize(2);
-    Scene()->setColor(Qt::black);
+    getCurrentScene()->setColor(Qt::black);
 
-    ui->graphicsView->setScene(Scene());
+    ui->graphicsView->setScene(getCurrentScene());
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
 
     timer = new QTimer();
@@ -38,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
 
-    Scene()->setBackgroundBrush(QBrush(Qt::white));
+    getCurrentScene()->setBackgroundBrush(QBrush(Qt::white));
 
     setDrawMenu();
     setSizeMenu();
@@ -120,7 +116,7 @@ void MainWindow::setSizeMenu()
 
 void MainWindow::onDraw(Phigure phigure)
 {
-    Scene()->setPhigure(phigure);
+    getCurrentScene()->setPhigure(phigure);
 
     reloadCustomCursor();
 }
@@ -167,28 +163,33 @@ void MainWindow::onDrawDashCircle()
 
 void MainWindow::onSmallSize()
 {
-    Scene()->setSize(1);
+    getCurrentScene()->setSize(1);
 }
 
 void MainWindow::onNormalSize()
 {
-    Scene()->setSize(2);
+    getCurrentScene()->setSize(2);
 }
 
 void MainWindow::onMediumSize()
 {
-    Scene()->setSize(5);
+    getCurrentScene()->setSize(5);
 }
 
 void MainWindow::onLargeSize()
 {
-    Scene()->setSize(10);
+    getCurrentScene()->setSize(10);
+}
+
+PainterScene* MainWindow::getCurrentScene()
+{
+    return scenes.at(sceneId);
 }
 
 void MainWindow::slotTimer()
 {
     timer->stop();
-    Scene()->setSceneRect(0,0, ui->graphicsView->width() - 20, ui->graphicsView->height() - 20);
+    getCurrentScene()->setSceneRect(0,0, ui->graphicsView->width() - 20, ui->graphicsView->height() - 20);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -202,12 +203,12 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::setColor()
 {
-    QColor color = QColorDialog::getColor(Scene()->getColor(),
+    QColor color = QColorDialog::getColor(getCurrentScene()->getColor(),
                                           this,
                                           "Color",
                                           QColorDialog::ColorDialogOption::ShowAlphaChannel);
 
-    Scene()->setColor(color);
+    getCurrentScene()->setColor(color);
 }
 
 void MainWindow::clearScene()
@@ -220,38 +221,38 @@ void MainWindow::clearScene()
 
     if(result == QMessageBox::Yes)
     {
-        Scene()->clear();
-        Scene()->initialize();
+        getCurrentScene()->clear();
+        getCurrentScene()->initialize();
     }
 }
 
 void MainWindow::nextScene()
 {
-    QColor color = Scene()->getColor();
-    int real = Scene()->getSize();
-    QRectF rect = Scene()->sceneRect();
-    Phigure phigure = Scene()->getPhigure();
+    QColor color = getCurrentScene()->getColor();
+    int real = getCurrentScene()->getSize();
+    QRectF rect = getCurrentScene()->sceneRect();
+    Phigure phigure = getCurrentScene()->getPhigure();
 
     sceneId++;
 
-    if(sceneId >= scene.size())
+    if(sceneId >= scenes.size())
     {
-        scene.push_back(new PainterScene());
+        scenes.push_back(new PainterScene());
 
-        Scene()->setSize(real);
-        Scene()->setColor(color);
+        getCurrentScene()->setSize(real);
+        getCurrentScene()->setColor(color);
 
-        Scene()->setSceneRect(rect);
-        Scene()->setBackgroundBrush(scene.at(sceneId - 1)->backgroundBrush());
+        getCurrentScene()->setSceneRect(rect);
+        getCurrentScene()->setBackgroundBrush(scenes.at(sceneId - 1)->backgroundBrush());
     }
     else
     {
-        Scene()->setSize(real);
-        Scene()->setColor(color);
+        getCurrentScene()->setSize(real);
+        getCurrentScene()->setColor(color);
     }
 
-    Scene()->setPhigure(phigure);
-    ui->graphicsView->setScene(Scene());
+    getCurrentScene()->setPhigure(phigure);
+    ui->graphicsView->setScene(getCurrentScene());
 
     ui->sceneLabel->setText(tr((std::to_string(sceneId + 1)).c_str()));
 }
@@ -260,18 +261,18 @@ void MainWindow::prevScene()
 {
     if(sceneId > 0)
     {
-        QColor color = Scene()->getColor();
-        int real = Scene()->getSize();
-        Phigure phigure = Scene()->getPhigure();
+        QColor color = getCurrentScene()->getColor();
+        int real = getCurrentScene()->getSize();
+        Phigure phigure = getCurrentScene()->getPhigure();
 
         sceneId--;
 
-        Scene()->setSize(real);
-        Scene()->setColor(color);
-        Scene()->setPhigure(phigure);
-        Scene()->setSceneRect(Scene()->sceneRect());
+        getCurrentScene()->setSize(real);
+        getCurrentScene()->setColor(color);
+        getCurrentScene()->setPhigure(phigure);
+        getCurrentScene()->setSceneRect(getCurrentScene()->sceneRect());
 
-        ui->graphicsView->setScene(Scene());
+        ui->graphicsView->setScene(getCurrentScene());
 
         ui->sceneLabel->setText(tr((std::to_string(sceneId+1)).c_str()));
     }
@@ -284,7 +285,7 @@ void MainWindow::saveInImage()
                                                  "untitled.png",
                                                  "Images (*.png)");
 
-    Saver::SaveImage(Scene(), fileName, ui->graphicsView->sizeHint() * 2);
+    Saver::SaveImage(getCurrentScene(), fileName, ui->graphicsView->sizeHint() * 2);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -378,7 +379,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
 void MainWindow::reloadCustomCursor()
 {
-    auto phigure = Scene()->getPhigure();
+    auto phigure = getCurrentScene()->getPhigure();
 
     QCursor cursor;
 

@@ -3,12 +3,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QTimer>
-#include <QDebug>
-#include <QColor>
 #include <QGraphicsPolygonItem>
-
-#include <vector>
 
 enum Phigure {
     Pen             = 0,
@@ -27,10 +22,8 @@ class PainterScene : public QGraphicsScene
 
 public:
     PainterScene(QObject *parent = nullptr);
-    ~PainterScene();
-    void initialize();
 
-    bool CleanerVariant = false;
+    void initialize();
 
     Phigure getPhigure();
     int getSize();
@@ -40,12 +33,16 @@ public:
     void setSize(int size);
     void setColor(QColor color);
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+
 private:
     int size;
     QColor color;
     Phigure phigure;
 
-    QPointF     previousPoint;
+    QPointF previousPoint;
     QGraphicsPolygonItem* polyItem;
     QGraphicsEllipseItem* ellipse;
     QGraphicsLineItem* lineItem;
@@ -54,9 +51,6 @@ private:
     QGraphicsEllipseItem* dashellipse;
     QGraphicsLineItem* dashlineItem;
     QGraphicsLineItem* cleanerLine;
-
-    void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
 #endif

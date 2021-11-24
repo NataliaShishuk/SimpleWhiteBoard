@@ -9,8 +9,6 @@
 #include <QImage>
 #include <QCursor>
 
-#include <vector>
-
 #include "painterscene.h"
 
 using namespace std;
@@ -27,22 +25,22 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QTimer* timer;
-
-    vector<PainterScene*> scene;
-
-    size_t sceneId = 0;
-
 protected:
     void closeEvent(QCloseEvent *event) override;
     void resizeEvent(QResizeEvent * event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    QTimer* timer;
+
+    vector<PainterScene*> scenes;
+
+    size_t sceneId = 0;
+
     Ui::MainWindow *ui;
-    PainterScene* Scene(){
-        return  scene.at(sceneId);
-    }
+
+    PainterScene* getCurrentScene();
+
     QImage renderImage(size_t index);
 
     void reloadCustomCursor();
