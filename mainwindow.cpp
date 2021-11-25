@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <QActionGroup>
+#include <QWidgetAction>
 #include <qmessagebox.h>
 
 #include "saver.h"
@@ -47,106 +48,106 @@ MainWindow::~MainWindow()
 
 void MainWindow::setDrawMenu()
 {
-    QMenu *menu = new QMenu();
-    QActionGroup *actionGroup = new QActionGroup(menu);
+    auto menu = new QMenu();
 
-    QAction* action = menu->addAction(QIcon(":/icons/draw/pen.png"),
-                    "Pen",
-                    this,
-                    SLOT(onDrawPen()));
+    menu->setStyleSheet("QPushButton { "
+                        "border:none;"
+                        "qproperty-iconSize: 24px;"
+                        "width:35px;"
+                        "height:35px;"
+                        "}"
+                        "QPushButton:hover {"
+                        "cursor: pointer;"
+                        "border-radius: 5px;"
+                        "background-color: #b3cccc;"
+                        "}");
 
-    action->setChecked(true);
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    auto menuLayout = new QGridLayout();
 
-    action = menu->addAction(QIcon(":/icons/draw/rectangle.png"),
-                    "Rectangle",
-                    this,
-                    SLOT(onDrawRectangle()));
+    auto penButton = new QPushButton();
+    auto rectangleButton = new QPushButton();
+    auto dashedRectangleButton = new QPushButton();
+    auto lineButton = new QPushButton();
+    auto dashedLineButton = new QPushButton();
+    auto circleButton = new QPushButton();
+    auto dashedCircleButton = new QPushButton();
 
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    penButton->setIcon(QIcon(":/icons/draw/pen.png"));
+    rectangleButton->setIcon(QIcon(":/icons/draw/rectangle.png"));
+    dashedRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_dashed.png"));
+    lineButton->setIcon(QIcon(":/icons/draw/line.png"));
+    dashedLineButton->setIcon(QIcon(":/icons/draw/line_dashed.png"));
+    circleButton->setIcon(QIcon(":/icons/draw/circle.png"));
+    dashedCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
 
-    action = menu->addAction(QIcon(":/icons/draw/rectangle_dashed.png"),
-                    "Dashed rectangle",
-                    this,
-                    SLOT(onDrawDashRectangle()));
+    connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
+    connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));
+    connect(dashedRectangleButton, SIGNAL(clicked()), this, SLOT(onDrawDashRectangle()));
+    connect(lineButton, SIGNAL(clicked()), this, SLOT(onDrawLine()));
+    connect(dashedLineButton, SIGNAL(clicked()), this, SLOT(onDrawDashLine()));
+    connect(circleButton, SIGNAL(clicked()), this, SLOT(onDrawCircle()));
+    connect(dashedCircleButton, SIGNAL(clicked()), this, SLOT(onDrawDashCircle()));
 
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    connect(penButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(rectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(dashedRectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(lineButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(dashedLineButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(circleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(dashedCircleButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
-    action = menu->addAction(QIcon(":/icons/draw/line.png"),
-                    "Line",
-                    this,
-                    SLOT(onDrawLine()));
+    menuLayout->addWidget(penButton, 0, 0);
+    menuLayout->addWidget(rectangleButton, 0, 1);
+    menuLayout->addWidget(dashedRectangleButton, 1, 1);
+    menuLayout->addWidget(lineButton, 0, 2);
+    menuLayout->addWidget(dashedLineButton, 1, 2);
+    menuLayout->addWidget(circleButton, 0, 3);
+    menuLayout->addWidget(dashedCircleButton, 1, 3);
 
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
-
-    action = menu->addAction(QIcon(":/icons/draw/line_dashed.png"),
-                    "Dashed Line",
-                    this,
-                    SLOT(onDrawDashLine()));
-
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
-
-    action = menu->addAction(QIcon(":/icons/draw/circle.png"),
-                    "Circle",
-                    this,
-                    SLOT(onDrawCircle()));
-
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
-
-    action = menu->addAction(QIcon(":/icons/draw/circle_dashed.png"),
-                    "Dashed Circle",
-                    this,
-                    SLOT(onDrawDashCircle()));
-
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    menu->setLayout(menuLayout);
 
     ui->drawButton->setMenu(menu);
 }
 
 void MainWindow::setSizeMenu()
 {
-    QMenu *menu = new QMenu();
-    QActionGroup *actionGroup = new QActionGroup(menu);
+    auto menu = new QMenu();
 
-    QAction* action = menu->addAction(QIcon(":/icons/size/small.png"),
-                    "Small",
-                    this,
-                    SLOT(onSmallSize()));
+    menu->setStyleSheet("QPushButton { "
+                        "border:none;"
+                        "qproperty-iconSize: 24px;"
+                        "width:100px;"
+                        "height:35px;"
+                        "}"
+                        "QPushButton:hover {"
+                        "cursor: pointer;"
+                        "border-radius: 5px;"
+                        "background-color: #b3cccc;"
+                        "}");
 
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    auto menuLayout = new QGridLayout();
 
-    action = menu->addAction(QIcon(":/icons/size/normal.png"),
-                    "Normal",
-                    this,
-                    SLOT(onNormalSize()));
+    auto smallButton = new QPushButton("Small");
+    auto normalButton = new QPushButton("Normal");
+    auto mediumButton = new QPushButton("Medium");
+    auto largeButton = new QPushButton("Large");
 
-    action->setChecked(true);
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    connect(smallButton, SIGNAL(clicked()), this, SLOT(onSmallSize()));
+    connect(normalButton, SIGNAL(clicked()), this, SLOT(onNormalSize()));
+    connect(mediumButton, SIGNAL(clicked()), this, SLOT(onMediumSize()));
+    connect(largeButton, SIGNAL(clicked()), this, SLOT(onLargeSize()));
 
-    action = menu->addAction(QIcon(":/icons/size/medium.png"),
-                    "Medium",
-                    this,
-                    SLOT(onMediumSize()));
+    connect(smallButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(normalButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(mediumButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(largeButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    menuLayout->addWidget(smallButton, 0, 0);
+    menuLayout->addWidget(normalButton, 1, 0);
+    menuLayout->addWidget(mediumButton, 2, 0);
+    menuLayout->addWidget(largeButton, 3, 0);
 
-    action = menu->addAction(QIcon(":/icons/size/large.png"),
-                    "Large",
-                    this,
-                    SLOT(onLargeSize()));
-
-    action->setCheckable(true);
-    action->setActionGroup(actionGroup);
+    menu->setLayout(menuLayout);
 
     ui->sizeButton->setMenu(menu);
 }
