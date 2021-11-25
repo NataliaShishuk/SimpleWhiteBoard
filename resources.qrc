@@ -19,5 +19,7 @@
         <file>icons/eraser.png</file>
         <file>icons/draw/circle_dashed.png</file>
         <file>icons/draw/line_dashed.png</file>
+        <file>fonts/lato_regular.ttf</file>
+        <file>fonts/lato_bold.ttf</file>
     </qresource>
 </RCC>

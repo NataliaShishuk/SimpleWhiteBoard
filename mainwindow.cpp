@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QActionGroup>
 #include <QWidgetAction>
+#include <QFontDatabase>
 #include <qmessagebox.h>
 
 #include "saver.h"
@@ -26,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     scene->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
 
     reloadCustomCursor();
+
+    QFontDatabase::addApplicationFont(":/fonts/lato_regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/lato_bold.ttf");
 
     connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(onClean()));
     connect(ui->previousSceneButton, SIGNAL(clicked()), this, SLOT(prevScene()));
