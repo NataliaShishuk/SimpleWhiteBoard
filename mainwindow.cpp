@@ -8,7 +8,6 @@
 #include <qmessagebox.h>
 
 #include "saver.h"
-
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -29,15 +28,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     reloadCustomCursor();
 
     connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(onClean()));
-    connect(ui->colorButton, SIGNAL(clicked()), this, SLOT(setColor()));
     connect(ui->previousSceneButton, SIGNAL(clicked()), this, SLOT(prevScene()));
     connect(ui->nextSceneButton, SIGNAL(clicked()), this, SLOT(nextScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
 
-    getCurrentScene()->setBackgroundBrush(QBrush(Qt::white));
-
     setDrawMenu();
+    setColorMenu();
     setSizeMenu();
 }
 
@@ -109,6 +106,128 @@ void MainWindow::setDrawMenu()
     ui->drawButton->setMenu(menu);
 }
 
+void MainWindow::setColorMenu()
+{
+    auto menu = new QMenu();
+
+    menu->setStyleSheet("QPushButton { "
+                        "border:none;"
+                        "qproperty-iconSize: 24px;"
+                        "width:30px;"
+                        "height:30px;"
+                        "border-radius: 5px;"
+                        "}"
+                        "QPushButton:hover {"
+                        "cursor: pointer;"
+                        "border-radius: 5px;"
+                        "background-color: #b3cccc;"
+                        "}");
+
+    auto menuLayout = new QGridLayout();
+
+    auto whiteButton = new QPushButton();
+    auto redButton = new QPushButton();
+    auto yellowButton = new QPushButton();
+    auto lightGreenButton = new QPushButton();
+    auto blueButton = new QPushButton();
+
+    whiteButton->setStyleSheet("background-color: rgba(255,255,255,255);");
+    redButton->setStyleSheet("background-color: rgba(255,25,25,255);");
+    yellowButton->setStyleSheet("background-color: rgba(255,222,50,255);");
+    lightGreenButton->setStyleSheet("background-color: rgba(130,199,134,255);");
+    blueButton->setStyleSheet("background-color: rgba(46,140,255,255);");
+
+    connect(whiteButton, SIGNAL(clicked()), this, SLOT(onSetWhiteColor()));
+    connect(redButton, SIGNAL(clicked()), this, SLOT(onSetRedColor()));
+    connect(yellowButton, SIGNAL(clicked()), this, SLOT(onSetYellowColor()));
+    connect(lightGreenButton, SIGNAL(clicked()), this, SLOT(onSetLightGreenColor()));
+    connect(blueButton, SIGNAL(clicked()), this, SLOT(onSetBlueColor()));
+
+    connect(whiteButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(redButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(yellowButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(lightGreenButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(blueButton, SIGNAL(clicked()), menu, SLOT(hide()));
+
+    menuLayout->addWidget(whiteButton, 0, 0);
+    menuLayout->addWidget(redButton, 0, 1);
+    menuLayout->addWidget(yellowButton, 0, 2);
+    menuLayout->addWidget(lightGreenButton, 0, 3);
+    menuLayout->addWidget(blueButton, 0, 4);
+
+    auto purpleButton = new QPushButton();
+    auto pinkButton = new QPushButton();
+    auto orangeButton = new QPushButton();
+    auto greenButton = new QPushButton();
+    auto skyBlueButton = new QPushButton();
+
+    purpleButton->setStyleSheet("background-color: rgba(180,121,255,255);");
+    pinkButton->setStyleSheet("background-color: rgba(255,56,199,255);");
+    orangeButton->setStyleSheet("background-color: rgba(255,138,0,255);");
+    greenButton->setStyleSheet("background-color: rgba(73,214,30,255);");
+    skyBlueButton->setStyleSheet("background-color: rgba(81,216,235,255);");
+
+    connect(purpleButton, SIGNAL(clicked()), this, SLOT(onSetPurpleColor()));
+    connect(pinkButton, SIGNAL(clicked()), this, SLOT(onSetPinkColor()));
+    connect(orangeButton, SIGNAL(clicked()), this, SLOT(onSetOrangeColor()));
+    connect(greenButton, SIGNAL(clicked()), this, SLOT(onSetGreenColor()));
+    connect(skyBlueButton, SIGNAL(clicked()), this, SLOT(onSetSkyBlueColor()));
+
+    connect(purpleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(pinkButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(orangeButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(greenButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(skyBlueButton, SIGNAL(clicked()), menu, SLOT(hide()));
+
+    menuLayout->addWidget(purpleButton, 1, 0);
+    menuLayout->addWidget(pinkButton, 1, 1);
+    menuLayout->addWidget(orangeButton, 1, 2);
+    menuLayout->addWidget(greenButton, 1, 3);
+    menuLayout->addWidget(skyBlueButton, 1, 4);
+
+    auto blackButton = new QPushButton();
+    auto darkRedButton = new QPushButton();
+    auto darkOrangeButton = new QPushButton();
+    auto darkGreenButton = new QPushButton();
+    auto darkBlueButton = new QPushButton();
+
+    blackButton->setStyleSheet("background-color: rgba(0,0,0,255);");
+    darkRedButton->setStyleSheet("background-color: rgba(127,0,0,255);");
+    darkOrangeButton->setStyleSheet("background-color: rgba(119,68,8,255);");
+    darkGreenButton->setStyleSheet("background-color: rgba(11,114,40,255);");
+    darkBlueButton->setStyleSheet("background-color: rgba(20,79,195,255);");
+
+    connect(blackButton, SIGNAL(clicked()), this, SLOT(onSetBlackColor()));
+    connect(darkRedButton, SIGNAL(clicked()), this, SLOT(onSetDarkRedColor()));
+    connect(darkOrangeButton, SIGNAL(clicked()), this, SLOT(onSetDarkOrangeColor()));
+    connect(darkGreenButton, SIGNAL(clicked()), this, SLOT(onSetDarkGreenColor()));
+    connect(darkBlueButton, SIGNAL(clicked()), this, SLOT(onSetDarkBlueColor()));
+
+    connect(blackButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(darkRedButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(darkOrangeButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(darkGreenButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(darkBlueButton, SIGNAL(clicked()), menu, SLOT(hide()));
+
+    menuLayout->addWidget(blackButton, 2, 0);
+    menuLayout->addWidget(darkRedButton, 2, 1);
+    menuLayout->addWidget(darkOrangeButton, 2, 2);
+    menuLayout->addWidget(darkGreenButton, 2, 3);
+    menuLayout->addWidget(darkBlueButton, 2, 4);
+
+    auto otherButton = new QPushButton("Other");
+
+    otherButton->setStyleSheet("font-weight: bold;");
+
+    connect(otherButton, SIGNAL(clicked()), this, SLOT(setColor()));
+
+    menuLayout->addWidget(otherButton, 3, 0, 1, 5);
+
+    menu->setLayout(menuLayout);
+
+    ui->colorButton->setMenu(menu);
+}
+
 void MainWindow::setSizeMenu()
 {
     auto menu = new QMenu();
@@ -116,7 +235,7 @@ void MainWindow::setSizeMenu()
     menu->setStyleSheet("QPushButton { "
                         "border:none;"
                         "qproperty-iconSize: 24px;"
-                        "width:100px;"
+                        "width:35px;"
                         "height:35px;"
                         "}"
                         "QPushButton:hover {"
@@ -127,10 +246,10 @@ void MainWindow::setSizeMenu()
 
     auto menuLayout = new QGridLayout();
 
-    auto smallButton = new QPushButton("Small");
-    auto normalButton = new QPushButton("Normal");
-    auto mediumButton = new QPushButton("Medium");
-    auto largeButton = new QPushButton("Large");
+    auto smallButton = new QPushButton("S");
+    auto normalButton = new QPushButton("N");
+    auto mediumButton = new QPushButton("M");
+    auto largeButton = new QPushButton("L");
 
     connect(smallButton, SIGNAL(clicked()), this, SLOT(onSmallSize()));
     connect(normalButton, SIGNAL(clicked()), this, SLOT(onNormalSize()));
@@ -143,9 +262,9 @@ void MainWindow::setSizeMenu()
     connect(largeButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
     menuLayout->addWidget(smallButton, 0, 0);
-    menuLayout->addWidget(normalButton, 1, 0);
-    menuLayout->addWidget(mediumButton, 2, 0);
-    menuLayout->addWidget(largeButton, 3, 0);
+    menuLayout->addWidget(normalButton, 0, 1);
+    menuLayout->addWidget(mediumButton, 0, 2);
+    menuLayout->addWidget(largeButton, 0, 3);
 
     menu->setLayout(menuLayout);
 
@@ -197,6 +316,81 @@ void MainWindow::onDrawCircle()
 void MainWindow::onDrawDashCircle()
 {
     onDraw(Phigure::DashCircle);
+}
+
+void MainWindow::onSetWhiteColor()
+{
+    getCurrentScene()->setPenColor(Qt::white);
+}
+
+void MainWindow::onSetRedColor()
+{
+    getCurrentScene()->setPenColor(QColor(255, 25, 25, 255));
+}
+
+void MainWindow::onSetYellowColor()
+{
+    getCurrentScene()->setPenColor(QColor(255, 222, 50, 255));
+}
+
+void MainWindow::onSetLightGreenColor()
+{
+    getCurrentScene()->setPenColor(QColor(130, 199, 134, 255));
+}
+
+void MainWindow::onSetBlueColor()
+{
+    getCurrentScene()->setPenColor(QColor(46, 140, 255, 255));
+}
+
+void MainWindow::onSetPurpleColor()
+{
+    getCurrentScene()->setPenColor(QColor(180, 121, 255, 255));
+}
+
+void MainWindow::onSetPinkColor()
+{
+    getCurrentScene()->setPenColor(QColor(255, 56, 199, 255));
+}
+
+void MainWindow::onSetOrangeColor()
+{
+    getCurrentScene()->setPenColor(QColor(255, 138, 0, 255));
+}
+
+void MainWindow::onSetGreenColor()
+{
+    getCurrentScene()->setPenColor(QColor(73, 214, 30, 255));
+}
+
+void MainWindow::onSetSkyBlueColor()
+{
+    getCurrentScene()->setPenColor(QColor(81, 216, 235, 255));
+}
+
+void MainWindow::onSetBlackColor()
+{
+    getCurrentScene()->setPenColor(QColor(0, 0, 0, 255));
+}
+
+void MainWindow::onSetDarkRedColor()
+{
+    getCurrentScene()->setPenColor(QColor(127, 0, 0, 255));
+}
+
+void MainWindow::onSetDarkOrangeColor()
+{
+    getCurrentScene()->setPenColor(QColor(119, 68, 8, 255));
+}
+
+void MainWindow::onSetDarkGreenColor()
+{
+    getCurrentScene()->setPenColor(QColor(11, 114, 40, 255));
+}
+
+void MainWindow::onSetDarkBlueColor()
+{
+    getCurrentScene()->setPenColor(QColor(20, 79, 195, 255));
 }
 
 void MainWindow::onSmallSize()

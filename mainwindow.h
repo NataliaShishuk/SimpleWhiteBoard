@@ -41,6 +41,7 @@ private:
     void reloadCustomCursor();
 
     void setDrawMenu();
+    void setColorMenu();
     void setSizeMenu();
     void onDraw(Phigure phigure);
 
@@ -62,6 +63,25 @@ private slots:
      void onDrawDashLine();
      void onDrawCircle();
      void onDrawDashCircle();
+
+     // colors
+     void onSetWhiteColor();
+     void onSetRedColor();
+     void onSetYellowColor();
+     void onSetLightGreenColor();
+     void onSetBlueColor();
+
+     void onSetPurpleColor();
+     void onSetPinkColor();
+     void onSetOrangeColor();
+     void onSetGreenColor();
+     void onSetSkyBlueColor();
+
+     void onSetBlackColor();
+     void onSetDarkRedColor();
+     void onSetDarkOrangeColor();
+     void onSetDarkGreenColor();
+     void onSetDarkBlueColor();
 
      // size
      void onSmallSize();

@@ -7,6 +7,8 @@ PainterScene::PainterScene(QObject *parent)
       pen_color(Qt::black)
 {
    initialize();
+
+   setBackgroundBrush(Qt::white);
 }
 
 Phigure PainterScene::getPhigure()
