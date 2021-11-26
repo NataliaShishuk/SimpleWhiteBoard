@@ -237,8 +237,8 @@ void MainWindow::setSizeMenu()
 
     menu->setStyleSheet("QPushButton { "
                         "border:none;"
-                        "qproperty-iconSize: 24px;"
-                        "width:35px;"
+                        "qproperty-iconSize: 130px;"
+                        "width:130px;"
                         "height:35px;"
                         "}"
                         "QPushButton:hover {"
@@ -249,10 +249,15 @@ void MainWindow::setSizeMenu()
 
     auto menuLayout = new QGridLayout();
 
-    auto smallButton = new QPushButton("S");
-    auto normalButton = new QPushButton("N");
-    auto mediumButton = new QPushButton("M");
-    auto largeButton = new QPushButton("L");
+    auto smallButton = new QPushButton();
+    auto normalButton = new QPushButton();
+    auto mediumButton = new QPushButton();
+    auto largeButton = new QPushButton();
+
+    smallButton->setIcon(QIcon(":/icons/size/small.png"));
+    normalButton->setIcon(QIcon(":/icons/size/normal.png"));
+    mediumButton->setIcon(QIcon(":/icons/size/medium.png"));
+    largeButton->setIcon(QIcon(":/icons/size/large.png"));
 
     connect(smallButton, SIGNAL(clicked()), this, SLOT(onSmallSize()));
     connect(normalButton, SIGNAL(clicked()), this, SLOT(onNormalSize()));
@@ -264,10 +269,10 @@ void MainWindow::setSizeMenu()
     connect(mediumButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(largeButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
-    menuLayout->addWidget(smallButton, 0, 0);
-    menuLayout->addWidget(normalButton, 0, 1);
-    menuLayout->addWidget(mediumButton, 0, 2);
-    menuLayout->addWidget(largeButton, 0, 3);
+    menuLayout->addWidget(smallButton, 0, 0, 1, 4);
+    menuLayout->addWidget(normalButton, 1, 0, 1, 4);
+    menuLayout->addWidget(mediumButton, 2, 0, 1, 4);
+    menuLayout->addWidget(largeButton, 3, 0, 1, 4);
 
     menu->setLayout(menuLayout);
 
@@ -408,12 +413,12 @@ void MainWindow::onNormalSize()
 
 void MainWindow::onMediumSize()
 {
-    getCurrentScene()->setPenSize(5);
+    getCurrentScene()->setPenSize(3);
 }
 
 void MainWindow::onLargeSize()
 {
-    getCurrentScene()->setPenSize(10);
+    getCurrentScene()->setPenSize(5);
 }
 
 PainterScene* MainWindow::getCurrentScene()

@@ -22,5 +22,9 @@
         <file>fonts/lato_regular.ttf</file>
         <file>fonts/lato_bold.ttf</file>
         <file>icons/select.png</file>
+        <file>icons/size/large.png</file>
+        <file>icons/size/medium.png</file>
+        <file>icons/size/normal.png</file>
+        <file>icons/size/small.png</file>
     </qresource>
 </RCC>
