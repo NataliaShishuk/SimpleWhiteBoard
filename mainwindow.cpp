@@ -115,14 +115,13 @@ void MainWindow::setColorMenu()
 
     menu->setStyleSheet("QPushButton { "
                         "border:none;"
-                        "qproperty-iconSize: 24px;"
                         "width:30px;"
                         "height:30px;"
                         "border-radius: 5px;"
                         "}"
                         "QPushButton:hover {"
                         "cursor: pointer;"
-                        "border-radius: 5px;"
+                        "border-radius: 10px;"
                         "background-color: #b3cccc;"
                         "}");
 
