@@ -62,7 +62,7 @@ background-color: #b3cccc;
 QToolButton::menu-indicator { image: none; }
 </string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0">
        <property name="spacing">
         <number>10</number>
        </property>
@@ -84,6 +84,26 @@ QToolButton::menu-indicator { image: none; }
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="selectButton">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="toolTip">
+          <string>Select objects</string>
+         </property>
+         <property name="text">
+          <string>Select</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/select.png</normaloff>:/icons/select.png</iconset>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QToolButton" name="drawButton">
@@ -357,6 +377,9 @@ QToolButton::menu-indicator { image: none; }
       </property>
       <property name="cursor" stdset="0">
        <cursorShape>BlankCursor</cursorShape>
+      </property>
+      <property name="mouseTracking">
+       <bool>false</bool>
       </property>
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>

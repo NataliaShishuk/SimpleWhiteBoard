@@ -51,6 +51,9 @@ private slots:
      void prevScene();
      void saveInImage();
 
+     // select
+     void onSelect();
+
      // eraser
      void clearScene();
 

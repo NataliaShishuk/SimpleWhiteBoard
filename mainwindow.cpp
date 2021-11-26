@@ -13,9 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    auto scene = new PainterScene(this);
-
-    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    auto scene = new PainterScene(ui->graphicsView);
 
     scenes.push_back(scene);
 
@@ -36,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->nextSceneButton, SIGNAL(clicked()), this, SLOT(nextScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
+    connect(ui->selectButton, SIGNAL(clicked()), this, SLOT(onSelect()));
 
     setDrawMenu();
     setColorMenu();
@@ -509,6 +508,11 @@ void MainWindow::saveInImage()
     Saver::SaveImage(getCurrentScene(), fileName, ui->graphicsView->sizeHint() * 2);
 }
 
+void MainWindow::onSelect()
+{
+    onDraw(Phigure::Select);
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     auto result = QMessageBox::question(
@@ -558,6 +562,12 @@ void MainWindow::reloadCustomCursor()
         case Phigure::Cleaner:
         {
             cursor = QCursor(QPixmap::fromImage(QImage(":/cursors/eraser.png")), 8, 8);
+            break;
+        }
+
+        case Phigure::Select:
+        {
+            cursor = Qt::ArrowCursor;
             break;
         }
 

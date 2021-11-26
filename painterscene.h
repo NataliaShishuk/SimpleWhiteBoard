@@ -13,7 +13,8 @@ enum Phigure {
     DashLine        = 4,
     Circle          = 5,
     DashCircle      = 6,
-    Cleaner         = 7
+    Cleaner         = 7,
+    Select          = 8
 };
 
 class PainterScene : public QGraphicsScene

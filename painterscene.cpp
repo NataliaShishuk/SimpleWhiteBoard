@@ -7,8 +7,8 @@ PainterScene::PainterScene(QObject *parent)
       pen_color(Qt::black)
 {
    initialize();
-
    setBackgroundBrush(Qt::white);
+   setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
 Phigure PainterScene::getPhigure()
@@ -55,7 +55,7 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() != Qt::LeftButton)
     {
-        return;
+        return QGraphicsScene::mousePressEvent(event);
     }
 
     previousPoint = event->scenePos();
@@ -98,13 +98,15 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         dashlineItem = addLine(0, 0, 0, 0, pen_color);
     }
+
+    return QGraphicsScene::mousePressEvent(event);
 }
 
 void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!(event->buttons() & Qt::LeftButton))
     {
-        return;
+        return QGraphicsScene::mouseMoveEvent(event);
     }
 
     auto currentPosition = event->scenePos();
@@ -125,6 +127,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                            currentPosition.y(),
                            QPen(pen_color,pen_size, Qt::SolidLine, Qt::RoundCap));
 
+        lineItem->setFlag(QGraphicsItem::ItemIsMovable);
+
         break;
     }
 
@@ -137,6 +141,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                currentPosition.x(),
                                currentPosition.y(),
                                QPen(pen_color, pen_size, Qt::DashLine, Qt::RoundCap));
+
+        dashlineItem->setFlag(QGraphicsItem::ItemIsMovable);
 
         break;
     }
@@ -151,6 +157,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                              isShiftPressed ? point.x() : point.y(),
                              QPen(pen_color, pen_size, Qt::SolidLine, Qt::RoundCap));
 
+        ellipse->setFlag(QGraphicsItem::ItemIsMovable);
+
         break;
     }
 
@@ -163,6 +171,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                  point.x(),
                                  isShiftPressed ? point.x() : point.y(),
                                  QPen(pen_color, pen_size, Qt::DashLine, Qt::RoundCap));
+
+        dashellipse->setFlag(QGraphicsItem::ItemIsMovable);
 
         break;
     }
@@ -190,6 +200,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                                isShiftPressed ? point.x() : point.y())),
                               QPen(pen_color, pen_size, Qt::SolidLine));
 
+        polyItem->setFlag(QGraphicsItem::ItemIsMovable);
+
         break;
     }
 
@@ -202,6 +214,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                                    point.x(),
                                                    isShiftPressed ? point.x() : point.y())),
                                   QPen(pen_color, pen_size, Qt::DashLine));
+
+        dashpolyItem->setFlag(QGraphicsItem::ItemIsMovable);
 
         break;
     }
@@ -226,6 +240,13 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         break;
     }
 
+    case Phigure::Select:
+    {
+        return QGraphicsScene::mouseMoveEvent(event);
     }
+
+    }
+
+    return;
 }
 
