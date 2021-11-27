@@ -5,7 +5,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPolygonItem>
 
-enum Phigure {
+enum Phigure
+{
     Pen             = 0,
     Rectangle       = 1,
     DashRectangle   = 2,
@@ -17,14 +18,20 @@ enum Phigure {
     Select          = 8
 };
 
+enum PenStyle
+{
+    SolidLine       = 0,
+    DashedLine      = 1,
+    DotLine         = 2
+};
+
 class PainterScene : public QGraphicsScene
 {
     Q_OBJECT
 
 public:
     PainterScene(QObject *parent = nullptr);
-
-    void initialize();
+    ~PainterScene();
 
     Phigure getPhigure();
     int getPenSize();
@@ -38,20 +45,14 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
-private:
+protected:
     int pen_size;
     QColor pen_color;
     Phigure phigure;
 
     QPointF previousPoint;
-    QGraphicsPolygonItem* polyItem;
-    QGraphicsEllipseItem* ellipse;
-    QGraphicsLineItem* lineItem;
 
-    QGraphicsPolygonItem* dashpolyItem;
-    QGraphicsEllipseItem* dashellipse;
-    QGraphicsLineItem* dashlineItem;
-    QGraphicsPolygonItem* cleanerLine;
+    QGraphicsItem* currentPhigure;
 };
 
 #endif

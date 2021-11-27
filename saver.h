@@ -2,17 +2,28 @@
 #define SAVER_H
 
 #include <qpainter.h>
+#include <qpdfwriter.h>
+
 #include "painterscene.h"
 
-using namespace std;
+enum SaveType {
+    Image   = 0,
+    PDF     = 1
+};
 
 class Saver
 {
 public:
-    static void SaveImage(QGraphicsScene* scene, const QString& filname, const QSize& size);
+    Saver();
+    ~Saver();
+
+    void saveScene(QGraphicsScene* scene, const QString& filePath, const QSize& size, SaveType type = SaveType::Image);
 
 private:
-    static QImage* renderScene(QGraphicsScene* scene, const QSize& size);
+    QImage* renderScene(QGraphicsScene* scene, const QSize& size);
+
+    void saveAsImage(const QImage* image, const QString& filePath);
+    void saveAsPDF(const QImage* image, const QString& filePath);
 
 };
 

@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
+    saver = new Saver();
+
     auto scene = new PainterScene(ui->graphicsView);
 
     scenes.push_back(scene);
@@ -39,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setDrawMenu();
     setColorMenu();
     setSizeMenu();
+    setSaveMenu();
 }
 
 MainWindow::~MainWindow()
@@ -278,11 +281,76 @@ void MainWindow::setSizeMenu()
     ui->sizeButton->setMenu(menu);
 }
 
+void MainWindow::setSaveMenu()
+{
+    auto menu = new QMenu();
+
+    menu->setStyleSheet("QPushButton { "
+                        "border:none;"
+                        "width:130px;"
+                        "height:20px;"
+                        "}"
+                        "QPushButton:hover {"
+                        "cursor: pointer;"
+                        "border-radius: 5px;"
+                        "background-color: #b3cccc;"
+                        "}");
+
+    auto menuLayout = new QGridLayout();
+
+    auto imageButton = new QPushButton("Save as image");
+    auto pdfButton = new QPushButton("Save as PDF");
+
+    connect(imageButton, SIGNAL(clicked()), this, SLOT(saveAsImage()));
+    connect(pdfButton, SIGNAL(clicked()), this, SLOT(saveAsPdf()));
+
+    connect(imageButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(pdfButton, SIGNAL(clicked()), menu, SLOT(hide()));
+
+    menuLayout->addWidget(imageButton, 0, 0, 1, 4);
+    menuLayout->addWidget(pdfButton, 1, 0, 1, 4);
+
+    menu->setLayout(menuLayout);
+
+    ui->saveButton->setMenu(menu);
+}
+
 void MainWindow::onDraw(Phigure phigure)
 {
     getCurrentScene()->setPhigure(phigure);
 
     reloadCustomCursor();
+}
+
+void MainWindow::saveCurrentScene(SaveType type)
+{
+    QString title("Save Scene ");
+    QString fileName(("scene-" + std::to_string(sceneId + 1)).c_str());
+    QString extensions("");
+
+    switch (type)
+    {
+        case Image:
+        {
+            title.append("As Image");
+            extensions.append("Images (*.png)");
+            break;
+        }
+
+        case PDF:
+        {
+            title.append("As Pdf");
+            extensions.append("PDF file (*.pdf)");
+            break;
+        }
+    }
+
+    PainterScene* scene = getCurrentScene();
+    QSize size = ui->graphicsView->sizeHint();
+
+    QString filePath = QFileDialog::getSaveFileName(this, title, fileName, extensions);
+
+    saver->saveScene(scene, filePath, size, type);
 }
 
 void MainWindow::onClean()
@@ -420,6 +488,16 @@ void MainWindow::onLargeSize()
     getCurrentScene()->setPenSize(5);
 }
 
+void MainWindow::saveAsImage()
+{
+    saveCurrentScene(SaveType::Image);
+}
+
+void MainWindow::saveAsPdf()
+{
+    saveCurrentScene(SaveType::PDF);
+}
+
 PainterScene* MainWindow::getCurrentScene()
 {
     return scenes.at(sceneId);
@@ -446,7 +524,6 @@ void MainWindow::clearScene()
     if(result == QMessageBox::Yes)
     {
         getCurrentScene()->clear();
-        getCurrentScene()->initialize();
     }
 }
 
@@ -500,16 +577,6 @@ void MainWindow::prevScene()
 
         ui->sceneLabel->setText(tr((std::to_string(sceneId+1)).c_str()));
     }
-}
-
-void MainWindow::saveInImage()
-{
-    auto fileName = QFileDialog::getSaveFileName(this,
-                                                 "Save Image",
-                                                 "untitled.png",
-                                                 "Images (*.png)");
-
-    Saver::SaveImage(getCurrentScene(), fileName, ui->graphicsView->sizeHint() * 2);
 }
 
 void MainWindow::onSelect()

@@ -10,6 +10,7 @@
 #include <QCursor>
 
 #include "painterscene.h"
+#include "saver.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    Saver* saver;
     vector<PainterScene*> scenes;
 
     size_t sceneId = 0;
@@ -43,13 +45,16 @@ private:
     void setDrawMenu();
     void setColorMenu();
     void setSizeMenu();
+    void setSaveMenu();
+
     void onDraw(Phigure phigure);
+    void saveCurrentScene(SaveType type);
 
 private slots:
      void setColor();
      void nextScene();
      void prevScene();
-     void saveInImage();
+
 
      // select
      void onSelect();
@@ -91,6 +96,10 @@ private slots:
      void onNormalSize();
      void onMediumSize();
      void onLargeSize();
+
+     // save
+     void saveAsImage();
+     void saveAsPdf();
 };
 
 #endif // MAINWINDOW_H
