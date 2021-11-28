@@ -70,42 +70,52 @@ void MainWindow::setDrawMenu()
     auto penButton = new QPushButton();
     auto rectangleButton = new QPushButton();
     auto dashedRectangleButton = new QPushButton();
+    auto fillRectangleButton = new QPushButton();
     auto lineButton = new QPushButton();
     auto dashedLineButton = new QPushButton();
     auto circleButton = new QPushButton();
     auto dashedCircleButton = new QPushButton();
+    auto fillCircleButton = new QPushButton();
 
     penButton->setIcon(QIcon(":/icons/draw/pen.png"));
     rectangleButton->setIcon(QIcon(":/icons/draw/rectangle.png"));
     dashedRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_dashed.png"));
+    fillRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_dashed.png"));
     lineButton->setIcon(QIcon(":/icons/draw/line.png"));
     dashedLineButton->setIcon(QIcon(":/icons/draw/line_dashed.png"));
     circleButton->setIcon(QIcon(":/icons/draw/circle.png"));
     dashedCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
+    fillCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
 
     connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
     connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));
     connect(dashedRectangleButton, SIGNAL(clicked()), this, SLOT(onDrawDashRectangle()));
+    connect(fillRectangleButton, SIGNAL(clicked()), this, SLOT(onDrawFillRectangle()));
     connect(lineButton, SIGNAL(clicked()), this, SLOT(onDrawLine()));
     connect(dashedLineButton, SIGNAL(clicked()), this, SLOT(onDrawDashLine()));
     connect(circleButton, SIGNAL(clicked()), this, SLOT(onDrawCircle()));
     connect(dashedCircleButton, SIGNAL(clicked()), this, SLOT(onDrawDashCircle()));
+    connect(fillCircleButton, SIGNAL(clicked()), this, SLOT(onDrawFillCircle()));
 
     connect(penButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(rectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedRectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(fillRectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(lineButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedLineButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(circleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedCircleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(fillCircleButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
     menuLayout->addWidget(penButton, 0, 0);
-    menuLayout->addWidget(rectangleButton, 0, 1);
-    menuLayout->addWidget(dashedRectangleButton, 1, 1);
-    menuLayout->addWidget(lineButton, 0, 2);
-    menuLayout->addWidget(dashedLineButton, 1, 2);
+    menuLayout->addWidget(lineButton, 0, 1);
+    menuLayout->addWidget(dashedLineButton, 1, 1);
+    menuLayout->addWidget(rectangleButton, 0, 2);
+    menuLayout->addWidget(dashedRectangleButton, 1, 2);
+    menuLayout->addWidget(fillRectangleButton, 2, 2);
     menuLayout->addWidget(circleButton, 0, 3);
     menuLayout->addWidget(dashedCircleButton, 1, 3);
+    menuLayout->addWidget(fillCircleButton, 2, 3);
 
     menu->setLayout(menuLayout);
 
@@ -315,12 +325,13 @@ void MainWindow::setSaveMenu()
     ui->saveButton->setMenu(menu);
 }
 
-void MainWindow::onDraw(Phigure phigure, PhigureStyle style)
+void MainWindow::onDraw(Phigure phigure, PhigureLine style, PhigureFill fill)
 {
     PainterScene* scene = getCurrentScene();
 
     scene->setPhigure(phigure);
-    scene->setPenStyle(style);
+    scene->setPhigureLine(style);
+    scene->setPhigureFill(fill);
 
     reloadCustomCursor();
 }
@@ -358,42 +369,52 @@ void MainWindow::saveCurrentScene(SaveType type)
 
 void MainWindow::onClean()
 {
-    onDraw(Phigure::Cleaner, PhigureStyle::SolidLine);
+    onDraw(Phigure::Cleaner);
 }
 
 void MainWindow::onDrawPen()
 {
-    onDraw(Phigure::Pen, PhigureStyle::SolidLine);
+    onDraw(Phigure::Pen);
 }
 
 void MainWindow::onDrawRectangle()
 {
-    onDraw(Phigure::Rectangle, PhigureStyle::SolidLine);
+    onDraw(Phigure::Rectangle);
 }
 
 void MainWindow::onDrawDashRectangle()
 {
-    onDraw(Phigure::Rectangle, PhigureStyle::DashedLine);
+    onDraw(Phigure::Rectangle, PhigureLine::DashedLine);
+}
+
+void MainWindow::onDrawFillRectangle()
+{
+    onDraw(Phigure::Rectangle, PhigureLine::SolidLine, PhigureFill::Full);
 }
 
 void MainWindow::onDrawLine()
 {
-    onDraw(Phigure::Line, PhigureStyle::SolidLine);
+    onDraw(Phigure::Line);
 }
 
 void MainWindow::onDrawDashLine()
 {
-    onDraw(Phigure::Line, PhigureStyle::DashedLine);
+    onDraw(Phigure::Line, PhigureLine::DashedLine);
 }
 
 void MainWindow::onDrawCircle()
 {
-    onDraw(Phigure::Circle, PhigureStyle::SolidLine);
+    onDraw(Phigure::Circle);
 }
 
 void MainWindow::onDrawDashCircle()
 {
-    onDraw(Phigure::Circle, PhigureStyle::DashedLine);
+    onDraw(Phigure::Circle, PhigureLine::DashedLine);
+}
+
+void MainWindow::onDrawFillCircle()
+{
+    onDraw(Phigure::Circle, PhigureLine::SolidLine, PhigureFill::Full);
 }
 
 void MainWindow::onSetWhiteColor()
@@ -532,31 +553,34 @@ void MainWindow::clearScene()
 
 void MainWindow::nextScene()
 {
-    QColor color = getCurrentScene()->getPenColor();
-    int real = getCurrentScene()->getPenSize();
-    QRectF rect = getCurrentScene()->sceneRect();
-    Phigure phigure = getCurrentScene()->getPhigure();
+    PainterScene* scene = getCurrentScene();
+
+    QColor color = scene->getPenColor();
+    int real = scene->getPenSize();
+    Phigure phigure = scene->getPhigure();
+    PhigureLine phigureLine = scene->getPhigureLine();
+    PhigureFill phigureFill = scene->getPhigureFill();
 
     sceneId++;
 
     if(sceneId >= scenes.size())
     {
-        scenes.push_back(new PainterScene());
+        PainterScene* nextScene = new PainterScene();
 
-        getCurrentScene()->setPenSize(real);
-        getCurrentScene()->setPenColor(color);
+        nextScene->setSceneRect(scene->sceneRect());
 
-        getCurrentScene()->setSceneRect(rect);
-        getCurrentScene()->setBackgroundBrush(scenes.at(sceneId - 1)->backgroundBrush());
-    }
-    else
-    {
-        getCurrentScene()->setPenSize(real);
-        getCurrentScene()->setPenColor(color);
+        scenes.push_back(nextScene);
     }
 
-    getCurrentScene()->setPhigure(phigure);
-    ui->graphicsView->setScene(getCurrentScene());
+    scene = getCurrentScene();
+
+    scene->setPenSize(real);
+    scene->setPenColor(color);
+    scene->setPhigure(phigure);
+    scene->setPhigureLine(phigureLine);
+    scene->setPhigureFill(phigureFill);
+
+    ui->graphicsView->setScene(scene);
 
     ui->sceneLabel->setText(tr((std::to_string(sceneId + 1)).c_str()));
 }
@@ -565,18 +589,25 @@ void MainWindow::prevScene()
 {
     if(sceneId > 0)
     {
-        QColor color = getCurrentScene()->getPenColor();
-        int real = getCurrentScene()->getPenSize();
-        Phigure phigure = getCurrentScene()->getPhigure();
+        PainterScene* scene = getCurrentScene();
+
+        QColor color = scene->getPenColor();
+        int real = scene->getPenSize();
+        Phigure phigure = scene->getPhigure();
+        PhigureLine phigureLine = scene->getPhigureLine();
+        PhigureFill phigureFill = scene->getPhigureFill();
 
         sceneId--;
 
-        getCurrentScene()->setPenSize(real);
-        getCurrentScene()->setPenColor(color);
-        getCurrentScene()->setPhigure(phigure);
-        getCurrentScene()->setSceneRect(getCurrentScene()->sceneRect());
+        scene = getCurrentScene();
 
-        ui->graphicsView->setScene(getCurrentScene());
+        scene->setPenSize(real);
+        scene->setPenColor(color);
+        scene->setPhigure(phigure);
+        scene->setPhigureLine(phigureLine);
+        scene->setPhigureFill(phigureFill);
+
+        ui->graphicsView->setScene(scene);
 
         ui->sceneLabel->setText(tr((std::to_string(sceneId+1)).c_str()));
     }
@@ -584,7 +615,7 @@ void MainWindow::prevScene()
 
 void MainWindow::onSelect()
 {
-    onDraw(Phigure::Select, PhigureStyle::SolidLine);
+    onDraw(Phigure::Select, PhigureLine::SolidLine);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

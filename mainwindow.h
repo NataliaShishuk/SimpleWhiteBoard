@@ -47,7 +47,7 @@ private:
     void setSizeMenu();
     void setSaveMenu();
 
-    void onDraw(Phigure phigure, PhigureStyle style);
+    void onDraw(Phigure phigure, PhigureLine style = PhigureLine::SolidLine, PhigureFill fill = PhigureFill::Border);
     void saveCurrentScene(SaveType type);
 
 private slots:
@@ -67,10 +67,12 @@ private slots:
      void onDrawPen();
      void onDrawRectangle();
      void onDrawDashRectangle();
+     void onDrawFillRectangle();
      void onDrawLine();
      void onDrawDashLine();
      void onDrawCircle();
      void onDrawDashCircle();
+     void onDrawFillCircle();
 
      // colors
      void onSetWhiteColor();

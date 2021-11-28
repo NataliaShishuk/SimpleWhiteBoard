@@ -15,11 +15,17 @@ enum Phigure
     Select          = 8
 };
 
-enum PhigureStyle
+enum PhigureLine
 {
     SolidLine       = 0,
     DashedLine      = 1,
     DotLine         = 2
+};
+
+enum PhigureFill
+{
+    Border          = 0,
+    Full            = 1
 };
 
 class PainterScene : public QGraphicsScene
@@ -33,12 +39,14 @@ public:
     Phigure getPhigure();
     int getPenSize();
     QColor getPenColor();
-    PhigureStyle getPenStyle();
+    PhigureLine getPhigureLine();
+    PhigureFill getPhigureFill();
 
     void setPhigure(Phigure phigure);
     void setPenSize(int size);
     void setPenColor(QColor color);
-    void setPenStyle(PhigureStyle style);
+    void setPhigureLine(PhigureLine style);
+    void setPhigureFill(PhigureFill fill);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
@@ -48,7 +56,8 @@ protected:
     int pen_size;
     QColor pen_color;
     Phigure phigure;
-    PhigureStyle pen_style;
+    PhigureLine phigure_line;
+    PhigureFill phigure_fill;
 
     QPointF previousPoint;
 

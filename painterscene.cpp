@@ -5,7 +5,8 @@ PainterScene::PainterScene(QObject *parent)
       phigure(Pen),
       pen_size(2),
       pen_color(Qt::black),
-      pen_style(SolidLine)
+      phigure_line(SolidLine),
+      phigure_fill(Border)
 {
    setBackgroundBrush(Qt::white);
    setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -31,9 +32,14 @@ QColor PainterScene::getPenColor()
     return this->pen_color;
 }
 
-PhigureStyle PainterScene::getPenStyle()
+PhigureLine PainterScene::getPhigureLine()
 {
-    return this->pen_style;
+    return this->phigure_line;
+}
+
+PhigureFill PainterScene::getPhigureFill()
+{
+    return this->phigure_fill;
 }
 
 void PainterScene::setPhigure(Phigure phigure)
@@ -51,9 +57,14 @@ void PainterScene::setPenColor(QColor color)
     this->pen_color = color;
 }
 
-void PainterScene::setPenStyle(PhigureStyle style)
+void PainterScene::setPhigureLine(PhigureLine style)
 {
-    this->pen_style = style;
+    this->phigure_line = style;
+}
+
+void PainterScene::setPhigureFill(PhigureFill fill)
+{
+    this->phigure_fill = fill;
 }
 
 void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -111,7 +122,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     Qt::PenStyle penStyle = getCurrentPenStyle();
 
-    QPen pen(pen_color, pen_size, penStyle, Qt::RoundCap);
+    QPen pen(pen_color, pen_size, penStyle, Qt::SquareCap);
+    QBrush brush(pen_color, phigure_fill == Border ? Qt::NoBrush : Qt::SolidPattern);
 
     switch (phigure)
     {
@@ -133,7 +145,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                              previousPoint.y(),
                              point.x(),
                              isShiftPressed ? point.x() : point.y(),
-                             pen);
+                             pen,
+                             brush);
 
         break;
     }
@@ -157,7 +170,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                     previousPoint.y(),
                                     point.x(),
                                     isShiftPressed ? point.x() : point.y())),
-                                    pen);
+                                    pen,
+                                    brush);
 
         break;
     }
@@ -202,7 +216,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 Qt::PenStyle PainterScene::getCurrentPenStyle()
 {
-    switch (pen_style)
+    switch (phigure_line)
     {
         case SolidLine:
             return Qt::SolidLine;
