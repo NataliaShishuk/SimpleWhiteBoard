@@ -79,6 +79,9 @@ void MainWindow::setDrawMenu()
     auto triangleButton = new QPushButton();
     auto dashedTriangleButton = new QPushButton();
     auto filledTriangleButton = new QPushButton();
+    auto rhombusButton = new QPushButton();
+    auto dashedRhombusButton = new QPushButton();
+    auto filledRhombusButton = new QPushButton();
 
     penButton->setIcon(QIcon(":/icons/draw/pen.png"));
     rectangleButton->setIcon(QIcon(":/icons/draw/rectangle.png"));
@@ -92,6 +95,9 @@ void MainWindow::setDrawMenu()
     triangleButton->setIcon(QIcon(":/icons/draw/triangle.png"));
     dashedTriangleButton->setIcon(QIcon(":/icons/draw/triangle_dashed.png"));
     filledTriangleButton->setIcon(QIcon(":/icons/draw/triangle_filled.png"));
+    rhombusButton->setIcon(QIcon(":/icons/draw/rhombus.png"));
+    dashedRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_dashed.png"));
+    filledRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_filled.png"));
 
     connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
     connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));
@@ -105,6 +111,9 @@ void MainWindow::setDrawMenu()
     connect(triangleButton, SIGNAL(clicked()), this, SLOT(onDrawTriangle()));
     connect(dashedTriangleButton, SIGNAL(clicked()), this, SLOT(onDrawDashedTriangle()));
     connect(filledTriangleButton, SIGNAL(clicked()), this, SLOT(onDrawFilledTriangle()));
+    connect(rhombusButton, SIGNAL(clicked()), this, SLOT(onDrawRhombus()));
+    connect(dashedRhombusButton, SIGNAL(clicked()), this, SLOT(onDrawDashedRhombus()));
+    connect(filledRhombusButton, SIGNAL(clicked()), this, SLOT(onDrawFilledRhombus()));
 
     connect(penButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(rectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
@@ -118,6 +127,9 @@ void MainWindow::setDrawMenu()
     connect(triangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedTriangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(filledTriangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(rhombusButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(dashedRhombusButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(filledRhombusButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
     menuLayout->addWidget(penButton, 0, 0);
     menuLayout->addWidget(lineButton, 0, 1);
@@ -131,6 +143,9 @@ void MainWindow::setDrawMenu()
     menuLayout->addWidget(triangleButton, 0, 4);
     menuLayout->addWidget(dashedTriangleButton, 1, 4);
     menuLayout->addWidget(filledTriangleButton, 2, 4);
+    menuLayout->addWidget(rhombusButton, 0, 5);
+    menuLayout->addWidget(dashedRhombusButton, 1, 5);
+    menuLayout->addWidget(filledRhombusButton, 2, 5);
 
     menu->setLayout(menuLayout);
 
@@ -445,6 +460,21 @@ void MainWindow::onDrawDashedTriangle()
 void MainWindow::onDrawFilledTriangle()
 {
     onDraw(Phigure::Triangle, PhigureLine::SolidLine, PhigureFill::Full);
+}
+
+void MainWindow::onDrawRhombus()
+{
+    onDraw(Phigure::Rhombus);
+}
+
+void MainWindow::onDrawDashedRhombus()
+{
+    onDraw(Phigure::Rhombus, PhigureLine::DashedLine, PhigureFill::Border);
+}
+
+void MainWindow::onDrawFilledRhombus()
+{
+    onDraw(Phigure::Rhombus, PhigureLine::SolidLine, PhigureFill::Full);
 }
 
 void MainWindow::onSetWhiteColor()

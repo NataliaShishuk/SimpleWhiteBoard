@@ -73,9 +73,14 @@ private slots:
      void onDrawCircle();
      void onDrawDashCircle();
      void onDrawFillCircle();
+     // triangle
      void onDrawTriangle();
      void onDrawDashedTriangle();
      void onDrawFilledTriangle();
+     // rhombus
+     void onDrawRhombus();
+     void onDrawDashedRhombus();
+     void onDrawFilledRhombus();
 
      // colors
      void onSetWhiteColor();

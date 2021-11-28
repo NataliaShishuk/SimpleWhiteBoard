@@ -31,5 +31,8 @@
         <file>icons/draw/triangle.png</file>
         <file>icons/draw/triangle_dashed.png</file>
         <file>icons/draw/triangle_filled.png</file>
+        <file>icons/draw/rhombus.png</file>
+        <file>icons/draw/rhombus_dashed.png</file>
+        <file>icons/draw/rhombus_filled.png</file>
     </qresource>
 </RCC>

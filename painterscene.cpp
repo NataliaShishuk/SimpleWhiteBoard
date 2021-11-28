@@ -91,6 +91,10 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         currentPhigure = addPolygon(QPolygonF(), pen_color);
     }
+    else if(phigure == Phigure::Rhombus)
+    {
+        currentPhigure = addPolygon(QPolygonF(), pen_color);
+    }
     else if(phigure == Phigure::Circle)
     {
         currentPhigure = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, pen_color);
@@ -129,6 +133,16 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QPen pen(pen_color, pen_size, penStyle, Qt::SquareCap);
     QBrush brush(pen_color, phigure_fill == Border ? Qt::NoBrush : Qt::SolidPattern);
 
+    if(pen.style() == Qt::CustomDashLine)
+    {
+        QVector<qreal> dashes ;
+              dashes.append(10);
+              dashes.append(20);
+
+        pen.setDashPattern(dashes);
+        pen.setDashOffset(0);
+    }
+
     switch (phigure)
     {
 
@@ -157,13 +171,35 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Triangle:
     {
-        auto width = currentPosition.x() - previousPoint.x();
+        auto width = qMax(currentPosition.x() - previousPoint.x(), currentPosition.y() - previousPoint.y());
 
         QPolygonF polygon;
 
         polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, previousPoint.y())));
         polygon.append(QPointF(previousPoint.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
         polygon.append(QPointF(isShiftPressed ? previousPoint.x() + width : currentPosition.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
+
+        currentPhigure = addPolygon(polygon, pen, brush);
+
+        break;
+    }
+
+    case Phigure::Rhombus:
+    {
+        auto width = currentPosition.x() - previousPoint.x();
+        auto height = currentPosition.y() - previousPoint.y();
+
+        if(isShiftPressed)
+        {
+            width = qMax(width, height);
+        }
+
+        QPolygonF polygon;
+
+        polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, previousPoint.y())));
+        polygon.append(QPointF(QPoint(previousPoint.x(), isShiftPressed ? previousPoint.y() + width / 2 : currentPosition.y() - height / 2)));
+        polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, isShiftPressed ? previousPoint.y() + width : currentPosition.y())));
+        polygon.append(QPointF(QPoint(isShiftPressed ? previousPoint.x() + width : currentPosition.x(), isShiftPressed ? previousPoint.y() + width / 2 : currentPosition.y() - height / 2)));
 
         currentPhigure = addPolygon(polygon, pen, brush);
 
@@ -240,7 +276,7 @@ Qt::PenStyle PainterScene::getCurrentPenStyle()
         case SolidLine:
             return Qt::SolidLine;
         case DashedLine:
-            return Qt::DashLine;
+            return Qt::CustomDashLine;
         case DotLine:
             return Qt::DotLine;
     }

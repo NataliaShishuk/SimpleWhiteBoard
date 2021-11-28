@@ -12,6 +12,7 @@ enum Phigure
     Triangle        = 2,
     Line            = 3,
     Circle          = 5,
+    Rhombus         = 6,
     Cleaner         = 7,
     Select          = 8
 };
