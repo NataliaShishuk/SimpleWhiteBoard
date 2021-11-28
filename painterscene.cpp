@@ -237,8 +237,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         currentPhigure = addPolygon(QPolygonF(QRectF(currentPosition.x() - pen_size,
                                     currentPosition.y() - pen_size,
-                                    pen_size * 2,
-                                    pen_size * 2)),
+                                    pen_size * 2 + 3,
+                                    pen_size * 2 + 3)),
                                     pen);
 
         QList<QGraphicsItem*> colliding = currentPhigure->collidingItems(Qt::IntersectsItemBoundingRect);

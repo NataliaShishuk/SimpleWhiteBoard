@@ -555,21 +555,25 @@ void MainWindow::onSetDarkBlueColor()
 void MainWindow::onSmallSize()
 {
     getCurrentScene()->setPenSize(1);
+    reloadCustomCursor();
 }
 
 void MainWindow::onNormalSize()
 {
     getCurrentScene()->setPenSize(2);
+    reloadCustomCursor();
 }
 
 void MainWindow::onMediumSize()
 {
     getCurrentScene()->setPenSize(3);
+    reloadCustomCursor();
 }
 
 void MainWindow::onLargeSize()
 {
     getCurrentScene()->setPenSize(5);
+    reloadCustomCursor();
 }
 
 void MainWindow::saveAsImage()
@@ -712,7 +716,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
 void MainWindow::reloadCustomCursor()
 {
-    auto phigure = getCurrentScene()->getPhigure();
+    PainterScene* scene = getCurrentScene();
+
+    Phigure phigure = scene->getPhigure();
+    int size = scene->getPenSize();
 
     QCursor cursor;
 
@@ -726,7 +733,30 @@ void MainWindow::reloadCustomCursor()
 
         case Phigure::Cleaner:
         {
-            cursor = QCursor(QPixmap::fromImage(QImage(":/cursors/eraser.png")), 8, 8);
+            string filename = ":/cursors/";
+
+            if(size == 1)
+            {
+                filename += "eraser_small.png";
+            }
+            else if(size == 2)
+            {
+                filename += "eraser_normal.png";
+            }
+            else if(size == 3)
+            {
+                filename += "eraser_medium.png";
+            }
+            else
+            {
+                filename += "eraser_large.png";
+            }
+
+            QImage image(filename.c_str());
+
+            QSize imageSize = image.size();
+
+            cursor = QCursor(QPixmap::fromImage(image), imageSize.width() / 2, imageSize.height() / 2);
             break;
         }
 

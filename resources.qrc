@@ -7,7 +7,6 @@
         <file>icons/save.png</file>
         <file>icons/draw.png</file>
         <file>icons/color.png</file>
-        <file>cursors/eraser.png</file>
         <file>cursors/pen.png</file>
         <file>cursors/target.png</file>
         <file>icons/draw/circle.png</file>
@@ -34,5 +33,9 @@
         <file>icons/draw/rhombus.png</file>
         <file>icons/draw/rhombus_dashed.png</file>
         <file>icons/draw/rhombus_filled.png</file>
+        <file>cursors/eraser_large.png</file>
+        <file>cursors/eraser_medium.png</file>
+        <file>cursors/eraser_normal.png</file>
+        <file>cursors/eraser_small.png</file>
     </qresource>
 </RCC>
