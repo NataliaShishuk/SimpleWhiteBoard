@@ -315,9 +315,12 @@ void MainWindow::setSaveMenu()
     ui->saveButton->setMenu(menu);
 }
 
-void MainWindow::onDraw(Phigure phigure)
+void MainWindow::onDraw(Phigure phigure, PhigureStyle style)
 {
-    getCurrentScene()->setPhigure(phigure);
+    PainterScene* scene = getCurrentScene();
+
+    scene->setPhigure(phigure);
+    scene->setPenStyle(style);
 
     reloadCustomCursor();
 }
@@ -355,42 +358,42 @@ void MainWindow::saveCurrentScene(SaveType type)
 
 void MainWindow::onClean()
 {
-    onDraw(Phigure::Cleaner);
+    onDraw(Phigure::Cleaner, PhigureStyle::SolidLine);
 }
 
 void MainWindow::onDrawPen()
 {
-    onDraw(Phigure::Pen);
+    onDraw(Phigure::Pen, PhigureStyle::SolidLine);
 }
 
 void MainWindow::onDrawRectangle()
 {
-    onDraw(Phigure::Rectangle);
+    onDraw(Phigure::Rectangle, PhigureStyle::SolidLine);
 }
 
 void MainWindow::onDrawDashRectangle()
 {
-    onDraw(Phigure::DashRectangle);
+    onDraw(Phigure::Rectangle, PhigureStyle::DashedLine);
 }
 
 void MainWindow::onDrawLine()
 {
-    onDraw(Phigure::Line);
+    onDraw(Phigure::Line, PhigureStyle::SolidLine);
 }
 
 void MainWindow::onDrawDashLine()
 {
-    onDraw(Phigure::DashLine);
+    onDraw(Phigure::Line, PhigureStyle::DashedLine);
 }
 
 void MainWindow::onDrawCircle()
 {
-    onDraw(Phigure::Circle);
+    onDraw(Phigure::Circle, PhigureStyle::SolidLine);
 }
 
 void MainWindow::onDrawDashCircle()
 {
-    onDraw(Phigure::DashCircle);
+    onDraw(Phigure::Circle, PhigureStyle::DashedLine);
 }
 
 void MainWindow::onSetWhiteColor()
@@ -581,7 +584,7 @@ void MainWindow::prevScene()
 
 void MainWindow::onSelect()
 {
-    onDraw(Phigure::Select);
+    onDraw(Phigure::Select, PhigureStyle::SolidLine);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

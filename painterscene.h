@@ -9,16 +9,13 @@ enum Phigure
 {
     Pen             = 0,
     Rectangle       = 1,
-    DashRectangle   = 2,
     Line            = 3,
-    DashLine        = 4,
     Circle          = 5,
-    DashCircle      = 6,
     Cleaner         = 7,
     Select          = 8
 };
 
-enum PenStyle
+enum PhigureStyle
 {
     SolidLine       = 0,
     DashedLine      = 1,
@@ -36,10 +33,12 @@ public:
     Phigure getPhigure();
     int getPenSize();
     QColor getPenColor();
+    PhigureStyle getPenStyle();
 
     void setPhigure(Phigure phigure);
     void setPenSize(int size);
     void setPenColor(QColor color);
+    void setPenStyle(PhigureStyle style);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
@@ -49,10 +48,13 @@ protected:
     int pen_size;
     QColor pen_color;
     Phigure phigure;
+    PhigureStyle pen_style;
 
     QPointF previousPoint;
 
     QGraphicsItem* currentPhigure;
+
+    Qt::PenStyle getCurrentPenStyle();
 };
 
 #endif

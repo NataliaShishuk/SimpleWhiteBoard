@@ -47,7 +47,7 @@ private:
     void setSizeMenu();
     void setSaveMenu();
 
-    void onDraw(Phigure phigure);
+    void onDraw(Phigure phigure, PhigureStyle style);
     void saveCurrentScene(SaveType type);
 
 private slots:
