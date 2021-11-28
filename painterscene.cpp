@@ -87,6 +87,10 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         currentPhigure = addPolygon(polygon, pen_color);
     }
+    else if(phigure == Phigure::Triangle)
+    {
+        currentPhigure = addPolygon(QPolygonF(), pen_color);
+    }
     else if(phigure == Phigure::Circle)
     {
         currentPhigure = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, pen_color);
@@ -147,6 +151,21 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                              isShiftPressed ? point.x() : point.y(),
                              pen,
                              brush);
+
+        break;
+    }
+
+    case Phigure::Triangle:
+    {
+        auto width = currentPosition.x() - previousPoint.x();
+
+        QPolygonF polygon;
+
+        polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, previousPoint.y())));
+        polygon.append(QPointF(previousPoint.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
+        polygon.append(QPointF(isShiftPressed ? previousPoint.x() + width : currentPosition.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
+
+        currentPhigure = addPolygon(polygon, pen, brush);
 
         break;
     }

@@ -9,6 +9,7 @@ enum Phigure
 {
     Pen             = 0,
     Rectangle       = 1,
+    Triangle        = 2,
     Line            = 3,
     Circle          = 5,
     Cleaner         = 7,

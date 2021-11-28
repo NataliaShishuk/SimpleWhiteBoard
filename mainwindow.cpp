@@ -76,6 +76,9 @@ void MainWindow::setDrawMenu()
     auto circleButton = new QPushButton();
     auto dashedCircleButton = new QPushButton();
     auto fillCircleButton = new QPushButton();
+    auto triangleButton = new QPushButton();
+    auto dashedTriangleButton = new QPushButton();
+    auto filledTriangleButton = new QPushButton();
 
     penButton->setIcon(QIcon(":/icons/draw/pen.png"));
     rectangleButton->setIcon(QIcon(":/icons/draw/rectangle.png"));
@@ -86,6 +89,9 @@ void MainWindow::setDrawMenu()
     circleButton->setIcon(QIcon(":/icons/draw/circle.png"));
     dashedCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
     fillCircleButton->setIcon(QIcon(":/icons/draw/circle_filled.png"));
+    triangleButton->setIcon(QIcon(":/icons/draw/triangle.png"));
+    dashedTriangleButton->setIcon(QIcon(":/icons/draw/triangle_dashed.png"));
+    filledTriangleButton->setIcon(QIcon(":/icons/draw/triangle_filled.png"));
 
     connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
     connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));
@@ -96,6 +102,9 @@ void MainWindow::setDrawMenu()
     connect(circleButton, SIGNAL(clicked()), this, SLOT(onDrawCircle()));
     connect(dashedCircleButton, SIGNAL(clicked()), this, SLOT(onDrawDashCircle()));
     connect(fillCircleButton, SIGNAL(clicked()), this, SLOT(onDrawFillCircle()));
+    connect(triangleButton, SIGNAL(clicked()), this, SLOT(onDrawTriangle()));
+    connect(dashedTriangleButton, SIGNAL(clicked()), this, SLOT(onDrawDashedTriangle()));
+    connect(filledTriangleButton, SIGNAL(clicked()), this, SLOT(onDrawFilledTriangle()));
 
     connect(penButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(rectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
@@ -106,6 +115,9 @@ void MainWindow::setDrawMenu()
     connect(circleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedCircleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(fillCircleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(triangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(dashedTriangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(filledTriangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
     menuLayout->addWidget(penButton, 0, 0);
     menuLayout->addWidget(lineButton, 0, 1);
@@ -116,6 +128,9 @@ void MainWindow::setDrawMenu()
     menuLayout->addWidget(circleButton, 0, 3);
     menuLayout->addWidget(dashedCircleButton, 1, 3);
     menuLayout->addWidget(fillCircleButton, 2, 3);
+    menuLayout->addWidget(triangleButton, 0, 4);
+    menuLayout->addWidget(dashedTriangleButton, 1, 4);
+    menuLayout->addWidget(filledTriangleButton, 2, 4);
 
     menu->setLayout(menuLayout);
 
@@ -415,6 +430,21 @@ void MainWindow::onDrawDashCircle()
 void MainWindow::onDrawFillCircle()
 {
     onDraw(Phigure::Circle, PhigureLine::SolidLine, PhigureFill::Full);
+}
+
+void MainWindow::onDrawTriangle()
+{
+    onDraw(Phigure::Triangle);
+}
+
+void MainWindow::onDrawDashedTriangle()
+{
+    onDraw(Phigure::Triangle, PhigureLine::DashedLine, PhigureFill::Border);
+}
+
+void MainWindow::onDrawFilledTriangle()
+{
+    onDraw(Phigure::Triangle, PhigureLine::SolidLine, PhigureFill::Full);
 }
 
 void MainWindow::onSetWhiteColor()

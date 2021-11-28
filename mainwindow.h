@@ -73,6 +73,9 @@ private slots:
      void onDrawCircle();
      void onDrawDashCircle();
      void onDrawFillCircle();
+     void onDrawTriangle();
+     void onDrawDashedTriangle();
+     void onDrawFilledTriangle();
 
      // colors
      void onSetWhiteColor();
