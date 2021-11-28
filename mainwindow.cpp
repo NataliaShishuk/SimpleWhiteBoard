@@ -80,12 +80,12 @@ void MainWindow::setDrawMenu()
     penButton->setIcon(QIcon(":/icons/draw/pen.png"));
     rectangleButton->setIcon(QIcon(":/icons/draw/rectangle.png"));
     dashedRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_dashed.png"));
-    fillRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_dashed.png"));
+    fillRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_filled.png"));
     lineButton->setIcon(QIcon(":/icons/draw/line.png"));
     dashedLineButton->setIcon(QIcon(":/icons/draw/line_dashed.png"));
     circleButton->setIcon(QIcon(":/icons/draw/circle.png"));
     dashedCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
-    fillCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
+    fillCircleButton->setIcon(QIcon(":/icons/draw/circle_filled.png"));
 
     connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
     connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));

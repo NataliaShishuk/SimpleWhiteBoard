@@ -26,5 +26,7 @@
         <file>icons/size/medium.png</file>
         <file>icons/size/normal.png</file>
         <file>icons/size/small.png</file>
+        <file>icons/draw/circle_filled.png</file>
+        <file>icons/draw/rectangle_filled.png</file>
     </qresource>
 </RCC>
