@@ -103,6 +103,14 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         currentPhigure = addLine(0, 0, 0, 0, pen_color);
     }
+    else if(phigure == Phigure::Pen)
+    {
+        currentPhigure = addLine(previousPoint.x(),
+                                 previousPoint.y(),
+                                 previousPoint.x(),
+                                 previousPoint.y(),
+                                 QPen(pen_color, pen_size, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin));
+    }
 
     return QGraphicsScene::mousePressEvent(event);
 }
@@ -130,14 +138,23 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     Qt::PenStyle penStyle = getCurrentPenStyle();
 
-    QPen pen(pen_color, pen_size, penStyle, Qt::SquareCap);
+    QPen pen(pen_color, pen_size, penStyle, Qt::SquareCap, Qt::RoundJoin);
     QBrush brush(pen_color, phigure_fill == Border ? Qt::NoBrush : Qt::SolidPattern);
 
     if(pen.style() == Qt::CustomDashLine)
     {
         QVector<qreal> dashes ;
-              dashes.append(10);
-              dashes.append(20);
+              dashes.append(5);
+              dashes.append(9);
+
+        pen.setDashPattern(dashes);
+        pen.setDashOffset(0);
+    }
+    else if(pen.style() == Qt::DotLine)
+    {
+        QVector<qreal> dashes ;
+              dashes.append(0.5);
+              dashes.append(9);
 
         pen.setDashPattern(dashes);
         pen.setDashOffset(0);
@@ -241,12 +258,14 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                     pen_size * 2 + 3)),
                                     pen);
 
-        QList<QGraphicsItem*> colliding = currentPhigure->collidingItems(Qt::IntersectsItemBoundingRect);
+        QList<QGraphicsItem*> colliding = currentPhigure->collidingItems();
 
         for(auto i = 0; i < colliding.size(); i++)
         {
             removeItem(colliding.at(i));
         }
+
+        removeItem(currentPhigure);
 
         previousPoint = currentPosition;
 

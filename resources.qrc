@@ -37,5 +37,6 @@
         <file>cursors/eraser_medium.png</file>
         <file>cursors/eraser_normal.png</file>
         <file>cursors/eraser_small.png</file>
+        <file>icons/draw/line_doted.png</file>
     </qresource>
 </RCC>

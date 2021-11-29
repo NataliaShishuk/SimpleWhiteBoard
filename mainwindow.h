@@ -51,7 +51,6 @@ private:
     void saveCurrentScene(SaveType type);
 
 private slots:
-     void setColor();
      void nextScene();
      void prevScene();
 
@@ -70,6 +69,7 @@ private slots:
      void onDrawFillRectangle();
      void onDrawLine();
      void onDrawDashLine();
+     void onDrawDotLine();
      void onDrawCircle();
      void onDrawDashCircle();
      void onDrawFillCircle();

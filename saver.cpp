@@ -1,18 +1,12 @@
 #include "saver.h"
 
-Saver::Saver()
+void Saver::saveScene(QGraphicsScene *scene, const QString &filePath, SaveType type)
 {
+    QImage* image = new QImage(scene->width(), scene->height(), QImage::Format_ARGB32);
+    QPainter* painter = new QPainter(image);
 
-}
-
-Saver::~Saver()
-{
-
-}
-
-void Saver::saveScene(QGraphicsScene *scene, const QString &filePath, const QSize &size, SaveType type)
-{
-    QImage* image = renderScene(scene,size);
+    painter->setRenderHint(QPainter::Antialiasing);
+    scene->render(painter);
 
     if(type == SaveType::Image)
     {
@@ -22,21 +16,6 @@ void Saver::saveScene(QGraphicsScene *scene, const QString &filePath, const QSiz
     {
         saveAsPDF(image, filePath);
     }
-
-    delete image;
-}
-
-QImage *Saver::renderScene(QGraphicsScene *scene, const QSize &size)
-{
-    QImage* img = new QImage(size, QImage::Format_ARGB32);
-    QPainter* painter = new QPainter(img);
-
-    painter->setRenderHint(QPainter::Antialiasing);
-    scene->render(painter);
-
-    delete painter;
-
-    return img;
 }
 
 void Saver::saveAsImage(const QImage *image, const QString &filePath)

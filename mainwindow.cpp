@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     saver = new Saver();
 
-    auto scene = new PainterScene(ui->graphicsView);
+    auto scene = new PainterScene();
 
     scenes.push_back(scene);
 
@@ -73,6 +73,7 @@ void MainWindow::setDrawMenu()
     auto fillRectangleButton = new QPushButton();
     auto lineButton = new QPushButton();
     auto dashedLineButton = new QPushButton();
+    auto dotedLineButton = new QPushButton();
     auto circleButton = new QPushButton();
     auto dashedCircleButton = new QPushButton();
     auto fillCircleButton = new QPushButton();
@@ -89,6 +90,7 @@ void MainWindow::setDrawMenu()
     fillRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_filled.png"));
     lineButton->setIcon(QIcon(":/icons/draw/line.png"));
     dashedLineButton->setIcon(QIcon(":/icons/draw/line_dashed.png"));
+    dotedLineButton->setIcon(QIcon(":/icons/draw/line_doted.png"));
     circleButton->setIcon(QIcon(":/icons/draw/circle.png"));
     dashedCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
     fillCircleButton->setIcon(QIcon(":/icons/draw/circle_filled.png"));
@@ -105,6 +107,7 @@ void MainWindow::setDrawMenu()
     connect(fillRectangleButton, SIGNAL(clicked()), this, SLOT(onDrawFillRectangle()));
     connect(lineButton, SIGNAL(clicked()), this, SLOT(onDrawLine()));
     connect(dashedLineButton, SIGNAL(clicked()), this, SLOT(onDrawDashLine()));
+    connect(dotedLineButton, SIGNAL(clicked()), this, SLOT(onDrawDotLine()));
     connect(circleButton, SIGNAL(clicked()), this, SLOT(onDrawCircle()));
     connect(dashedCircleButton, SIGNAL(clicked()), this, SLOT(onDrawDashCircle()));
     connect(fillCircleButton, SIGNAL(clicked()), this, SLOT(onDrawFillCircle()));
@@ -121,6 +124,7 @@ void MainWindow::setDrawMenu()
     connect(fillRectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(lineButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedLineButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(dotedLineButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(circleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedCircleButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(fillCircleButton, SIGNAL(clicked()), menu, SLOT(hide()));
@@ -134,6 +138,7 @@ void MainWindow::setDrawMenu()
     menuLayout->addWidget(penButton, 0, 0);
     menuLayout->addWidget(lineButton, 0, 1);
     menuLayout->addWidget(dashedLineButton, 1, 1);
+    menuLayout->addWidget(dotedLineButton, 2, 1);
     menuLayout->addWidget(rectangleButton, 0, 2);
     menuLayout->addWidget(dashedRectangleButton, 1, 2);
     menuLayout->addWidget(fillRectangleButton, 2, 2);
@@ -260,14 +265,6 @@ void MainWindow::setColorMenu()
     menuLayout->addWidget(darkGreenButton, 2, 3);
     menuLayout->addWidget(darkBlueButton, 2, 4);
 
-    auto otherButton = new QPushButton("Other");
-
-    otherButton->setStyleSheet("font-weight: bold;");
-
-    connect(otherButton, SIGNAL(clicked()), this, SLOT(setColor()));
-
-    menuLayout->addWidget(otherButton, 3, 0, 1, 5);
-
     menu->setLayout(menuLayout);
 
     ui->colorButton->setMenu(menu);
@@ -328,7 +325,7 @@ void MainWindow::setSaveMenu()
     menu->setStyleSheet("QPushButton { "
                         "border:none;"
                         "width:130px;"
-                        "height:20px;"
+                        "height:30px;"
                         "}"
                         "QPushButton:hover {"
                         "cursor: pointer;"
@@ -390,11 +387,10 @@ void MainWindow::saveCurrentScene(SaveType type)
     }
 
     PainterScene* scene = getCurrentScene();
-    QSize size = ui->graphicsView->sizeHint();
 
     QString filePath = QFileDialog::getSaveFileName(this, title, fileName, extensions);
 
-    saver->saveScene(scene, filePath, size, type);
+    saver->saveScene(scene, filePath, type);
 }
 
 void MainWindow::onClean()
@@ -430,6 +426,11 @@ void MainWindow::onDrawLine()
 void MainWindow::onDrawDashLine()
 {
     onDraw(Phigure::Line, PhigureLine::DashedLine);
+}
+
+void MainWindow::onDrawDotLine()
+{
+    onDraw(Phigure::Line, PhigureLine::DotLine);
 }
 
 void MainWindow::onDrawCircle()
@@ -589,16 +590,6 @@ void MainWindow::saveAsPdf()
 PainterScene* MainWindow::getCurrentScene()
 {
     return scenes.at(sceneId);
-}
-
-void MainWindow::setColor()
-{
-    QColor color = QColorDialog::getColor(getCurrentScene()->getPenColor(),
-                                          this,
-                                          "Color",
-                                          QColorDialog::ColorDialogOption::ShowAlphaChannel);
-
-    getCurrentScene()->setPenColor(color);
 }
 
 void MainWindow::clearScene()

@@ -6,7 +6,8 @@
 
 #include "painterscene.h"
 
-enum SaveType {
+enum SaveType
+{
     Image   = 0,
     PDF     = 1
 };
@@ -14,14 +15,12 @@ enum SaveType {
 class Saver
 {
 public:
-    Saver();
-    ~Saver();
+    Saver() {};
+    ~Saver() {};
 
-    void saveScene(QGraphicsScene* scene, const QString& filePath, const QSize& size, SaveType type = SaveType::Image);
+    void saveScene(QGraphicsScene* scene, const QString& filePath, SaveType type = SaveType::Image);
 
 private:
-    QImage* renderScene(QGraphicsScene* scene, const QSize& size);
-
     void saveAsImage(const QImage* image, const QString& filePath);
     void saveAsPDF(const QImage* image, const QString& filePath);
 

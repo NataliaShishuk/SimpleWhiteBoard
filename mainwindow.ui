@@ -43,13 +43,12 @@
 border: none;
 }
 
-QPushButton, QToolButton { 
+QPushButton, QToolButton {
+padding: 4px 15px;
 font-weight: bold;
 font-size:14px;
 border:none;
 qproperty-iconSize: 24px;
-width:50px;
-height:50px;
 cursor: pointer;
  }
 
