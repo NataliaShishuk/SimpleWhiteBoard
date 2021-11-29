@@ -32,7 +32,7 @@ void Saver::saveAsPDF(const QImage *image, const QString &filePath)
 
     QPainter painter(&writer);
 
-    painter.drawImage(QPoint(0, 0), *image);
+    painter.drawImage(QRect(0, 0, painter.device()->width(), painter.device()->height()), *image);
 
     painter.end();
 }

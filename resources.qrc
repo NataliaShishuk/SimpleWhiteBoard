@@ -38,5 +38,7 @@
         <file>cursors/eraser_medium.png</file>
         <file>cursors/eraser_normal.png</file>
         <file>cursors/eraser_small.png</file>
+        <file>icons/save/pdf.png</file>
+        <file>icons/save/png.png</file>
     </qresource>
 </RCC>

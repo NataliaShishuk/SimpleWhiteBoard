@@ -27,10 +27,12 @@ public:
     ~MainWindow();
 
 protected:
+    void resizeEvent(QResizeEvent * event) override;
     void closeEvent(QCloseEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
+    QTimer* timer;
     Saver* saver;
     vector<PainterScene*> scenes;
 
@@ -51,6 +53,8 @@ private:
     void saveCurrentScene(SaveType type);
 
 private slots:
+     void slotTimer();
+
      void nextScene();
      void prevScene();
 

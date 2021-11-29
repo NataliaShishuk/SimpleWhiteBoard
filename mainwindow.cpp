@@ -31,6 +31,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QFontDatabase::addApplicationFont(":/fonts/lato_regular.ttf");
     QFontDatabase::addApplicationFont(":/fonts/lato_bold.ttf");
 
+    timer = new QTimer();
+
+    connect(timer, &QTimer::timeout, this, &MainWindow::slotTimer);
+
+    timer->start(100);
+
     connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(onClean()));
     connect(ui->previousSceneButton, SIGNAL(clicked()), this, SLOT(prevScene()));
     connect(ui->nextSceneButton, SIGNAL(clicked()), this, SLOT(nextScene()));
@@ -47,6 +53,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    timer->start(100);
+
+    QWidget::resizeEvent(event);
 }
 
 void MainWindow::setDrawMenu()
@@ -362,10 +375,15 @@ void MainWindow::setSaveMenu()
 {
     auto menu = new QMenu();
 
-    menu->setStyleSheet("QPushButton { "
+    menu->setStyleSheet("QPushButton {"
+                        "padding: 5px 20px;"
                         "border:none;"
+                        "qproperty-iconSize: 24px;"
                         "width:130px;"
-                        "height:30px;"
+                        "height:40px;"
+                        "text-align: left;"
+                        "font-weight: bold;"
+                        "font-size:12px;"
                         "}"
                         "QPushButton:hover {"
                         "cursor: pointer;"
@@ -375,8 +393,14 @@ void MainWindow::setSaveMenu()
 
     auto menuLayout = new QGridLayout();
 
-    auto imageButton = new QPushButton("Save as image");
+    auto imageButton = new QPushButton("Save as PNG");
     auto pdfButton = new QPushButton("Save as PDF");
+
+    imageButton->setIcon(QIcon(":/icons/save/png.png"));
+    pdfButton->setIcon(QIcon(":/icons/save/pdf.png"));
+
+    imageButton->setCursor(Qt::PointingHandCursor);
+    pdfButton->setCursor(Qt::PointingHandCursor);
 
     connect(imageButton, SIGNAL(clicked()), this, SLOT(saveAsImage()));
     connect(pdfButton, SIGNAL(clicked()), this, SLOT(saveAsPdf()));
@@ -431,6 +455,12 @@ void MainWindow::saveCurrentScene(SaveType type)
     QString filePath = QFileDialog::getSaveFileName(this, title, fileName, extensions);
 
     saver->saveScene(scene, filePath, type);
+}
+
+void MainWindow::slotTimer()
+{
+    timer->stop();
+    getCurrentScene()->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
 }
 
 void MainWindow::onClean()
