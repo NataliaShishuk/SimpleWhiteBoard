@@ -193,12 +193,11 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Triangle:
     {
-        auto width = qMax(currentPosition.x() - previousPoint.x(),
-                          currentPosition.y() - previousPoint.y());
+        auto width = currentPosition.x() - previousPoint.x();
 
         QPolygonF polygon;
 
-        polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, previousPoint.y())));
+        polygon.append(QPointF(QPoint(currentPosition.x() - width / 2, previousPoint.y())));
         polygon.append(QPointF(previousPoint.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
         polygon.append(QPointF(isShiftPressed ? previousPoint.x() + width : currentPosition.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
 

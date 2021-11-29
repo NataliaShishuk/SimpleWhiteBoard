@@ -101,6 +101,23 @@ void MainWindow::setDrawMenu()
     dashedRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_dashed.png"));
     filledRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_filled.png"));
 
+    penButton->setCursor(Qt::PointingHandCursor);
+    rectangleButton->setCursor(Qt::PointingHandCursor);
+    dashedRectangleButton->setCursor(Qt::PointingHandCursor);
+    fillRectangleButton->setCursor(Qt::PointingHandCursor);
+    lineButton->setCursor(Qt::PointingHandCursor);
+    dashedLineButton->setCursor(Qt::PointingHandCursor);
+    dotedLineButton->setCursor(Qt::PointingHandCursor);
+    circleButton->setCursor(Qt::PointingHandCursor);
+    dashedCircleButton->setCursor(Qt::PointingHandCursor);
+    fillCircleButton->setCursor(Qt::PointingHandCursor);
+    triangleButton->setCursor(Qt::PointingHandCursor);
+    dashedTriangleButton->setCursor(Qt::PointingHandCursor);
+    filledTriangleButton->setCursor(Qt::PointingHandCursor);
+    rhombusButton->setCursor(Qt::PointingHandCursor);
+    dashedRhombusButton->setCursor(Qt::PointingHandCursor);
+    filledRhombusButton->setCursor(Qt::PointingHandCursor);
+
     connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
     connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));
     connect(dashedRectangleButton, SIGNAL(clicked()), this, SLOT(onDrawDashRectangle()));
@@ -187,6 +204,12 @@ void MainWindow::setColorMenu()
     lightGreenButton->setStyleSheet("background-color: rgba(130,199,134,255);");
     blueButton->setStyleSheet("background-color: rgba(46,140,255,255);");
 
+    whiteButton->setCursor(Qt::PointingHandCursor);
+    redButton->setCursor(Qt::PointingHandCursor);
+    yellowButton->setCursor(Qt::PointingHandCursor);
+    lightGreenButton->setCursor(Qt::PointingHandCursor);
+    blueButton->setCursor(Qt::PointingHandCursor);
+
     connect(whiteButton, SIGNAL(clicked()), this, SLOT(onSetWhiteColor()));
     connect(redButton, SIGNAL(clicked()), this, SLOT(onSetRedColor()));
     connect(yellowButton, SIGNAL(clicked()), this, SLOT(onSetYellowColor()));
@@ -217,6 +240,12 @@ void MainWindow::setColorMenu()
     greenButton->setStyleSheet("background-color: rgba(73,214,30,255);");
     skyBlueButton->setStyleSheet("background-color: rgba(81,216,235,255);");
 
+    purpleButton->setCursor(Qt::PointingHandCursor);
+    pinkButton->setCursor(Qt::PointingHandCursor);
+    orangeButton->setCursor(Qt::PointingHandCursor);
+    greenButton->setCursor(Qt::PointingHandCursor);
+    skyBlueButton->setCursor(Qt::PointingHandCursor);
+
     connect(purpleButton, SIGNAL(clicked()), this, SLOT(onSetPurpleColor()));
     connect(pinkButton, SIGNAL(clicked()), this, SLOT(onSetPinkColor()));
     connect(orangeButton, SIGNAL(clicked()), this, SLOT(onSetOrangeColor()));
@@ -246,6 +275,12 @@ void MainWindow::setColorMenu()
     darkOrangeButton->setStyleSheet("background-color: rgba(119,68,8,255);");
     darkGreenButton->setStyleSheet("background-color: rgba(11,114,40,255);");
     darkBlueButton->setStyleSheet("background-color: rgba(20,79,195,255);");
+
+    blackButton->setCursor(Qt::PointingHandCursor);
+    darkRedButton->setCursor(Qt::PointingHandCursor);
+    darkOrangeButton->setCursor(Qt::PointingHandCursor);
+    darkGreenButton->setCursor(Qt::PointingHandCursor);
+    darkBlueButton->setCursor(Qt::PointingHandCursor);
 
     connect(blackButton, SIGNAL(clicked()), this, SLOT(onSetBlackColor()));
     connect(darkRedButton, SIGNAL(clicked()), this, SLOT(onSetDarkRedColor()));
@@ -297,6 +332,11 @@ void MainWindow::setSizeMenu()
     normalButton->setIcon(QIcon(":/icons/size/normal.png"));
     mediumButton->setIcon(QIcon(":/icons/size/medium.png"));
     largeButton->setIcon(QIcon(":/icons/size/large.png"));
+
+    smallButton->setCursor(Qt::PointingHandCursor);
+    normalButton->setCursor(Qt::PointingHandCursor);
+    mediumButton->setCursor(Qt::PointingHandCursor);
+    largeButton->setCursor(Qt::PointingHandCursor);
 
     connect(smallButton, SIGNAL(clicked()), this, SLOT(onSmallSize()));
     connect(normalButton, SIGNAL(clicked()), this, SLOT(onNormalSize()));
