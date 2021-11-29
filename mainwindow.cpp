@@ -753,7 +753,7 @@ void MainWindow::reloadCustomCursor()
 
         case Phigure::Select:
         {
-            cursor = Qt::ArrowCursor;
+            cursor = Qt::PointingHandCursor;
             break;
         }
 

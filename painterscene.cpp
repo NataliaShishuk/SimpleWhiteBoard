@@ -69,9 +69,11 @@ void PainterScene::setPhigureFill(PhigureFill fill)
 
 void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    QGraphicsScene::mousePressEvent(event);
+
     if (event->button() != Qt::LeftButton)
     {
-        return QGraphicsScene::mousePressEvent(event);
+        return;
     }
 
     previousPoint = event->scenePos();
@@ -97,7 +99,11 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
     else if(phigure == Phigure::Circle)
     {
-        currentPhigure = addEllipse(previousPoint.x(), previousPoint.y(), 0, 0, pen_color);
+        currentPhigure = addEllipse(previousPoint.x(),
+                                    previousPoint.y(),
+                                    0,
+                                    0,
+                                    pen_color);
     }
     else if(phigure == Phigure::Line)
     {
@@ -111,8 +117,6 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                  previousPoint.y(),
                                  QPen(pen_color, pen_size, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin));
     }
-
-    return QGraphicsScene::mousePressEvent(event);
 }
 
 void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -128,7 +132,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     auto isShiftPressed = event->modifiers() == Qt::ShiftModifier;
 
     if(phigure != Phigure::Pen &&
-       phigure != Phigure::Select)
+       phigure != Phigure::Select &&
+       phigure != Phigure::Cleaner)
     {
         if(currentPhigure != nullptr)
         {
@@ -166,10 +171,10 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     case Phigure::Line:
     {
         currentPhigure = addLine(previousPoint.x(),
-                           previousPoint.y(),
-                           currentPosition.x(),
-                           currentPosition.y(),
-                           pen);
+                                 previousPoint.y(),
+                                 currentPosition.x(),
+                                 currentPosition.y(),
+                                 pen);
 
         break;
     }
@@ -177,18 +182,19 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     case Phigure::Circle:
     {
         currentPhigure = addEllipse(previousPoint.x(),
-                             previousPoint.y(),
-                             point.x(),
-                             isShiftPressed ? point.x() : point.y(),
-                             pen,
-                             brush);
+                                    previousPoint.y(),
+                                    point.x(),
+                                    isShiftPressed ? point.x() : point.y(),
+                                    pen,
+                                    brush);
 
         break;
     }
 
     case Phigure::Triangle:
     {
-        auto width = qMax(currentPosition.x() - previousPoint.x(), currentPosition.y() - previousPoint.y());
+        auto width = qMax(currentPosition.x() - previousPoint.x(),
+                          currentPosition.y() - previousPoint.y());
 
         QPolygonF polygon;
 
@@ -226,10 +232,10 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     case Phigure::Pen:
     {
         currentPhigure = addLine(previousPoint.x(),
-                previousPoint.y(),
-                currentPosition.x(),
-                currentPosition.y(),
-                pen);
+                                 previousPoint.y(),
+                                 currentPosition.x(),
+                                 currentPosition.y(),
+                                 pen);
 
         previousPoint = currentPosition;
 
@@ -250,22 +256,19 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Cleaner:
     {
-        pen.setColor(Qt::white);
+        qreal width = pen_size * 7.2;
 
-        currentPhigure = addPolygon(QPolygonF(QRectF(currentPosition.x() - pen_size,
-                                    currentPosition.y() - pen_size,
-                                    pen_size * 2 + 3,
-                                    pen_size * 2 + 3)),
-                                    pen);
+        auto rect = QRectF(currentPosition.x() - width / 2,
+                           currentPosition.y() - width / 2,
+                           width,
+                           width);
 
-        QList<QGraphicsItem*> colliding = currentPhigure->collidingItems();
+        QList<QGraphicsItem*> colliding = items(rect);
 
-        for(auto i = 0; i < colliding.size(); i++)
+        for (QGraphicsItem* item : colliding)
         {
-            removeItem(colliding.at(i));
+            removeItem(item);
         }
-
-        removeItem(currentPhigure);
 
         previousPoint = currentPosition;
 
