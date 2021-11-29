@@ -753,13 +753,14 @@ void MainWindow::reloadCustomCursor()
 
         case Phigure::Select:
         {
-            cursor = Qt::PointingHandCursor;
+            cursor = Qt::SizeAllCursor;
             break;
         }
 
         default:
         {
-            cursor = QCursor(QPixmap::fromImage(QImage(":/cursors/target.png")), 8, 8);
+            cursor = Qt::CrossCursor;
+            //cursor = QCursor(QPixmap::fromImage(QImage(":/cursors/target.png")), 8, 8);
             break;
         }
     }
