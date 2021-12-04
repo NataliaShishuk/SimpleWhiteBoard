@@ -820,6 +820,20 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     {
         nextScene();
     }
+    else if(key == Qt::Key_Delete)
+    {
+        PainterScene* scene = getCurrentScene();
+
+        Phigure phigure = scene->getPhigure();
+
+        if(phigure == Phigure::Select)
+        {
+            for (auto selectedItem : scene->selectedItems())
+            {
+                scene->removeItem(selectedItem);
+            }
+        }
+    }
 }
 
 void MainWindow::reloadCustomCursor()
