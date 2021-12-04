@@ -121,9 +121,11 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    QGraphicsScene::mouseMoveEvent(event);
+
     if (!(event->buttons() & Qt::LeftButton))
     {
-        return QGraphicsScene::mouseMoveEvent(event);
+        return;
     }
 
     auto currentPosition = event->scenePos();
@@ -230,11 +232,12 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Pen:
     {
-        currentPhigure = addLine(previousPoint.x(),
-                                 previousPoint.y(),
-                                 currentPosition.x(),
-                                 currentPosition.y(),
-                                 pen);
+        path.moveTo(previousPoint);
+        path.lineTo(currentPosition.x(), currentPosition.y());
+
+        removeItem(currentPhigure);
+
+        currentPhigure = addPath(path, pen);
 
         previousPoint = currentPosition;
 
@@ -276,18 +279,25 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Select:
     {
-        return QGraphicsScene::mouseMoveEvent(event);
+        break;
     }
 
     }
 
-    if(phigure != Phigure::Pen)
+    if(currentPhigure != nullptr)
     {
-        if(currentPhigure != nullptr)
-        {
-            currentPhigure->setFlag(QGraphicsItem::ItemIsMovable);
-        }
+        currentPhigure->setAcceptHoverEvents(true);
     }
+}
+
+void PainterScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseReleaseEvent(event);
+
+    currentPhigure = nullptr;
+
+    // del old path
+    path = QPainterPath();
 }
 
 Qt::PenStyle PainterScene::getCurrentPenStyle()

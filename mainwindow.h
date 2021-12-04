@@ -8,9 +8,11 @@
 #include <QColorDialog>
 #include <QImage>
 #include <QCursor>
+#include <QUndoStack>
 
 #include "painterscene.h"
 #include "saver.h"
+#include "commands.h"
 
 using namespace std;
 
@@ -40,6 +42,10 @@ private:
 
     Ui::MainWindow *ui;
 
+    QUndoStack *undoStack;
+    QAction *undoAction;
+    QAction *redoAction;
+
     PainterScene* getCurrentScene();
 
     void reloadCustomCursor();
@@ -50,7 +56,10 @@ private:
     void setSaveMenu();
 
     void onDraw(Phigure phigure, PhigureLine style = PhigureLine::SolidLine, PhigureFill fill = PhigureFill::Border);
+    void setPenColor(QColor color);
+    void setPenSize(qreal size);
     void saveCurrentScene(SaveType type);
+    void createUndoStackAndActions();
 
 private slots:
      void slotTimer();

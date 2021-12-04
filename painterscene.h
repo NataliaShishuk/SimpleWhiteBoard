@@ -53,6 +53,7 @@ public:
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 protected:
     int pen_size;
@@ -64,6 +65,7 @@ protected:
     QPointF previousPoint;
 
     QGraphicsItem* currentPhigure;
+    QPainterPath path;
 
     Qt::PenStyle getCurrentPenStyle();
 };

@@ -25,12 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    commands.cpp \
         main.cpp \
         mainwindow.cpp \
     painterscene.cpp \
     saver.cpp
 
 HEADERS += \
+    commands.h \
         mainwindow.h \
     painterscene.h \
     saver.h

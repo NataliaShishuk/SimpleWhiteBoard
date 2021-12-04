@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setColorMenu();
     setSizeMenu();
     setSaveMenu();
+    createUndoStackAndActions();
 }
 
 MainWindow::~MainWindow()
@@ -424,6 +425,42 @@ void MainWindow::onDraw(Phigure phigure, PhigureLine style, PhigureFill fill)
     scene->setPhigureLine(style);
     scene->setPhigureFill(fill);
 
+    for (auto item : scene->items())
+    {
+        if(phigure == Phigure::Select)
+        {
+            item->setCursor(Qt::PointingHandCursor);
+
+            item->setFlag(QGraphicsItem::ItemIsMovable);
+            item->setFlag(QGraphicsItem::ItemIsSelectable);
+        }
+        else
+        {
+            item->unsetCursor();
+
+            item->setFlag(QGraphicsItem::ItemIsMovable, false);
+            item->setFlag(QGraphicsItem::ItemIsSelectable, false);
+        }
+    }
+
+    //undoStack->push(new SceneteItemCommand(scene, nullptr));
+
+    reloadCustomCursor();
+}
+
+void MainWindow::setPenColor(QColor color)
+{
+    PainterScene* scene = getCurrentScene();
+
+    scene->setPenColor(color);
+}
+
+void MainWindow::setPenSize(qreal size)
+{
+    PainterScene* scene = getCurrentScene();
+
+    scene->setPenSize(size);
+
     reloadCustomCursor();
 }
 
@@ -455,6 +492,20 @@ void MainWindow::saveCurrentScene(SaveType type)
     QString filePath = QFileDialog::getSaveFileName(this, title, fileName, extensions);
 
     saver->saveScene(scene, filePath, type);
+}
+
+void MainWindow::createUndoStackAndActions()
+{
+    undoStack = new QUndoStack(this);
+
+    undoAction = undoStack->createUndoAction(this, tr("&Undo"));
+    undoAction->setIcon(QIcon(":/icons/undo.png"));
+
+    redoAction = undoStack->createRedoAction(this, tr("&Redo"));
+    redoAction->setIcon(QIcon(":/icons/redo.png"));
+
+    ui->undoButton->setDefaultAction(undoAction);
+    ui->redoButton->setDefaultAction(redoAction);
 }
 
 void MainWindow::slotTimer()
@@ -550,101 +601,97 @@ void MainWindow::onDrawFilledRhombus()
 
 void MainWindow::onSetWhiteColor()
 {
-    getCurrentScene()->setPenColor(Qt::white);
+    setPenColor(Qt::white);
 }
 
 void MainWindow::onSetRedColor()
 {
-    getCurrentScene()->setPenColor(QColor(255, 25, 25, 255));
+    setPenColor(QColor(255, 25, 25, 255));
 }
 
 void MainWindow::onSetYellowColor()
 {
-    getCurrentScene()->setPenColor(QColor(255, 222, 50, 255));
+    setPenColor(QColor(255, 222, 50, 255));
 }
 
 void MainWindow::onSetLightGreenColor()
 {
-    getCurrentScene()->setPenColor(QColor(130, 199, 134, 255));
+    setPenColor(QColor(130, 199, 134, 255));
 }
 
 void MainWindow::onSetBlueColor()
 {
-    getCurrentScene()->setPenColor(QColor(46, 140, 255, 255));
+    setPenColor(QColor(46, 140, 255, 255));
 }
 
 void MainWindow::onSetPurpleColor()
 {
-    getCurrentScene()->setPenColor(QColor(180, 121, 255, 255));
+    setPenColor(QColor(180, 121, 255, 255));
 }
 
 void MainWindow::onSetPinkColor()
 {
-    getCurrentScene()->setPenColor(QColor(255, 56, 199, 255));
+    setPenColor(QColor(255, 56, 199, 255));
 }
 
 void MainWindow::onSetOrangeColor()
 {
-    getCurrentScene()->setPenColor(QColor(255, 138, 0, 255));
+    setPenColor(QColor(255, 138, 0, 255));
 }
 
 void MainWindow::onSetGreenColor()
 {
-    getCurrentScene()->setPenColor(QColor(73, 214, 30, 255));
+    setPenColor(QColor(73, 214, 30, 255));
 }
 
 void MainWindow::onSetSkyBlueColor()
 {
-    getCurrentScene()->setPenColor(QColor(81, 216, 235, 255));
+    setPenColor(QColor(81, 216, 235, 255));
 }
 
 void MainWindow::onSetBlackColor()
 {
-    getCurrentScene()->setPenColor(QColor(0, 0, 0, 255));
+    setPenColor(QColor(0, 0, 0, 255));
 }
 
 void MainWindow::onSetDarkRedColor()
 {
-    getCurrentScene()->setPenColor(QColor(127, 0, 0, 255));
+    setPenColor(QColor(127, 0, 0, 255));
 }
 
 void MainWindow::onSetDarkOrangeColor()
 {
-    getCurrentScene()->setPenColor(QColor(119, 68, 8, 255));
+    setPenColor(QColor(119, 68, 8, 255));
 }
 
 void MainWindow::onSetDarkGreenColor()
 {
-    getCurrentScene()->setPenColor(QColor(11, 114, 40, 255));
+    setPenColor(QColor(11, 114, 40, 255));
 }
 
 void MainWindow::onSetDarkBlueColor()
 {
-    getCurrentScene()->setPenColor(QColor(20, 79, 195, 255));
+    setPenColor(QColor(20, 79, 195, 255));
 }
 
 void MainWindow::onSmallSize()
 {
-    getCurrentScene()->setPenSize(1);
-    reloadCustomCursor();
+    setPenSize(1);
 }
 
 void MainWindow::onNormalSize()
 {
-    getCurrentScene()->setPenSize(2);
-    reloadCustomCursor();
+    setPenSize(2);
 }
 
 void MainWindow::onMediumSize()
 {
-    getCurrentScene()->setPenSize(3);
-    reloadCustomCursor();
+    setPenSize(3);
 }
 
 void MainWindow::onLargeSize()
 {
-    getCurrentScene()->setPenSize(5);
-    reloadCustomCursor();
+    setPenSize(5);
 }
 
 void MainWindow::saveAsImage()
@@ -823,14 +870,13 @@ void MainWindow::reloadCustomCursor()
 
         case Phigure::Select:
         {
-            cursor = Qt::SizeAllCursor;
+            cursor = Qt::ArrowCursor;
             break;
         }
 
         default:
         {
             cursor = Qt::CrossCursor;
-            //cursor = QCursor(QPixmap::fromImage(QImage(":/cursors/target.png")), 8, 8);
             break;
         }
     }

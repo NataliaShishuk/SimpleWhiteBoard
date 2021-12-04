@@ -40,5 +40,7 @@
         <file>cursors/eraser_small.png</file>
         <file>icons/save/pdf.png</file>
         <file>icons/save/png.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/undo.png</file>
     </qresource>
 </RCC>
