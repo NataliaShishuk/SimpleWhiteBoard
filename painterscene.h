@@ -11,8 +11,9 @@ enum Phigure
     Rectangle       = 1,
     Triangle        = 2,
     Line            = 3,
-    Circle          = 5,
-    Rhombus         = 6,
+    Circle          = 4,
+    Rhombus         = 5,
+    Parallelogram   = 6,
     Cleaner         = 7,
     Select          = 8
 };

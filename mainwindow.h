@@ -97,6 +97,10 @@ private slots:
      void onDrawRhombus();
      void onDrawDashedRhombus();
      void onDrawFilledRhombus();
+     // parallelogram
+     void onDrawParallelogram();
+     void onDrawDashedParallelogram();
+     void onDrawFilledParallelogram();
 
      // colors
      void onSetWhiteColor();

@@ -43,5 +43,8 @@
         <file>icons/redo.png</file>
         <file>icons/undo.png</file>
         <file>icons/grid.png</file>
+        <file>icons/draw/parallelogram_dashed.png</file>
+        <file>icons/draw/parallelogram_filled.png</file>
+        <file>icons/draw/parallelogram.png</file>
     </qresource>
 </RCC>

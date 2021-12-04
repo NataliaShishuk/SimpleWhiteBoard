@@ -78,38 +78,7 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     previousPoint = event->scenePos();
 
-    if(phigure == Phigure::Rectangle)
-    {
-        QPolygonF polygon;
-
-        polygon.append(QPointF(previousPoint));
-        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
-        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
-        polygon.append(QPointF(previousPoint.x(), previousPoint.y()));
-
-        currentPhigure = addPolygon(polygon, pen_color);
-    }
-    else if(phigure == Phigure::Triangle)
-    {
-        currentPhigure = addPolygon(QPolygonF(), pen_color);
-    }
-    else if(phigure == Phigure::Rhombus)
-    {
-        currentPhigure = addPolygon(QPolygonF(), pen_color);
-    }
-    else if(phigure == Phigure::Circle)
-    {
-        currentPhigure = addEllipse(previousPoint.x(),
-                                    previousPoint.y(),
-                                    0,
-                                    0,
-                                    pen_color);
-    }
-    else if(phigure == Phigure::Line)
-    {
-        currentPhigure = addLine(0, 0, 0, 0, pen_color);
-    }
-    else if(phigure == Phigure::Pen)
+    if(phigure == Phigure::Pen)
     {
         currentPhigure = addLine(previousPoint.x(),
                                  previousPoint.y(),
@@ -224,6 +193,25 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         polygon.append(QPointF(QPoint(previousPoint.x(), isShiftPressed ? previousPoint.y() + width / 2 : currentPosition.y() - height / 2)));
         polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, isShiftPressed ? previousPoint.y() + width : currentPosition.y())));
         polygon.append(QPointF(QPoint(isShiftPressed ? previousPoint.x() + width : currentPosition.x(), isShiftPressed ? previousPoint.y() + width / 2 : currentPosition.y() - height / 2)));
+
+        currentPhigure = addPolygon(polygon, pen, brush);
+
+        break;
+    }
+
+    case Phigure::Parallelogram:
+    {
+        auto width = currentPosition.x() - previousPoint.x();
+        auto height = currentPosition.y() - previousPoint.y();
+
+        auto shift = qAbs(qMax(width, height)) * 0.35;
+
+        QPolygonF polygon;
+
+        polygon.append(QPointF(previousPoint));
+        polygon.append(QPointF(QPoint(previousPoint.x() - shift, currentPosition.y())));
+        polygon.append(QPointF(currentPosition));
+        polygon.append(QPointF(QPoint(currentPosition.x() + shift, previousPoint.y())));
 
         currentPhigure = addPolygon(polygon, pen, brush);
 

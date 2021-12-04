@@ -9,6 +9,7 @@
 #include <qmessagebox.h>
 
 #include "saver.h"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -98,6 +99,9 @@ void MainWindow::setDrawMenu()
     auto rhombusButton = new QPushButton();
     auto dashedRhombusButton = new QPushButton();
     auto filledRhombusButton = new QPushButton();
+    auto parallelogramButton = new QPushButton();
+    auto dashedParallelogramButton = new QPushButton();
+    auto filledParallelogramButton = new QPushButton();
 
     penButton->setIcon(QIcon(":/icons/draw/pen.png"));
     rectangleButton->setIcon(QIcon(":/icons/draw/rectangle.png"));
@@ -115,6 +119,9 @@ void MainWindow::setDrawMenu()
     rhombusButton->setIcon(QIcon(":/icons/draw/rhombus.png"));
     dashedRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_dashed.png"));
     filledRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_filled.png"));
+    parallelogramButton->setIcon(QIcon(":/icons/draw/parallelogram.png"));
+    dashedParallelogramButton->setIcon(QIcon(":/icons/draw/parallelogram_dashed.png"));
+    filledParallelogramButton->setIcon(QIcon(":/icons/draw/parallelogram_filled.png"));
 
     penButton->setCursor(Qt::PointingHandCursor);
     rectangleButton->setCursor(Qt::PointingHandCursor);
@@ -132,6 +139,9 @@ void MainWindow::setDrawMenu()
     rhombusButton->setCursor(Qt::PointingHandCursor);
     dashedRhombusButton->setCursor(Qt::PointingHandCursor);
     filledRhombusButton->setCursor(Qt::PointingHandCursor);
+    parallelogramButton->setCursor(Qt::PointingHandCursor);
+    dashedParallelogramButton->setCursor(Qt::PointingHandCursor);
+    filledParallelogramButton->setCursor(Qt::PointingHandCursor);
 
     connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
     connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));
@@ -149,6 +159,9 @@ void MainWindow::setDrawMenu()
     connect(rhombusButton, SIGNAL(clicked()), this, SLOT(onDrawRhombus()));
     connect(dashedRhombusButton, SIGNAL(clicked()), this, SLOT(onDrawDashedRhombus()));
     connect(filledRhombusButton, SIGNAL(clicked()), this, SLOT(onDrawFilledRhombus()));
+    connect(parallelogramButton, SIGNAL(clicked()), this, SLOT(onDrawParallelogram()));
+    connect(dashedParallelogramButton, SIGNAL(clicked()), this, SLOT(onDrawDashedParallelogram()));
+    connect(filledParallelogramButton, SIGNAL(clicked()), this, SLOT(onDrawFilledParallelogram()));
 
     connect(penButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(rectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
@@ -166,6 +179,9 @@ void MainWindow::setDrawMenu()
     connect(rhombusButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedRhombusButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(filledRhombusButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(parallelogramButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(dashedParallelogramButton, SIGNAL(clicked()), menu, SLOT(hide()));
+    connect(filledParallelogramButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
     menuLayout->addWidget(penButton, 0, 0);
     menuLayout->addWidget(lineButton, 0, 1);
@@ -183,6 +199,9 @@ void MainWindow::setDrawMenu()
     menuLayout->addWidget(rhombusButton, 0, 5);
     menuLayout->addWidget(dashedRhombusButton, 1, 5);
     menuLayout->addWidget(filledRhombusButton, 2, 5);
+    menuLayout->addWidget(parallelogramButton, 0, 6);
+    menuLayout->addWidget(dashedParallelogramButton, 1, 6);
+    menuLayout->addWidget(filledParallelogramButton, 2, 6);
 
     menu->setLayout(menuLayout);
 
@@ -430,7 +449,7 @@ void MainWindow::onDraw(Phigure phigure, PhigureLine style, PhigureFill fill)
     {
         if(phigure == Phigure::Select)
         {
-            item->setCursor(Qt::PointingHandCursor);
+            item->setCursor(Qt::SizeAllCursor);
 
             item->setFlag(QGraphicsItem::ItemIsMovable);
             item->setFlag(QGraphicsItem::ItemIsSelectable);
@@ -616,6 +635,21 @@ void MainWindow::onDrawDashedRhombus()
 void MainWindow::onDrawFilledRhombus()
 {
     onDraw(Phigure::Rhombus, PhigureLine::SolidLine, PhigureFill::Full);
+}
+
+void MainWindow::onDrawParallelogram()
+{
+    onDraw(Phigure::Parallelogram);
+}
+
+void MainWindow::onDrawDashedParallelogram()
+{
+    onDraw(Phigure::Parallelogram, PhigureLine::DashedLine);
+}
+
+void MainWindow::onDrawFilledParallelogram()
+{
+    onDraw(Phigure::Parallelogram, PhigureLine::SolidLine, PhigureFill::Full);
 }
 
 void MainWindow::onSetWhiteColor()
