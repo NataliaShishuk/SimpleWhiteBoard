@@ -42,5 +42,6 @@
         <file>icons/save/png.png</file>
         <file>icons/redo.png</file>
         <file>icons/undo.png</file>
+        <file>icons/grid.png</file>
     </qresource>
 </RCC>

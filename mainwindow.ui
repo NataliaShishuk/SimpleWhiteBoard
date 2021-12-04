@@ -61,7 +61,7 @@ background-color: #b3cccc;
 QToolButton::menu-indicator { image: none; }
 </string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0">
        <property name="spacing">
         <number>10</number>
        </property>
@@ -108,9 +108,7 @@ QToolButton::menu-indicator { image: none; }
         <widget class="QToolButton" name="drawButton">
          <property name="font">
           <font>
-           <family>Lato</family>
            <pointsize>-1</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -157,9 +155,7 @@ QToolButton::menu-indicator { image: none; }
          </property>
          <property name="font">
           <font>
-           <family>Lato</family>
            <pointsize>-1</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -197,9 +193,7 @@ QToolButton::menu-indicator { image: none; }
         <widget class="QToolButton" name="colorButton">
          <property name="font">
           <font>
-           <family>Lato</family>
            <pointsize>-1</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -234,9 +228,7 @@ QToolButton::menu-indicator { image: none; }
         <widget class="QToolButton" name="sizeButton">
          <property name="font">
           <font>
-           <family>Lato</family>
            <pointsize>-1</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -261,6 +253,35 @@ QToolButton::menu-indicator { image: none; }
          </property>
          <property name="popupMode">
           <enum>QToolButton::InstantPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="showGridButton">
+         <property name="minimumSize">
+          <size>
+           <width>105</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="text">
+          <string>Show Grid</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/grid.png</normaloff>:/icons/grid.png</iconset>
          </property>
          <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -311,9 +332,7 @@ QToolButton::menu-indicator { image: none; }
          </property>
          <property name="font">
           <font>
-           <family>Lato</family>
            <pointsize>-1</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -348,9 +367,7 @@ QToolButton::menu-indicator { image: none; }
         <widget class="QToolButton" name="saveButton">
          <property name="font">
           <font>
-           <family>Lato</family>
            <pointsize>-1</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -532,6 +549,15 @@ QToolButton::menu-indicator { image: none; }
               </color>
              </brush>
             </colorrole>
+            <colorrole role="Light">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
             <colorrole role="Base">
              <brush brushstyle="SolidPattern">
               <color alpha="255">
@@ -561,6 +587,15 @@ QToolButton::menu-indicator { image: none; }
               </color>
              </brush>
             </colorrole>
+            <colorrole role="Light">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </colorrole>
             <colorrole role="Base">
              <brush brushstyle="SolidPattern">
               <color alpha="255">
@@ -587,6 +622,15 @@ QToolButton::menu-indicator { image: none; }
                <red>241</red>
                <green>241</green>
                <blue>241</blue>
+              </color>
+             </brush>
+            </colorrole>
+            <colorrole role="Light">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
               </color>
              </brush>
             </colorrole>
@@ -666,9 +710,7 @@ QToolButton::menu-indicator { image: none; }
          </property>
          <property name="font">
           <font>
-           <family>Lato</family>
            <pointsize>12</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

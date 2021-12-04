@@ -37,6 +37,7 @@ private:
     QTimer* timer;
     Saver* saver;
     vector<PainterScene*> scenes;
+    bool isGridVisible = false;
 
     size_t sceneId = 0;
 
@@ -60,6 +61,8 @@ private:
     void setPenSize(qreal size);
     void saveCurrentScene(SaveType type);
     void createUndoStackAndActions();
+
+    QPixmap drawPattern(int step, const QColor &color);
 
 private slots:
      void slotTimer();
@@ -123,6 +126,9 @@ private slots:
      // save
      void saveAsImage();
      void saveAsPdf();
+
+     // grid
+     void onSetGrid();
 };
 
 #endif // MAINWINDOW_H

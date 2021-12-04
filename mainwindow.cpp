@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
     connect(ui->selectButton, SIGNAL(clicked()), this, SLOT(onSelect()));
+    connect(ui->showGridButton, SIGNAL(clicked()), this, SLOT(onSetGrid()));
 
     setDrawMenu();
     setColorMenu();
@@ -508,6 +509,24 @@ void MainWindow::createUndoStackAndActions()
     ui->redoButton->setDefaultAction(redoAction);
 }
 
+QPixmap MainWindow::drawPattern(int step, const QColor &color)
+{
+    QPixmap pixmap(step, step);
+    QPainter painter;
+
+    int pixmapWidth = pixmap.width() - 1;
+
+    pixmap.fill(Qt::transparent);
+
+    painter.begin(&pixmap);
+
+    painter.setPen(color);
+    painter.drawLine(0, 0, pixmapWidth, 0);
+    painter.drawLine(0, 0, 0, pixmapWidth);
+
+    return pixmap;
+}
+
 void MainWindow::slotTimer()
 {
     timer->stop();
@@ -702,6 +721,24 @@ void MainWindow::saveAsImage()
 void MainWindow::saveAsPdf()
 {
     saveCurrentScene(SaveType::PDF);
+}
+
+void MainWindow::onSetGrid()
+{
+    if(isGridVisible)
+    {
+        // hide
+        ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
+        ui->showGridButton->setText("Show Grid");
+    }
+    else
+    {
+        // show
+        ui->graphicsView->setBackgroundBrush(drawPattern(20, QColor(0, 0, 0, 30)));
+        ui->showGridButton->setText("Hide Grid");
+    }
+
+    isGridVisible = !isGridVisible;
 }
 
 PainterScene* MainWindow::getCurrentScene()
