@@ -267,6 +267,25 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Select:
     {
+        QList<QGraphicsItem*> allItems = items();
+
+        for (auto item : allItems)
+        {
+            if(item->isSelected())
+            {
+                return;;
+            }
+        }
+
+        removeItem(currentPhigure);
+
+        currentPhigure = addPolygon(QPolygonF(QRectF(previousPoint.x(),
+                                    previousPoint.y(),
+                                    point.x(),
+                                    point.y())),
+                                    QPen(QColor(205, 205, 248, 255)),
+                                    QBrush(QColor(223, 238, 253, 30)));
+
         break;
     }
 
@@ -281,6 +300,21 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void PainterScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseReleaseEvent(event);
+
+    if(phigure == Phigure::Select)
+    {
+        if(currentPhigure != nullptr)
+        {
+            QList<QGraphicsItem*> colliding = items(currentPhigure->boundingRect());
+
+            for (QGraphicsItem* item : colliding)
+            {
+                item->setSelected(true);
+            }
+
+            removeItem(currentPhigure);
+        }
+    }
 
     currentPhigure = nullptr;
 
