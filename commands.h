@@ -5,10 +5,10 @@
 #include <QGraphicsItem>
 #include <QGraphicsScene>
 
-class ClearSceneteCommand : public QUndoCommand
+class ClearSceneCommand : public QUndoCommand
 {
 public:
-    ClearSceneteCommand(QGraphicsScene *scene, QUndoCommand *parent = nullptr);
+    ClearSceneCommand(QGraphicsScene *scene, QUndoCommand *parent = nullptr);
 
     void undo();
     void redo();
@@ -18,10 +18,23 @@ private:
     QList<QGraphicsItem*> items;
 };
 
-class SceneteItemCommand : public QUndoCommand
+class AddSceneItemCommand : public QUndoCommand
 {
 public:
-    SceneteItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent = nullptr);
+    AddSceneItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent = nullptr);
+
+    void undo();
+    void redo();
+
+private:
+    QGraphicsScene* scene;
+    QGraphicsItem* item;
+};
+
+class RemoveSceneItemCommand : public QUndoCommand
+{
+public:
+    RemoveSceneItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent = nullptr);
 
     void undo();
     void redo();

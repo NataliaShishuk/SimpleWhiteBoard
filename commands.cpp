@@ -1,6 +1,6 @@
 #include "commands.h"
 
-ClearSceneteCommand::ClearSceneteCommand(QGraphicsScene *scene, QUndoCommand *parent)
+ClearSceneCommand::ClearSceneCommand(QGraphicsScene *scene, QUndoCommand *parent)
     : QUndoCommand(parent)
 {
     this->scene = scene;
@@ -11,7 +11,7 @@ ClearSceneteCommand::ClearSceneteCommand(QGraphicsScene *scene, QUndoCommand *pa
     }
 }
 
-void ClearSceneteCommand::undo()
+void ClearSceneCommand::undo()
 {
     for (QGraphicsItem* item : items)
     {
@@ -19,7 +19,7 @@ void ClearSceneteCommand::undo()
     }
 }
 
-void ClearSceneteCommand::redo()
+void ClearSceneCommand::redo()
 {
     for (QGraphicsItem* item : items)
     {
@@ -27,19 +27,35 @@ void ClearSceneteCommand::redo()
     }
 }
 
-SceneteItemCommand::SceneteItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent)
+AddSceneItemCommand::AddSceneItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent)
     : QUndoCommand(parent)
 {
     this->scene = scene;
     this->item = item;
 }
 
-void SceneteItemCommand::undo()
+void AddSceneItemCommand::undo()
 {
     this->scene->removeItem(item);
 }
 
-void SceneteItemCommand::redo()
+void AddSceneItemCommand::redo()
 {
     this->scene->addItem(item);
+}
+
+RemoveSceneItemCommand::RemoveSceneItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent)
+{
+    this->scene = scene;
+    this->item = item;
+}
+
+void RemoveSceneItemCommand::undo()
+{
+    this->scene->addItem(item);
+}
+
+void RemoveSceneItemCommand::redo()
+{
+    this->scene->removeItem(item);
 }

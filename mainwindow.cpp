@@ -940,6 +940,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     auto key = event->key();
+    auto modifiers = event->modifiers();
 
     if(key == Qt::Key_Left)
     {
@@ -962,6 +963,18 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
                 scene->removeItem(selectedItem);
             }
         }
+    }
+    else if(modifiers == Qt::ControlModifier && key == Qt::Key_Z)
+    {
+        PainterScene* scene = getCurrentScene();
+
+        scene->undoStack->undo();
+    }
+    else if(modifiers == Qt::ControlModifier && key == Qt::Key_Y)
+    {
+        PainterScene* scene = getCurrentScene();
+
+        scene->undoStack->redo();
     }
 }
 

@@ -80,7 +80,7 @@ void PainterScene::clearScene()
         return;
     }
 
-    undoStack->push(new ClearSceneteCommand(this));
+    undoStack->push(new ClearSceneCommand(this));
 
     clear();
 }
@@ -103,6 +103,24 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                  previousPoint.x(),
                                  previousPoint.y(),
                                  QPen(pen_color, pen_size, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin));
+    }
+    else if(phigure == Phigure::Cleaner)
+    {
+        qreal width = pen_size * 7.2;
+
+        auto rect = QRectF(previousPoint.x() - width / 2,
+                           previousPoint.y() - width / 2,
+                           width,
+                           width);
+
+        QList<QGraphicsItem*> colliding = items(rect);
+
+        for (QGraphicsItem* item : colliding)
+        {
+            undoStack->push(new RemoveSceneItemCommand(this, item));
+
+            removeItem(item);
+        }
     }
 }
 
@@ -275,6 +293,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         for (QGraphicsItem* item : colliding)
         {
+            undoStack->push(new RemoveSceneItemCommand(this, item));
+
             removeItem(item);
         }
 
@@ -291,7 +311,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         {
             if(item->isSelected())
             {
-                return;;
+                return;
             }
         }
 
@@ -342,7 +362,7 @@ void PainterScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     {
         if(currentPhigure != nullptr)
         {
-            undoStack->push(new SceneteItemCommand(this, currentPhigure));
+            undoStack->push(new AddSceneItemCommand(this, currentPhigure));
         }
     }
 
