@@ -1,5 +1,3 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <string>
 #include <QPainter>
 #include <QFileDialog>
@@ -8,6 +6,8 @@
 #include <QFontDatabase>
 #include <qmessagebox.h>
 
+#include "ui_mainwindow.h"
+#include "mainwindow.h"
 #include "saver.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -463,8 +463,6 @@ void MainWindow::onDraw(Phigure phigure, PhigureLine style, PhigureFill fill)
         }
     }
 
-    //undoStack->push(new SceneteItemCommand(scene, nullptr));
-
     reloadCustomCursor();
 }
 
@@ -516,12 +514,12 @@ void MainWindow::saveCurrentScene(SaveType type)
 
 void MainWindow::createUndoStackAndActions()
 {
-    undoStack = new QUndoStack(this);
+    PainterScene* scene = getCurrentScene();
 
-    undoAction = undoStack->createUndoAction(this, tr("&Undo"));
+    undoAction = scene->undoStack->createUndoAction(this, tr("&Undo"));
     undoAction->setIcon(QIcon(":/icons/undo.png"));
 
-    redoAction = undoStack->createRedoAction(this, tr("&Redo"));
+    redoAction = scene->undoStack->createRedoAction(this, tr("&Redo"));
     redoAction->setIcon(QIcon(":/icons/redo.png"));
 
     ui->undoButton->setDefaultAction(undoAction);
@@ -790,7 +788,7 @@ void MainWindow::clearScene()
 
     if(result == QMessageBox::Yes)
     {
-        getCurrentScene()->clear();
+        getCurrentScene()->clearScene();
     }
 }
 
@@ -826,6 +824,8 @@ void MainWindow::nextScene()
     ui->graphicsView->setScene(scene);
 
     ui->sceneLabel->setText(tr((std::to_string(sceneId + 1)).c_str()));
+
+    createUndoStackAndActions();
 }
 
 void MainWindow::prevScene()
@@ -853,6 +853,8 @@ void MainWindow::prevScene()
         ui->graphicsView->setScene(scene);
 
         ui->sceneLabel->setText(tr((std::to_string(sceneId+1)).c_str()));
+
+        createUndoStackAndActions();
     }
 }
 

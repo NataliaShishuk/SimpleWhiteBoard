@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPolygonItem>
+#include <QUndoStack>
 
 enum Phigure
 {
@@ -50,6 +51,11 @@ public:
     void setPenColor(QColor color);
     void setPhigureLine(PhigureLine style);
     void setPhigureFill(PhigureFill fill);
+
+    void clearScene();
+
+    // undo-redo
+    QUndoStack* undoStack;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;

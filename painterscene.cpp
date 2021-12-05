@@ -1,4 +1,5 @@
 #include "painterscene.h"
+#include "commands.h"
 
 PainterScene::PainterScene(QObject *parent)
     : QGraphicsScene(parent),
@@ -8,8 +9,11 @@ PainterScene::PainterScene(QObject *parent)
       phigure_line(SolidLine),
       phigure_fill(Border)
 {
-   setBackgroundBrush(Qt::white);
-   setItemIndexMethod(QGraphicsScene::NoIndex);
+    this->currentPhigure = nullptr;
+    this->undoStack = new QUndoStack();
+
+    setBackgroundBrush(Qt::white);
+    setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
 PainterScene::~PainterScene()
@@ -65,6 +69,20 @@ void PainterScene::setPhigureLine(PhigureLine style)
 void PainterScene::setPhigureFill(PhigureFill fill)
 {
     this->phigure_fill = fill;
+}
+
+void PainterScene::clearScene()
+{
+    QList<QGraphicsItem*> allItems = items();
+
+    if(allItems.size() == 0)
+    {
+        return;
+    }
+
+    undoStack->push(new ClearSceneteCommand(this));
+
+    clear();
 }
 
 void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -301,6 +319,11 @@ void PainterScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseReleaseEvent(event);
 
+    if(event->button() != Qt::LeftButton)
+    {
+        return;
+    }
+
     if(phigure == Phigure::Select)
     {
         if(currentPhigure != nullptr)
@@ -313,6 +336,13 @@ void PainterScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             }
 
             removeItem(currentPhigure);
+        }
+    }
+    else if(phigure != Phigure::Cleaner)
+    {
+        if(currentPhigure != nullptr)
+        {
+            undoStack->push(new SceneteItemCommand(this, currentPhigure));
         }
     }
 

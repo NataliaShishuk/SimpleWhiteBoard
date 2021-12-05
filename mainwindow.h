@@ -43,7 +43,6 @@ private:
 
     Ui::MainWindow *ui;
 
-    QUndoStack *undoStack;
     QAction *undoAction;
     QAction *redoAction;
 

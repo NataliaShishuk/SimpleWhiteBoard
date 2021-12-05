@@ -1,5 +1,32 @@
 #include "commands.h"
 
+ClearSceneteCommand::ClearSceneteCommand(QGraphicsScene *scene, QUndoCommand *parent)
+    : QUndoCommand(parent)
+{
+    this->scene = scene;
+
+    for (QGraphicsItem* item : scene->items())
+    {
+        items.append(item);
+    }
+}
+
+void ClearSceneteCommand::undo()
+{
+    for (QGraphicsItem* item : items)
+    {
+        this->scene->addItem(item);
+    }
+}
+
+void ClearSceneteCommand::redo()
+{
+    for (QGraphicsItem* item : items)
+    {
+        this->scene->removeItem(item);
+    }
+}
+
 SceneteItemCommand::SceneteItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent)
     : QUndoCommand(parent)
 {
@@ -9,26 +36,10 @@ SceneteItemCommand::SceneteItemCommand(QGraphicsScene *scene, QGraphicsItem *ite
 
 void SceneteItemCommand::undo()
 {
-    resetItem(CommandType::Undo);
+    this->scene->removeItem(item);
 }
 
 void SceneteItemCommand::redo()
 {
-    resetItem(CommandType::Redo);
-}
-
-void SceneteItemCommand::resetItem(const CommandType commandType)
-{
-    switch (commandType)
-    {
-
-    case Undo:
-        this->scene->removeItem(item);
-        break;
-
-    case Redo:
-        this->scene->addItem(item);
-        break;
-
-    }
+    this->scene->addItem(item);
 }

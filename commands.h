@@ -5,10 +5,17 @@
 #include <QGraphicsItem>
 #include <QGraphicsScene>
 
-enum CommandType
+class ClearSceneteCommand : public QUndoCommand
 {
-    Undo,
-    Redo
+public:
+    ClearSceneteCommand(QGraphicsScene *scene, QUndoCommand *parent = nullptr);
+
+    void undo();
+    void redo();
+
+private:
+    QGraphicsScene* scene;
+    QList<QGraphicsItem*> items;
 };
 
 class SceneteItemCommand : public QUndoCommand
@@ -22,7 +29,6 @@ public:
 private:
     QGraphicsScene* scene;
     QGraphicsItem* item;
-    void resetItem(const CommandType commandType);
 };
 
 #endif // COMMANDS_H
