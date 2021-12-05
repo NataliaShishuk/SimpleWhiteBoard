@@ -45,6 +45,7 @@ void AddSceneItemCommand::redo()
 }
 
 RemoveSceneItemCommand::RemoveSceneItemCommand(QGraphicsScene *scene, QGraphicsItem *item, QUndoCommand *parent)
+    : QUndoCommand(parent)
 {
     this->scene = scene;
     this->item = item;
