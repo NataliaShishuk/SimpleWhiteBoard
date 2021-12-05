@@ -4,7 +4,6 @@
         <file>icons/arrow_forward.png</file>
         <file>icons/icon.png</file>
         <file>icons/clear.png</file>
-        <file>icons/save.png</file>
         <file>icons/draw.png</file>
         <file>icons/color.png</file>
         <file>cursors/pen.png</file>
@@ -46,5 +45,7 @@
         <file>icons/draw/parallelogram_dashed.png</file>
         <file>icons/draw/parallelogram_filled.png</file>
         <file>icons/draw/parallelogram.png</file>
+        <file>icons/save/project.png</file>
+        <file>icons/save.png</file>
     </qresource>
 </RCC>
