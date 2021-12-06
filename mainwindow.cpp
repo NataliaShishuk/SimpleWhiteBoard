@@ -365,44 +365,57 @@ void MainWindow::setSizeMenu()
 {
     auto menu = new QMenu();
 
-    menu->setStyleSheet("QPushButton { "
+    menu->setStyleSheet("QToolButton { "
                         "border:none;"
                         "qproperty-iconSize: 130px;"
                         "width:130px;"
                         "height:35px;"
                         "}"
-                        "QPushButton:hover {"
+                        "QToolButton:hover {"
                         "cursor: pointer;"
                         "border-radius: 5px;"
-                        "background-color: #b3cccc;"
+                        "background-color: rgba(179, 204, 204, 0.5);"
+                        "}"
+                        "QToolButton:checked {"
+                        "border-radius: 5px;"
+                        "background-color: rgba(179, 204, 204, 1);"
                         "}");
 
     auto menuLayout = new QGridLayout();
 
-    auto smallButton = new QPushButton();
-    auto normalButton = new QPushButton();
-    auto mediumButton = new QPushButton();
-    auto largeButton = new QPushButton();
+    auto smallButton = new QToolButton();
+    auto normalButton = new QToolButton();
+    auto mediumButton = new QToolButton();
+    auto largeButton = new QToolButton();
 
-    smallButton->setIcon(QIcon(":/icons/size/small.png"));
-    normalButton->setIcon(QIcon(":/icons/size/normal.png"));
-    mediumButton->setIcon(QIcon(":/icons/size/medium.png"));
-    largeButton->setIcon(QIcon(":/icons/size/large.png"));
+    QActionGroup* menuActionGroup = new QActionGroup(this);
 
-    smallButton->setCursor(Qt::PointingHandCursor);
-    normalButton->setCursor(Qt::PointingHandCursor);
-    mediumButton->setCursor(Qt::PointingHandCursor);
-    largeButton->setCursor(Qt::PointingHandCursor);
+    QAction* smallAction = menuActionGroup->addAction(QIcon(":/icons/size/small.png"), "");
+    QAction* normalAction = menuActionGroup->addAction(QIcon(":/icons/size/normal.png"), "");
+    QAction* mediumAction = menuActionGroup->addAction(QIcon(":/icons/size/medium.png"), "");
+    QAction* largeAction = menuActionGroup->addAction(QIcon(":/icons/size/large.png"), "");
 
-    connect(smallButton, SIGNAL(clicked()), this, SLOT(onSmallSize()));
-    connect(normalButton, SIGNAL(clicked()), this, SLOT(onNormalSize()));
-    connect(mediumButton, SIGNAL(clicked()), this, SLOT(onMediumSize()));
-    connect(largeButton, SIGNAL(clicked()), this, SLOT(onLargeSize()));
+    smallAction->setCheckable(true);
+    normalAction->setCheckable(true);
+    mediumAction->setCheckable(true);
+    largeAction->setCheckable(true);
+
+    normalAction->setChecked(true);
+
+    connect(smallAction, SIGNAL(triggered()), this, SLOT(onSmallSize()));
+    connect(normalAction, SIGNAL(triggered()), this, SLOT(onNormalSize()));
+    connect(mediumAction, SIGNAL(triggered()), this, SLOT(onMediumSize()));
+    connect(largeAction, SIGNAL(triggered()), this, SLOT(onLargeSize()));
 
     connect(smallButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(normalButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(mediumButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(largeButton, SIGNAL(clicked()), menu, SLOT(hide()));
+
+    smallButton->setDefaultAction(smallAction);
+    normalButton->setDefaultAction(normalAction);
+    mediumButton->setDefaultAction(mediumAction);
+    largeButton->setDefaultAction(largeAction);
 
     menuLayout->addWidget(smallButton, 0, 0, 1, 4);
     menuLayout->addWidget(normalButton, 1, 0, 1, 4);

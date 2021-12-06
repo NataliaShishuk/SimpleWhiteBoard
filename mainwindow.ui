@@ -55,7 +55,7 @@ cursor: pointer;
 QPushButton:hover, QToolButton:hover {
 cursor: pointer;
 border-radius: 5px;
-background-color: #b3cccc;
+background-color: rgba(179, 204, 204, 0.5);
 }
 
 QPushButton:checked, QToolButton:checked {
@@ -500,8 +500,7 @@ padding:5px;
 
 QPushButton:hover, QToolButton:hover {
 cursor: pointer;
-
-background-color: #b3cccc;
+background-color: rgba(179, 204, 204, 0.5);
 }
 
 QToolButton::menu-indicator { image: none; }
