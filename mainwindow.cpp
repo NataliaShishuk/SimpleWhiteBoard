@@ -39,13 +39,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     timer->start(100);
 
-    connect(ui->eraserButton, SIGNAL(clicked()), this, SLOT(onClean()));
     connect(ui->previousSceneButton, SIGNAL(clicked()), this, SLOT(prevScene()));
     connect(ui->nextSceneButton, SIGNAL(clicked()), this, SLOT(nextScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
-    connect(ui->selectButton, SIGNAL(clicked()), this, SLOT(onSelect()));
-    connect(ui->showGridButton, SIGNAL(clicked()), this, SLOT(onSetGrid()));
+
+    QActionGroup* menuActionGroup = new QActionGroup(this);
+
+    selectAction = menuActionGroup->addAction(QIcon(":/icons/select.png"), "Select");
+    drawAction = menuActionGroup->addAction(QIcon(":/icons/draw.png"), "Draw");
+    eraserAction = menuActionGroup->addAction(QIcon(":/icons/eraser.png"), "Eraser");
+
+    showGridlinesAction = new QAction(QIcon(":/icons/grid.png"), "Show Grid", this);
+
+    selectAction->setCheckable(true);
+    drawAction->setCheckable(true);
+    eraserAction->setCheckable(true);
+    showGridlinesAction->setCheckable(true);
+
+    drawAction->setChecked(true);
+
+    connect(selectAction, SIGNAL(triggered()), this, SLOT(onSelect()));
+    connect(eraserAction, SIGNAL(triggered()), this, SLOT(onClean()));
+    connect(showGridlinesAction, SIGNAL(triggered()), this, SLOT(onSetGrid()));
+
+    ui->selectButton->setDefaultAction(selectAction);
+    ui->drawButton->setDefaultAction(drawAction);
+    ui->eraserButton->setDefaultAction(eraserAction);
+    ui->showGridButton->setDefaultAction(showGridlinesAction);
 
     setDrawMenu();
     setColorMenu();
@@ -471,6 +492,19 @@ void MainWindow::setSaveMenu()
 
 void MainWindow::onDraw(Phigure phigure, PhigureLine style, PhigureFill fill)
 {
+    if(phigure == Phigure::Select)
+    {
+        selectAction->setChecked(true);
+    }
+    else if(phigure == Phigure::Cleaner)
+    {
+        eraserAction->setChecked(true);
+    }
+    else
+    {
+        drawAction->setChecked(true);
+    }
+
     PainterScene* scene = getCurrentScene();
 
     scene->setPhigure(phigure);
@@ -818,16 +852,18 @@ void MainWindow::onSetGrid()
     {
         // hide
         ui->graphicsView->setBackgroundBrush(Qt::NoBrush);
-        ui->showGridButton->setText("Show Grid");
+        showGridlinesAction->setText("Show Grid");
     }
     else
     {
         // show
         ui->graphicsView->setBackgroundBrush(drawPattern(20, QColor(0, 0, 0, 30)));
-        ui->showGridButton->setText("Hide Grid");
+        showGridlinesAction->setText("Hide Grid");
     }
 
     isGridVisible = !isGridVisible;
+
+    showGridlinesAction->setChecked(isGridVisible);
 }
 
 PainterScene* MainWindow::getCurrentScene()

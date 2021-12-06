@@ -321,8 +321,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                                     previousPoint.y(),
                                     point.x(),
                                     point.y())),
-                                    QPen(QColor(205, 205, 248, 255)),
-                                    QBrush(QColor(223, 238, 253, 30)));
+                                    QPen(QColor(8, 105, 181, 255)),
+                                    QBrush(QColor(183, 213, 236, 40)));
 
         break;
     }

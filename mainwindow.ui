@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1025</width>
+    <width>1038</width>
     <height>611</height>
    </rect>
   </property>
@@ -58,8 +58,12 @@ border-radius: 5px;
 background-color: #b3cccc;
 }
 
-QToolButton::menu-indicator { image: none; }
-</string>
+QPushButton:checked, QToolButton:checked {
+border-radius: 5px;
+background-color: #b3cccc;
+}
+
+QToolButton::menu-indicator { image: none; }</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0">
        <property name="spacing">
@@ -798,7 +802,7 @@ QToolButton::menu-indicator { image: none; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1025</width>
+     <width>1038</width>
      <height>19</height>
     </rect>
    </property>

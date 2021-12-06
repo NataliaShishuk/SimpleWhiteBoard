@@ -43,6 +43,10 @@ private:
 
     Ui::MainWindow *ui;
 
+    QAction *selectAction;
+    QAction *drawAction;
+    QAction *eraserAction;
+    QAction *showGridlinesAction;
     QAction *undoAction;
     QAction *redoAction;
 
