@@ -98,7 +98,6 @@ void MainWindow::setDrawMenu()
                         "height:35px;"
                         "}"
                         "QToolButton:hover {"
-                        "cursor: pointer;"
                         "border-radius: 5px;"
                         "background-color: rgba(179, 204, 204, 0.5);"
                         "}"
@@ -293,7 +292,6 @@ void MainWindow::setColorMenu()
                         "border-radius: 5px;"
                         "}"
                         "QPushButton:hover {"
-                        "cursor: pointer;"
                         "border-radius: 10px;"
                         "background-color: #b3cccc;"
                         "}");
@@ -342,12 +340,6 @@ void MainWindow::setColorMenu()
     greenButton->setStyleSheet("background-color: rgba(73,214,30,255);");
     skyBlueButton->setStyleSheet("background-color: rgba(81,216,235,255);");
 
-    purpleButton->setCursor(Qt::PointingHandCursor);
-    pinkButton->setCursor(Qt::PointingHandCursor);
-    orangeButton->setCursor(Qt::PointingHandCursor);
-    greenButton->setCursor(Qt::PointingHandCursor);
-    skyBlueButton->setCursor(Qt::PointingHandCursor);
-
     connect(purpleButton, SIGNAL(clicked()), this, SLOT(onSetPurpleColor()));
     connect(pinkButton, SIGNAL(clicked()), this, SLOT(onSetPinkColor()));
     connect(orangeButton, SIGNAL(clicked()), this, SLOT(onSetOrangeColor()));
@@ -377,12 +369,6 @@ void MainWindow::setColorMenu()
     darkOrangeButton->setStyleSheet("background-color: rgba(119,68,8,255);");
     darkGreenButton->setStyleSheet("background-color: rgba(11,114,40,255);");
     darkBlueButton->setStyleSheet("background-color: rgba(20,79,195,255);");
-
-    blackButton->setCursor(Qt::PointingHandCursor);
-    darkRedButton->setCursor(Qt::PointingHandCursor);
-    darkOrangeButton->setCursor(Qt::PointingHandCursor);
-    darkGreenButton->setCursor(Qt::PointingHandCursor);
-    darkBlueButton->setCursor(Qt::PointingHandCursor);
 
     connect(blackButton, SIGNAL(clicked()), this, SLOT(onSetBlackColor()));
     connect(darkRedButton, SIGNAL(clicked()), this, SLOT(onSetDarkRedColor()));
@@ -418,7 +404,6 @@ void MainWindow::setSizeMenu()
                         "height:35px;"
                         "}"
                         "QToolButton:hover {"
-                        "cursor: pointer;"
                         "border-radius: 5px;"
                         "background-color: rgba(179, 204, 204, 0.5);"
                         "}"
@@ -488,7 +473,6 @@ void MainWindow::setSaveMenu()
                         "font-size:12px;"
                         "}"
                         "QPushButton:hover {"
-                        "cursor: pointer;"
                         "border-radius: 5px;"
                         "background-color: rgba(179, 204, 204, 0.5);"
                         "}");
@@ -508,12 +492,6 @@ void MainWindow::setSaveMenu()
     allScenePNGButton->setIcon(QIcon(":/icons/save/png.png"));
     allScenePDFButton->setIcon(QIcon(":/icons/save/pdf.png"));
     projectButton->setIcon(QIcon(":/icons/save/project.png"));
-
-    currentScenePNGButton->setCursor(Qt::PointingHandCursor);
-    currentScenePDFButton->setCursor(Qt::PointingHandCursor);
-    allScenePNGButton->setCursor(Qt::PointingHandCursor);
-    allScenePDFButton->setCursor(Qt::PointingHandCursor);
-    projectButton->setCursor(Qt::PointingHandCursor);
 
     connect(currentScenePNGButton, SIGNAL(clicked()), this, SLOT(saveAsImage()));
     connect(currentScenePDFButton, SIGNAL(clicked()), this, SLOT(saveAsPdf()));
@@ -570,6 +548,7 @@ void MainWindow::onDraw(Phigure phigure, PhigureLine style, PhigureFill fill)
     {
         eraserAction->setChecked(true);
         ui->colorButton->setDisabled(true);
+        ui->sizeButton->setDisabled(false);
     }
     else
     {
@@ -1157,7 +1136,6 @@ void MainWindow::reloadCustomCursor()
             }
 
             QImage image(filename.c_str());
-
             QSize imageSize = image.size();
 
             cursor = QCursor(QPixmap::fromImage(image), imageSize.width() / 2, imageSize.height() / 2);
