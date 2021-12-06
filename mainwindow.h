@@ -9,6 +9,7 @@
 #include <QImage>
 #include <QCursor>
 #include <QUndoStack>
+#include <QActionGroup>
 
 #include "painterscene.h"
 #include "saver.h"
@@ -49,6 +50,8 @@ private:
     QAction *showGridlinesAction;
     QAction *undoAction;
     QAction *redoAction;
+
+    QActionGroup* drawActionGroup;
 
     QList<QGraphicsItem*> selectedItemsToCopy;
 

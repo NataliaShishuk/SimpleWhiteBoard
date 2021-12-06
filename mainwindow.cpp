@@ -91,99 +91,125 @@ void MainWindow::setDrawMenu()
 {
     auto menu = new QMenu();
 
-    menu->setStyleSheet("QPushButton { "
+    menu->setStyleSheet("QToolButton { "
                         "border:none;"
                         "qproperty-iconSize: 24px;"
                         "width:35px;"
                         "height:35px;"
                         "}"
-                        "QPushButton:hover {"
+                        "QToolButton:hover {"
                         "cursor: pointer;"
                         "border-radius: 5px;"
-                        "background-color: #b3cccc;"
+                        "background-color: rgba(179, 204, 204, 0.5);"
+                        "}"
+                        "QToolButton:checked {"
+                        "border-radius: 5px;"
+                        "background-color: rgba(179, 204, 204, 1);"
                         "}");
 
     auto menuLayout = new QGridLayout();
 
-    auto penButton = new QPushButton();
-    auto rectangleButton = new QPushButton();
-    auto dashedRectangleButton = new QPushButton();
-    auto fillRectangleButton = new QPushButton();
-    auto lineButton = new QPushButton();
-    auto dashedLineButton = new QPushButton();
-    auto dotedLineButton = new QPushButton();
-    auto circleButton = new QPushButton();
-    auto dashedCircleButton = new QPushButton();
-    auto fillCircleButton = new QPushButton();
-    auto triangleButton = new QPushButton();
-    auto dashedTriangleButton = new QPushButton();
-    auto filledTriangleButton = new QPushButton();
-    auto rhombusButton = new QPushButton();
-    auto dashedRhombusButton = new QPushButton();
-    auto filledRhombusButton = new QPushButton();
-    auto parallelogramButton = new QPushButton();
-    auto dashedParallelogramButton = new QPushButton();
-    auto filledParallelogramButton = new QPushButton();
+    auto penButton = new QToolButton();
+    auto rectangleButton = new QToolButton();
+    auto dashedRectangleButton = new QToolButton();
+    auto fillRectangleButton = new QToolButton();
+    auto lineButton = new QToolButton();
+    auto dashedLineButton = new QToolButton();
+    auto dotedLineButton = new QToolButton();
+    auto circleButton = new QToolButton();
+    auto dashedCircleButton = new QToolButton();
+    auto fillCircleButton = new QToolButton();
+    auto triangleButton = new QToolButton();
+    auto dashedTriangleButton = new QToolButton();
+    auto filledTriangleButton = new QToolButton();
+    auto rhombusButton = new QToolButton();
+    auto dashedRhombusButton = new QToolButton();
+    auto filledRhombusButton = new QToolButton();
+    auto parallelogramButton = new QToolButton();
+    auto dashedParallelogramButton = new QToolButton();
+    auto filledParallelogramButton = new QToolButton();
 
-    penButton->setIcon(QIcon(":/icons/draw/pen.png"));
-    rectangleButton->setIcon(QIcon(":/icons/draw/rectangle.png"));
-    dashedRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_dashed.png"));
-    fillRectangleButton->setIcon(QIcon(":/icons/draw/rectangle_filled.png"));
-    lineButton->setIcon(QIcon(":/icons/draw/line.png"));
-    dashedLineButton->setIcon(QIcon(":/icons/draw/line_dashed.png"));
-    dotedLineButton->setIcon(QIcon(":/icons/draw/line_doted.png"));
-    circleButton->setIcon(QIcon(":/icons/draw/circle.png"));
-    dashedCircleButton->setIcon(QIcon(":/icons/draw/circle_dashed.png"));
-    fillCircleButton->setIcon(QIcon(":/icons/draw/circle_filled.png"));
-    triangleButton->setIcon(QIcon(":/icons/draw/triangle.png"));
-    dashedTriangleButton->setIcon(QIcon(":/icons/draw/triangle_dashed.png"));
-    filledTriangleButton->setIcon(QIcon(":/icons/draw/triangle_filled.png"));
-    rhombusButton->setIcon(QIcon(":/icons/draw/rhombus.png"));
-    dashedRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_dashed.png"));
-    filledRhombusButton->setIcon(QIcon(":/icons/draw/rhombus_filled.png"));
-    parallelogramButton->setIcon(QIcon(":/icons/draw/parallelogram.png"));
-    dashedParallelogramButton->setIcon(QIcon(":/icons/draw/parallelogram_dashed.png"));
-    filledParallelogramButton->setIcon(QIcon(":/icons/draw/parallelogram_filled.png"));
+    drawActionGroup = new QActionGroup(this);
 
-    penButton->setCursor(Qt::PointingHandCursor);
-    rectangleButton->setCursor(Qt::PointingHandCursor);
-    dashedRectangleButton->setCursor(Qt::PointingHandCursor);
-    fillRectangleButton->setCursor(Qt::PointingHandCursor);
-    lineButton->setCursor(Qt::PointingHandCursor);
-    dashedLineButton->setCursor(Qt::PointingHandCursor);
-    dotedLineButton->setCursor(Qt::PointingHandCursor);
-    circleButton->setCursor(Qt::PointingHandCursor);
-    dashedCircleButton->setCursor(Qt::PointingHandCursor);
-    fillCircleButton->setCursor(Qt::PointingHandCursor);
-    triangleButton->setCursor(Qt::PointingHandCursor);
-    dashedTriangleButton->setCursor(Qt::PointingHandCursor);
-    filledTriangleButton->setCursor(Qt::PointingHandCursor);
-    rhombusButton->setCursor(Qt::PointingHandCursor);
-    dashedRhombusButton->setCursor(Qt::PointingHandCursor);
-    filledRhombusButton->setCursor(Qt::PointingHandCursor);
-    parallelogramButton->setCursor(Qt::PointingHandCursor);
-    dashedParallelogramButton->setCursor(Qt::PointingHandCursor);
-    filledParallelogramButton->setCursor(Qt::PointingHandCursor);
+    QAction* penAction = drawActionGroup->addAction(QIcon(":/icons/draw/pen.png"), "");
 
-    connect(penButton, SIGNAL(clicked()), this, SLOT(onDrawPen()));
-    connect(rectangleButton, SIGNAL(clicked()), this, SLOT(onDrawRectangle()));
-    connect(dashedRectangleButton, SIGNAL(clicked()), this, SLOT(onDrawDashRectangle()));
-    connect(fillRectangleButton, SIGNAL(clicked()), this, SLOT(onDrawFillRectangle()));
-    connect(lineButton, SIGNAL(clicked()), this, SLOT(onDrawLine()));
-    connect(dashedLineButton, SIGNAL(clicked()), this, SLOT(onDrawDashLine()));
-    connect(dotedLineButton, SIGNAL(clicked()), this, SLOT(onDrawDotLine()));
-    connect(circleButton, SIGNAL(clicked()), this, SLOT(onDrawCircle()));
-    connect(dashedCircleButton, SIGNAL(clicked()), this, SLOT(onDrawDashCircle()));
-    connect(fillCircleButton, SIGNAL(clicked()), this, SLOT(onDrawFillCircle()));
-    connect(triangleButton, SIGNAL(clicked()), this, SLOT(onDrawTriangle()));
-    connect(dashedTriangleButton, SIGNAL(clicked()), this, SLOT(onDrawDashedTriangle()));
-    connect(filledTriangleButton, SIGNAL(clicked()), this, SLOT(onDrawFilledTriangle()));
-    connect(rhombusButton, SIGNAL(clicked()), this, SLOT(onDrawRhombus()));
-    connect(dashedRhombusButton, SIGNAL(clicked()), this, SLOT(onDrawDashedRhombus()));
-    connect(filledRhombusButton, SIGNAL(clicked()), this, SLOT(onDrawFilledRhombus()));
-    connect(parallelogramButton, SIGNAL(clicked()), this, SLOT(onDrawParallelogram()));
-    connect(dashedParallelogramButton, SIGNAL(clicked()), this, SLOT(onDrawDashedParallelogram()));
-    connect(filledParallelogramButton, SIGNAL(clicked()), this, SLOT(onDrawFilledParallelogram()));
+    QAction* rectangleAction = drawActionGroup->addAction(QIcon(":/icons/draw/rectangle.png"), "");
+    QAction* rectangleDashedAction = drawActionGroup->addAction(QIcon(":/icons/draw/rectangle_dashed.png"), "");
+    QAction* rectangleFilledAction = drawActionGroup->addAction(QIcon(":/icons/draw/rectangle_filled.png"), "");
+
+    QAction* lineAction = drawActionGroup->addAction(QIcon(":/icons/draw/line.png"), "");
+    QAction* lineDashedAction = drawActionGroup->addAction(QIcon(":/icons/draw/line_dashed.png"), "");
+    QAction* lineDotedAction = drawActionGroup->addAction(QIcon(":/icons/draw/line_doted.png"), "");
+
+    QAction* circleAction = drawActionGroup->addAction(QIcon(":/icons/draw/circle.png"), "");
+    QAction* circleDashedAction = drawActionGroup->addAction(QIcon(":/icons/draw/circle_dashed.png"), "");
+    QAction* circleFilledAction = drawActionGroup->addAction(QIcon(":/icons/draw/circle_filled.png"), "");
+
+    QAction* triangleAction = drawActionGroup->addAction(QIcon(":/icons/draw/triangle.png"), "");
+    QAction* triangleDashedAction = drawActionGroup->addAction(QIcon(":/icons/draw/triangle_dashed.png"), "");
+    QAction* triangleFilledAction = drawActionGroup->addAction(QIcon(":/icons/draw/triangle_filled.png"), "");
+
+    QAction* rhombusAction = drawActionGroup->addAction(QIcon(":/icons/draw/rhombus.png"), "");
+    QAction* rhombusDashedAction = drawActionGroup->addAction(QIcon(":/icons/draw/rhombus_dashed.png"), "");
+    QAction* rhombusFilledAction = drawActionGroup->addAction(QIcon(":/icons/draw/rhombus_filled.png"), "");
+
+    QAction* parallelogramAction = drawActionGroup->addAction(QIcon(":/icons/draw/parallelogram.png"), "");
+    QAction* parallelogramDashedAction = drawActionGroup->addAction(QIcon(":/icons/draw/parallelogram_dashed.png"), "");
+    QAction* parallelogramFilledAction = drawActionGroup->addAction(QIcon(":/icons/draw/parallelogram_filled.png"), "");
+
+    penAction->setCheckable(true);
+
+    rectangleAction->setCheckable(true);
+    rectangleDashedAction->setCheckable(true);
+    rectangleFilledAction->setCheckable(true);
+
+    lineAction->setCheckable(true);
+    lineDashedAction->setCheckable(true);
+    lineDotedAction->setCheckable(true);
+
+    circleAction->setCheckable(true);
+    circleDashedAction->setCheckable(true);
+    circleFilledAction->setCheckable(true);
+
+    triangleAction->setCheckable(true);
+    triangleDashedAction->setCheckable(true);
+    triangleFilledAction->setCheckable(true);
+
+    rhombusAction->setCheckable(true);
+    rhombusDashedAction->setCheckable(true);
+    rhombusFilledAction->setCheckable(true);
+
+    parallelogramAction->setCheckable(true);
+    parallelogramDashedAction->setCheckable(true);
+    parallelogramFilledAction->setCheckable(true);
+
+    penAction->setChecked(true);
+
+    connect(penAction, SIGNAL(triggered()), this, SLOT(onDrawPen()));
+
+    connect(rectangleAction, SIGNAL(triggered()), this, SLOT(onDrawRectangle()));
+    connect(rectangleDashedAction, SIGNAL(triggered()), this, SLOT(onDrawDashRectangle()));
+    connect(rectangleFilledAction, SIGNAL(triggered()), this, SLOT(onDrawFillRectangle()));
+
+    connect(lineAction, SIGNAL(triggered()), this, SLOT(onDrawLine()));
+    connect(lineDashedAction, SIGNAL(triggered()), this, SLOT(onDrawDashLine()));
+    connect(lineDotedAction, SIGNAL(triggered()), this, SLOT(onDrawDotLine()));
+
+    connect(circleAction, SIGNAL(triggered()), this, SLOT(onDrawCircle()));
+    connect(circleDashedAction, SIGNAL(triggered()), this, SLOT(onDrawDashCircle()));
+    connect(circleFilledAction, SIGNAL(triggered()), this, SLOT(onDrawFillCircle()));
+
+    connect(triangleAction, SIGNAL(triggered()), this, SLOT(onDrawTriangle()));
+    connect(triangleDashedAction, SIGNAL(triggered()), this, SLOT(onDrawDashedTriangle()));
+    connect(triangleFilledAction, SIGNAL(triggered()), this, SLOT(onDrawFilledTriangle()));
+
+    connect(rhombusAction, SIGNAL(triggered()), this, SLOT(onDrawRhombus()));
+    connect(rhombusDashedAction, SIGNAL(triggered()), this, SLOT(onDrawDashedRhombus()));
+    connect(rhombusFilledAction, SIGNAL(triggered()), this, SLOT(onDrawFilledRhombus()));
+
+    connect(parallelogramAction, SIGNAL(triggered()), this, SLOT(onDrawParallelogram()));
+    connect(parallelogramDashedAction, SIGNAL(triggered()), this, SLOT(onDrawDashedParallelogram()));
+    connect(parallelogramFilledAction, SIGNAL(triggered()), this, SLOT(onDrawFilledParallelogram()));
 
     connect(penButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(rectangleButton, SIGNAL(clicked()), menu, SLOT(hide()));
@@ -204,6 +230,32 @@ void MainWindow::setDrawMenu()
     connect(parallelogramButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(dashedParallelogramButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(filledParallelogramButton, SIGNAL(clicked()), menu, SLOT(hide()));
+
+    penButton->setDefaultAction(penAction);
+
+    rectangleButton->setDefaultAction(rectangleAction);
+    dashedRectangleButton->setDefaultAction(rectangleDashedAction);
+    fillRectangleButton->setDefaultAction(rectangleFilledAction);
+
+    lineButton->setDefaultAction(lineAction);
+    dashedLineButton->setDefaultAction(lineDashedAction);
+    dotedLineButton->setDefaultAction(lineDotedAction);
+
+    circleButton->setDefaultAction(circleAction);
+    dashedCircleButton->setDefaultAction(circleDashedAction);
+    fillCircleButton->setDefaultAction(circleFilledAction);
+
+    triangleButton->setDefaultAction(triangleAction);
+    dashedTriangleButton->setDefaultAction(triangleDashedAction);
+    filledTriangleButton->setDefaultAction(triangleFilledAction);
+
+    rhombusButton->setDefaultAction(rhombusAction);
+    dashedRhombusButton->setDefaultAction(rhombusDashedAction);
+    filledRhombusButton->setDefaultAction(rhombusFilledAction);
+
+    parallelogramButton->setDefaultAction(parallelogramAction);
+    dashedParallelogramButton->setDefaultAction(parallelogramDashedAction);
+    filledParallelogramButton->setDefaultAction(parallelogramFilledAction);
 
     menuLayout->addWidget(penButton, 0, 0);
     menuLayout->addWidget(lineButton, 0, 1);
@@ -259,12 +311,6 @@ void MainWindow::setColorMenu()
     yellowButton->setStyleSheet("background-color: rgba(255,222,50,255);");
     lightGreenButton->setStyleSheet("background-color: rgba(130,199,134,255);");
     blueButton->setStyleSheet("background-color: rgba(46,140,255,255);");
-
-    whiteButton->setCursor(Qt::PointingHandCursor);
-    redButton->setCursor(Qt::PointingHandCursor);
-    yellowButton->setCursor(Qt::PointingHandCursor);
-    lightGreenButton->setCursor(Qt::PointingHandCursor);
-    blueButton->setCursor(Qt::PointingHandCursor);
 
     connect(whiteButton, SIGNAL(clicked()), this, SLOT(onSetWhiteColor()));
     connect(redButton, SIGNAL(clicked()), this, SLOT(onSetRedColor()));
@@ -444,7 +490,7 @@ void MainWindow::setSaveMenu()
                         "QPushButton:hover {"
                         "cursor: pointer;"
                         "border-radius: 5px;"
-                        "background-color: #b3cccc;"
+                        "background-color: rgba(179, 204, 204, 0.5);"
                         "}");
 
     auto menuLayout = new QGridLayout();
@@ -505,17 +551,31 @@ void MainWindow::setSaveMenu()
 
 void MainWindow::onDraw(Phigure phigure, PhigureLine style, PhigureFill fill)
 {
+    if(phigure == Phigure::Select ||
+       phigure == Phigure::Cleaner)
+    {
+        for (QAction* action : drawActionGroup->actions())
+        {
+            action->setChecked(false);
+        }
+    }
+
     if(phigure == Phigure::Select)
     {
         selectAction->setChecked(true);
+        ui->colorButton->setDisabled(true);
+        ui->sizeButton->setDisabled(true);
     }
     else if(phigure == Phigure::Cleaner)
     {
         eraserAction->setChecked(true);
+        ui->colorButton->setDisabled(true);
     }
     else
     {
         drawAction->setChecked(true);
+        ui->colorButton->setDisabled(false);
+        ui->sizeButton->setDisabled(false);
     }
 
     PainterScene* scene = getCurrentScene();
