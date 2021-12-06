@@ -46,6 +46,8 @@ private:
     QAction *undoAction;
     QAction *redoAction;
 
+    QList<QGraphicsItem*> selectedItemsToCopy;
+
     PainterScene* getCurrentScene();
 
     void reloadCustomCursor();

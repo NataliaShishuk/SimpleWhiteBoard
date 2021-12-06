@@ -4,6 +4,7 @@
 #include <QActionGroup>
 #include <QWidgetAction>
 #include <QFontDatabase>
+
 #include <qmessagebox.h>
 
 #include "ui_mainwindow.h"
@@ -942,14 +943,17 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     auto key = event->key();
     auto modifiers = event->modifiers();
 
+    // previous scene
     if(key == Qt::Key_Left)
     {
         prevScene();
     }
+    // next scene
     else if(key == Qt::Key_Right)
     {
         nextScene();
     }
+    // delete
     else if(key == Qt::Key_Delete)
     {
         PainterScene* scene = getCurrentScene();
@@ -964,17 +968,44 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
             }
         }
     }
+    // undo
     else if(modifiers == Qt::ControlModifier && key == Qt::Key_Z)
     {
         PainterScene* scene = getCurrentScene();
 
         scene->undoStack->undo();
     }
+    // redo
     else if(modifiers == Qt::ControlModifier && key == Qt::Key_Y)
     {
         PainterScene* scene = getCurrentScene();
 
         scene->undoStack->redo();
+    }
+    // copy
+    else if(modifiers == Qt::ControlModifier && key == Qt::Key_C)
+    {
+        PainterScene* scene = getCurrentScene();
+
+        this->selectedItemsToCopy = scene->selectedItems();
+    }
+    // paste
+    else if(modifiers == Qt::ControlModifier && key == Qt::Key_V)
+    {
+        if(!this->selectedItemsToCopy.isEmpty())
+        {
+            PainterScene* scene = getCurrentScene();
+
+            scene->clearSelection();
+
+            for (QGraphicsItem* item : this->selectedItemsToCopy)
+            {
+                scene->addItem(item);
+
+                item->setPos(item->pos().x() + 10, item->pos().y() + 10);
+                item->setSelected(true);
+            }
+        }
     }
 }
 
