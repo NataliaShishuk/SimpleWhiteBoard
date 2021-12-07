@@ -96,7 +96,7 @@ QGraphicsItem *PainterScene::createCopy(QGraphicsItem *item)
     if(item->type() == QGraphicsRectItem::Type)
     {
         QGraphicsRectItem* rectItem = (QGraphicsRectItem*)item;
-        QGraphicsRectItem* copy = new QGraphicsRectItem(item->parentItem());
+        QGraphicsRectItem* copy = new QGraphicsRectItem(rectItem->parentItem());
 
         copy->setRect(rectItem->rect());
         copy->setPen(rectItem->pen());
@@ -109,7 +109,7 @@ QGraphicsItem *PainterScene::createCopy(QGraphicsItem *item)
     if(item->type() == QGraphicsPolygonItem::Type)
     {
         QGraphicsPolygonItem* polygonItem = (QGraphicsPolygonItem*)item;
-        QGraphicsPolygonItem* copy = new QGraphicsPolygonItem(item->parentItem());
+        QGraphicsPolygonItem* copy = new QGraphicsPolygonItem(polygonItem->parentItem());
 
         copy->setPolygon(polygonItem->polygon());
         copy->setPen(polygonItem->pen());
@@ -122,7 +122,7 @@ QGraphicsItem *PainterScene::createCopy(QGraphicsItem *item)
     if(item->type() == QGraphicsLineItem::Type)
     {
         QGraphicsLineItem* lineItem = (QGraphicsLineItem*)item;
-        QGraphicsLineItem* copy = new QGraphicsLineItem(item->parentItem());
+        QGraphicsLineItem* copy = new QGraphicsLineItem(lineItem->parentItem());
 
         copy->setLine(lineItem->line());
         copy->setPen(lineItem->pen());
@@ -134,7 +134,7 @@ QGraphicsItem *PainterScene::createCopy(QGraphicsItem *item)
     if(item->type() == QGraphicsEllipseItem::Type)
     {
         QGraphicsEllipseItem* ellipseItem = (QGraphicsEllipseItem*)item;
-        QGraphicsEllipseItem* copy = new QGraphicsEllipseItem(item->parentItem());
+        QGraphicsEllipseItem* copy = new QGraphicsEllipseItem(ellipseItem->parentItem());
 
         copy->setRect(ellipseItem->rect());
         copy->setStartAngle(ellipseItem->startAngle());
@@ -149,7 +149,7 @@ QGraphicsItem *PainterScene::createCopy(QGraphicsItem *item)
     if(item->type() == QGraphicsPathItem::Type)
     {
         QGraphicsPathItem* pathItem = (QGraphicsPathItem*)item;
-        QGraphicsPathItem* copy = new QGraphicsPathItem(item->parentItem());
+        QGraphicsPathItem* copy = new QGraphicsPathItem(pathItem->parentItem());
 
         copy->setPath(pathItem->path());
         copy->setPen(pathItem->pen());

@@ -1035,6 +1035,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     auto key = event->key();
     auto modifiers = event->modifiers();
 
+    PainterScene* scene = getCurrentScene();
+
     // previous scene
     if(key == Qt::Key_Left)
     {
@@ -1048,8 +1050,6 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     // delete
     else if(key == Qt::Key_Delete)
     {
-        PainterScene* scene = getCurrentScene();
-
         Phigure phigure = scene->getPhigure();
 
         if(phigure == Phigure::Select)
@@ -1063,32 +1063,33 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     // undo
     else if(modifiers == Qt::ControlModifier && key == Qt::Key_Z)
     {
-        PainterScene* scene = getCurrentScene();
-
         scene->undoStack->undo();
     }
     // redo
     else if(modifiers == Qt::ControlModifier && key == Qt::Key_Y)
     {
-        PainterScene* scene = getCurrentScene();
-
         scene->undoStack->redo();
     }
     // copy
     else if(modifiers == Qt::ControlModifier && key == Qt::Key_C)
     {
-        PainterScene* scene = getCurrentScene();
-
         this->selectedItemsToCopy.clear();
-        this->selectedItemsToCopy.append(scene->selectedItems());
+
+        for (QGraphicsItem* item : scene->selectedItems())
+        {
+            QGraphicsItem* copyItem = scene->createCopy(item);
+
+            if(copyItem)
+            {
+                this->selectedItemsToCopy.append(copyItem);
+            }
+        }
     }
     // paste
     else if(modifiers == Qt::ControlModifier && key == Qt::Key_V)
     {
         if(!this->selectedItemsToCopy.isEmpty())
         {
-            PainterScene* scene = getCurrentScene();
-
             scene->clearSelection();
 
             QList<QGraphicsItem*> copiedItems;
@@ -1109,7 +1110,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
             for (QGraphicsItem* item : copiedItems)
             {
-                item->setPos(item->pos().x() + 20, item->pos().y() + 30);
+                item->moveBy(20, 30);
                 item->setSelected(true);
             }
 
