@@ -4,11 +4,7 @@ ClearSceneCommand::ClearSceneCommand(QGraphicsScene *scene, QUndoCommand *parent
     : QUndoCommand(parent)
 {
     this->scene = scene;
-
-    for (QGraphicsItem* item : scene->items())
-    {
-        items.append(item);
-    }
+    this->items.append(scene->items());
 }
 
 void ClearSceneCommand::undo()
@@ -59,4 +55,27 @@ void RemoveSceneItemCommand::undo()
 void RemoveSceneItemCommand::redo()
 {
     this->scene->removeItem(item);
+}
+
+PasteSceneCommand::PasteSceneCommand(QGraphicsScene *scene, QList<QGraphicsItem*> items, QUndoCommand *parent)
+    : QUndoCommand(parent)
+{
+    this->scene = scene;
+    this->items.append(items);
+}
+
+void PasteSceneCommand::undo()
+{
+    for (QGraphicsItem* item : this->items)
+    {
+        this->scene->removeItem(item);
+    }
+}
+
+void PasteSceneCommand::redo()
+{
+    for (QGraphicsItem* item : this->items)
+    {
+        this->scene->addItem(item);
+    }
 }

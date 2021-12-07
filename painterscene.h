@@ -57,6 +57,8 @@ public:
     // undo-redo
     QUndoStack* undoStack;
 
+    QGraphicsItem *createCopy(QGraphicsItem* item);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -69,7 +71,7 @@ protected:
     PhigureLine phigure_line;
     PhigureFill phigure_fill;
 
-    QPointF previousPoint;
+    QPointF previousPosition;
 
     QGraphicsItem* currentPhigure;
     QPainterPath path;

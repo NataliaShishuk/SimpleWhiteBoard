@@ -85,6 +85,82 @@ void PainterScene::clearScene()
     clear();
 }
 
+QGraphicsItem *PainterScene::createCopy(QGraphicsItem *item)
+{
+    if(item == nullptr)
+    {
+        return nullptr;
+    }
+
+    // QGraphicsRectItem
+    if(item->type() == QGraphicsRectItem::Type)
+    {
+        QGraphicsRectItem* rectItem = (QGraphicsRectItem*)item;
+        QGraphicsRectItem* copy = new QGraphicsRectItem(item->parentItem());
+
+        copy->setRect(rectItem->rect());
+        copy->setPen(rectItem->pen());
+        copy->setBrush(rectItem->brush());
+
+        return copy;
+    }
+
+    // QGraphicsPolygonItem
+    if(item->type() == QGraphicsPolygonItem::Type)
+    {
+        QGraphicsPolygonItem* polygonItem = (QGraphicsPolygonItem*)item;
+        QGraphicsPolygonItem* copy = new QGraphicsPolygonItem(item->parentItem());
+
+        copy->setPolygon(polygonItem->polygon());
+        copy->setPen(polygonItem->pen());
+        copy->setBrush(polygonItem->brush());
+
+        return copy;
+    }
+
+    // QGraphicsLineItem
+    if(item->type() == QGraphicsLineItem::Type)
+    {
+        QGraphicsLineItem* lineItem = (QGraphicsLineItem*)item;
+        QGraphicsLineItem* copy = new QGraphicsLineItem(item->parentItem());
+
+        copy->setLine(lineItem->line());
+        copy->setPen(lineItem->pen());
+
+        return copy;
+    }
+
+    // QGraphicsEllipseItem
+    if(item->type() == QGraphicsEllipseItem::Type)
+    {
+        QGraphicsEllipseItem* ellipseItem = (QGraphicsEllipseItem*)item;
+        QGraphicsEllipseItem* copy = new QGraphicsEllipseItem(item->parentItem());
+
+        copy->setRect(ellipseItem->rect());
+        copy->setStartAngle(ellipseItem->startAngle());
+        copy->setSpanAngle(ellipseItem->spanAngle());
+        copy->setPen(ellipseItem->pen());
+        copy->setBrush(ellipseItem->brush());
+
+        return copy;
+    }
+
+    // QGraphicsPathItem
+    if(item->type() == QGraphicsPathItem::Type)
+    {
+        QGraphicsPathItem* pathItem = (QGraphicsPathItem*)item;
+        QGraphicsPathItem* copy = new QGraphicsPathItem(item->parentItem());
+
+        copy->setPath(pathItem->path());
+        copy->setPen(pathItem->pen());
+        copy->setBrush(pathItem->brush());
+
+        return copy;
+    }
+
+    return nullptr;
+}
+
 void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mousePressEvent(event);
@@ -94,22 +170,22 @@ void PainterScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    previousPoint = event->scenePos();
+    previousPosition = event->scenePos();
 
     if(phigure == Phigure::Pen)
     {
-        currentPhigure = addLine(previousPoint.x(),
-                                 previousPoint.y(),
-                                 previousPoint.x(),
-                                 previousPoint.y(),
+        currentPhigure = addLine(previousPosition.x(),
+                                 previousPosition.y(),
+                                 previousPosition.x(),
+                                 previousPosition.y(),
                                  QPen(pen_color, pen_size, Qt::SolidLine, Qt::SquareCap, Qt::RoundJoin));
     }
     else if(phigure == Phigure::Cleaner)
     {
         qreal width = pen_size * 7.2;
 
-        auto rect = QRectF(previousPoint.x() - width / 2,
-                           previousPoint.y() - width / 2,
+        auto rect = QRectF(previousPosition.x() - width / 2,
+                           previousPosition.y() - width / 2,
                            width,
                            width);
 
@@ -134,7 +210,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     }
 
     auto currentPosition = event->scenePos();
-    auto point = currentPosition - previousPoint;
+    auto point = currentPosition - previousPosition;
 
     auto isShiftPressed = event->modifiers() == Qt::ShiftModifier;
 
@@ -150,7 +226,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     Qt::PenStyle penStyle = getCurrentPenStyle();
 
-    QPen pen(pen_color, pen_size, penStyle, Qt::SquareCap, Qt::RoundJoin);
+    QPen pen(pen_color, pen_size, penStyle, Qt::SquareCap, Qt::MiterJoin);
     QBrush brush(pen_color, phigure_fill == Border ? Qt::NoBrush : Qt::SolidPattern);
 
     if(pen.style() == Qt::CustomDashLine)
@@ -177,8 +253,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Line:
     {
-        currentPhigure = addLine(previousPoint.x(),
-                                 previousPoint.y(),
+        currentPhigure = addLine(previousPosition.x(),
+                                 previousPosition.y(),
                                  currentPosition.x(),
                                  currentPosition.y(),
                                  pen);
@@ -188,8 +264,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Circle:
     {
-        currentPhigure = addEllipse(previousPoint.x(),
-                                    previousPoint.y(),
+        currentPhigure = addEllipse(previousPosition.x(),
+                                    previousPosition.y(),
                                     point.x(),
                                     isShiftPressed ? point.x() : point.y(),
                                     pen,
@@ -200,13 +276,13 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Triangle:
     {
-        auto width = currentPosition.x() - previousPoint.x();
+        auto width = currentPosition.x() - previousPosition.x();
 
         QPolygonF polygon;
 
-        polygon.append(QPointF(QPoint(currentPosition.x() - width / 2, previousPoint.y())));
-        polygon.append(QPointF(previousPoint.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
-        polygon.append(QPointF(isShiftPressed ? previousPoint.x() + width : currentPosition.x(), isShiftPressed ? previousPoint.y() + width : currentPosition.y()));
+        polygon.append(QPointF(QPoint(currentPosition.x() - width / 2, previousPosition.y())));
+        polygon.append(QPointF(previousPosition.x(), isShiftPressed ? previousPosition.y() + width : currentPosition.y()));
+        polygon.append(QPointF(isShiftPressed ? previousPosition.x() + width : currentPosition.x(), isShiftPressed ? previousPosition.y() + width : currentPosition.y()));
 
         currentPhigure = addPolygon(polygon, pen, brush);
 
@@ -215,8 +291,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Rhombus:
     {
-        auto width = currentPosition.x() - previousPoint.x();
-        auto height = currentPosition.y() - previousPoint.y();
+        auto width = currentPosition.x() - previousPosition.x();
+        auto height = currentPosition.y() - previousPosition.y();
 
         if(isShiftPressed)
         {
@@ -225,10 +301,10 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         QPolygonF polygon;
 
-        polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, previousPoint.y())));
-        polygon.append(QPointF(QPoint(previousPoint.x(), isShiftPressed ? previousPoint.y() + width / 2 : currentPosition.y() - height / 2)));
-        polygon.append(QPointF(QPoint(previousPoint.x() + width / 2, isShiftPressed ? previousPoint.y() + width : currentPosition.y())));
-        polygon.append(QPointF(QPoint(isShiftPressed ? previousPoint.x() + width : currentPosition.x(), isShiftPressed ? previousPoint.y() + width / 2 : currentPosition.y() - height / 2)));
+        polygon.append(QPointF(QPoint(previousPosition.x() + width / 2, previousPosition.y())));
+        polygon.append(QPointF(QPoint(previousPosition.x(), isShiftPressed ? previousPosition.y() + width / 2 : currentPosition.y() - height / 2)));
+        polygon.append(QPointF(QPoint(previousPosition.x() + width / 2, isShiftPressed ? previousPosition.y() + width : currentPosition.y())));
+        polygon.append(QPointF(QPoint(isShiftPressed ? previousPosition.x() + width : currentPosition.x(), isShiftPressed ? previousPosition.y() + width / 2 : currentPosition.y() - height / 2)));
 
         currentPhigure = addPolygon(polygon, pen, brush);
 
@@ -237,17 +313,17 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Parallelogram:
     {
-        auto width = currentPosition.x() - previousPoint.x();
-        auto height = currentPosition.y() - previousPoint.y();
+        auto width = currentPosition.x() - previousPosition.x();
+        auto height = currentPosition.y() - previousPosition.y();
 
         auto shift = qAbs(qMax(width, height)) * 0.35;
 
         QPolygonF polygon;
 
-        polygon.append(QPointF(previousPoint));
-        polygon.append(QPointF(QPoint(previousPoint.x() - shift, currentPosition.y())));
+        polygon.append(QPointF(previousPosition));
+        polygon.append(QPointF(QPoint(previousPosition.x() - shift, currentPosition.y())));
         polygon.append(QPointF(currentPosition));
-        polygon.append(QPointF(QPoint(currentPosition.x() + shift, previousPoint.y())));
+        polygon.append(QPointF(QPoint(currentPosition.x() + shift, previousPosition.y())));
 
         currentPhigure = addPolygon(polygon, pen, brush);
 
@@ -256,22 +332,22 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     case Phigure::Pen:
     {
-        path.moveTo(previousPoint);
+        path.moveTo(previousPosition);
         path.lineTo(currentPosition.x(), currentPosition.y());
 
         removeItem(currentPhigure);
 
         currentPhigure = addPath(path, pen);
 
-        previousPoint = currentPosition;
+        previousPosition = currentPosition;
 
         break;
     }
 
     case Phigure::Rectangle:
     {
-        currentPhigure = addPolygon(QPolygonF(QRectF(previousPoint.x(),
-                                    previousPoint.y(),
+        currentPhigure = addPolygon(QPolygonF(QRectF(previousPosition.x(),
+                                    previousPosition.y(),
                                     point.x(),
                                     isShiftPressed ? point.x() : point.y())),
                                     pen,
@@ -298,7 +374,7 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             removeItem(item);
         }
 
-        previousPoint = currentPosition;
+        previousPosition = currentPosition;
 
         break;
     }
@@ -317,8 +393,8 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
         removeItem(currentPhigure);
 
-        currentPhigure = addPolygon(QPolygonF(QRectF(previousPoint.x(),
-                                    previousPoint.y(),
+        currentPhigure = addPolygon(QPolygonF(QRectF(previousPosition.x(),
+                                    previousPosition.y(),
                                     point.x(),
                                     point.y())),
                                     QPen(QColor(8, 105, 181, 255), 0.3),

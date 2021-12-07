@@ -44,4 +44,17 @@ private:
     QGraphicsItem* item;
 };
 
+class PasteSceneCommand : public QUndoCommand
+{
+public:
+    PasteSceneCommand(QGraphicsScene *scene, QList<QGraphicsItem*> items, QUndoCommand *parent = nullptr);
+
+    void undo();
+    void redo();
+
+private:
+    QGraphicsScene* scene;
+    QList<QGraphicsItem*> items;
+};
+
 #endif // COMMANDS_H

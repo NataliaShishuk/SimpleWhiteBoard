@@ -960,6 +960,8 @@ void MainWindow::nextScene()
 
     scene = getCurrentScene();
 
+    scene->clearSelection();
+
     scene->setPenSize(real);
     scene->setPenColor(color);
     scene->setPhigure(phigure);
@@ -988,6 +990,8 @@ void MainWindow::prevScene()
         sceneId--;
 
         scene = getCurrentScene();
+
+        scene->clearSelection();
 
         scene->setPenSize(real);
         scene->setPenColor(color);
@@ -1075,7 +1079,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
     {
         PainterScene* scene = getCurrentScene();
 
-        this->selectedItemsToCopy = scene->selectedItems();
+        this->selectedItemsToCopy.clear();
+        this->selectedItemsToCopy.append(scene->selectedItems());
     }
     // paste
     else if(modifiers == Qt::ControlModifier && key == Qt::Key_V)
@@ -1086,13 +1091,29 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 
             scene->clearSelection();
 
+            QList<QGraphicsItem*> copiedItems;
+
             for (QGraphicsItem* item : this->selectedItemsToCopy)
             {
-                scene->addItem(item);
+                QGraphicsItem* copyItem = scene->createCopy(item);
 
-                item->setPos(item->pos().x() + 10, item->pos().y() + 10);
+                if(copyItem)
+                {
+                    scene->addItem(copyItem);
+
+                    copiedItems.append(copyItem);
+                }
+            }
+
+            onSelect();
+
+            for (QGraphicsItem* item : copiedItems)
+            {
+                item->setPos(item->pos().x() + 20, item->pos().y() + 30);
                 item->setSelected(true);
             }
+
+            scene->undoStack->push(new PasteSceneCommand(scene, copiedItems));
         }
     }
 }
