@@ -140,7 +140,6 @@ private slots:
      void saveAsPdf();
      void saveAllAsImage();
      void saveAllAsPdf();
-     void saveProject();
 
      // grid
      void onSetGrid();

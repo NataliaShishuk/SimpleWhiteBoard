@@ -45,7 +45,6 @@
         <file>icons/draw/parallelogram_dashed.png</file>
         <file>icons/draw/parallelogram_filled.png</file>
         <file>icons/draw/parallelogram.png</file>
-        <file>icons/save/project.png</file>
         <file>icons/save.png</file>
     </qresource>
 </RCC>

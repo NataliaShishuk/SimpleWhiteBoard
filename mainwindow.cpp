@@ -483,35 +483,27 @@ void MainWindow::setSaveMenu()
     auto currentScenePDFButton = new QPushButton("PDF");
     auto allScenePNGButton = new QPushButton("PNG");
     auto allScenePDFButton = new QPushButton("PDF");
-    auto projectButton = new QPushButton("Save project");
-
-    projectButton->setStyleSheet("text-align: center;");
 
     currentScenePNGButton->setIcon(QIcon(":/icons/save/png.png"));
     currentScenePDFButton->setIcon(QIcon(":/icons/save/pdf.png"));
     allScenePNGButton->setIcon(QIcon(":/icons/save/png.png"));
     allScenePDFButton->setIcon(QIcon(":/icons/save/pdf.png"));
-    projectButton->setIcon(QIcon(":/icons/save/project.png"));
 
     connect(currentScenePNGButton, SIGNAL(clicked()), this, SLOT(saveAsImage()));
     connect(currentScenePDFButton, SIGNAL(clicked()), this, SLOT(saveAsPdf()));
     connect(allScenePNGButton, SIGNAL(clicked()), this, SLOT(saveAllAsImage()));
     connect(allScenePDFButton, SIGNAL(clicked()), this, SLOT(saveAllAsPdf()));
-    connect(projectButton, SIGNAL(clicked()), this, SLOT(saveProject()));
 
     connect(currentScenePNGButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(currentScenePDFButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(allScenePNGButton, SIGNAL(clicked()), menu, SLOT(hide()));
     connect(allScenePDFButton, SIGNAL(clicked()), menu, SLOT(hide()));
-    connect(projectButton, SIGNAL(clicked()), menu, SLOT(hide()));
 
     auto currentSceneLabel = new QLabel("Current scene:");
     auto allSceneLabel = new QLabel("All scenes:");
-    auto projectLabel = new QLabel("Project:");
 
     currentSceneLabel->setStyleSheet("font-weight: bold;");
     allSceneLabel->setStyleSheet("font-weight: bold;");
-    projectLabel->setStyleSheet("font-weight: bold;");
 
     menuLayout->addWidget(currentSceneLabel, 0, 0, 1, 2);
     menuLayout->addWidget(currentScenePNGButton, 1, 0, 1, 1);
@@ -519,8 +511,6 @@ void MainWindow::setSaveMenu()
     menuLayout->addWidget(allSceneLabel, 2, 0, 1, 2);
     menuLayout->addWidget(allScenePNGButton, 3, 0, 1, 1);
     menuLayout->addWidget(allScenePDFButton, 3, 1, 1, 1);
-    menuLayout->addWidget(projectLabel, 4, 0, 1, 2);
-    menuLayout->addWidget(projectButton, 5, 0, 1, 2);
 
     menu->setLayout(menuLayout);
 
@@ -891,11 +881,6 @@ void MainWindow::saveAllAsPdf()
     QString filePath = QFileDialog::getSaveFileName(this, title, fileName, extensions);
 
     saver->saveScenes(scenes, filePath, SaveType::PDF);
-}
-
-void MainWindow::saveProject()
-{
-
 }
 
 void MainWindow::onSetGrid()
