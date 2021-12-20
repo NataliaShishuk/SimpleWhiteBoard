@@ -49,3 +49,5 @@ RESOURCES += \
     resources.qrc
 
 DISTFILES +=
+
+RC_FILE = SimpleWhiteBoard.rc
