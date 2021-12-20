@@ -16,7 +16,7 @@ void Saver::saveScene(PainterScene *scene, const QString &filePath, SaveType typ
     }
 }
 
-void Saver::saveScenes(vector<PainterScene*> &scenes, const QString &filePath, SaveType type)
+void Saver::saveScenes(QVector<PainterScene*> &scenes, const QString &filePath, SaveType type)
 {
     int lenght = scenes.size();
 
@@ -72,7 +72,7 @@ void Saver::saveScenes(vector<PainterScene*> &scenes, const QString &filePath, S
     }
 }
 
-void Saver::saveProject(vector<PainterScene *> &scenes, const QString &filePath)
+void Saver::saveProject(QVector<PainterScene *> &scenes, const QString &filePath)
 {
 
 }

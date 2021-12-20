@@ -41,19 +41,20 @@
       <property name="styleSheet">
        <string notr="true">QGroupBox {
 border: none;
+background-color: rgba(240,240,240,255);
+border-radius: 5px;
+padding: 0px 9px;
 }
 
 QPushButton, QToolButton {
-padding: 4px 15px;
+padding: 4px 10px;
 font-weight: bold;
 font-size:14px;
 border:none;
 qproperty-iconSize: 24px;
-cursor: pointer;
  }
 
 QPushButton:hover, QToolButton:hover {
-cursor: pointer;
 border-radius: 5px;
 background-color: rgba(179, 204, 204, 0.5);
 }
@@ -65,7 +66,10 @@ background-color: #b3cccc;
 
 QToolButton::menu-indicator { image: none; }</string>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0">
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0">
        <property name="spacing">
         <number>10</number>
        </property>
@@ -75,19 +79,6 @@ QToolButton::menu-indicator { image: none; }</string>
        <property name="leftMargin">
         <number>1</number>
        </property>
-       <item>
-        <spacer name="leftHorizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item>
         <widget class="QToolButton" name="selectButton">
          <property name="cursor">
@@ -108,7 +99,7 @@ QToolButton::menu-indicator { image: none; }</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item alignment="Qt::AlignHCenter|Qt::AlignTop">
         <widget class="QToolButton" name="drawButton">
          <property name="font">
           <font>
@@ -267,7 +258,7 @@ QToolButton::menu-indicator { image: none; }</string>
         <widget class="QToolButton" name="showGridButton">
          <property name="minimumSize">
           <size>
-           <width>105</width>
+           <width>95</width>
            <height>0</height>
           </size>
          </property>
@@ -414,19 +405,6 @@ QToolButton::menu-indicator { image: none; }</string>
          </property>
         </widget>
        </item>
-       <item>
-        <spacer name="rightHorizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
     </item>
@@ -475,14 +453,23 @@ border: 1px solid #D6d6d6;
     <item>
      <widget class="QGroupBox" name="footerGroupBox">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>215</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true">QGroupBox {
 border: none;
+background-color: rgba(255,255,255,150);
+border-radius: 5px;
+padding: 0px 5px 6px 5px;
 }
 
 QPushButton, QToolButton { 
@@ -490,21 +477,17 @@ font-weight: bold;
 font-size:14px;
 border:none;
 qproperty-iconSize: 24px;
-width:50px;
-height:50px;
-cursor: pointer;
+width:40px;
+height:40px;
 border-radius: 20px;
 background-color: #f1f1f1;
-padding:5px;
- }
+}
 
 QPushButton:hover, QToolButton:hover {
-cursor: pointer;
 background-color: rgba(179, 204, 204, 0.5);
 }
 
-QToolButton::menu-indicator { image: none; }
-</string>
+QToolButton::menu-indicator { image: none; }</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -516,19 +499,6 @@ QToolButton::menu-indicator { image: none; }
        <property name="bottomMargin">
         <number>1</number>
        </property>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item>
         <widget class="QPushButton" name="previousSceneButton">
          <property name="sizePolicy">
@@ -697,22 +667,10 @@ QToolButton::menu-indicator { image: none; }
        <item>
         <widget class="QLabel" name="sceneLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>24</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>50</width>
-           <height>24</height>
-          </size>
          </property>
          <property name="font">
           <font>
@@ -722,6 +680,9 @@ QToolButton::menu-indicator { image: none; }
          </property>
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">padding: 0 10px;</string>
          </property>
          <property name="text">
           <string>1</string>
@@ -779,17 +740,18 @@ QToolButton::menu-indicator { image: none; }
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+        <widget class="QToolButton" name="createSceneButton">
+         <property name="toolTip">
+          <string>Create new scene</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
+         <property name="text">
+          <string/>
          </property>
-        </spacer>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/add_scene.png</normaloff>:/icons/add_scene.png</iconset>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -3,7 +3,7 @@
 
 #include <qpainter.h>
 #include <qpdfwriter.h>
-#include <vector>
+#include <QVector>
 
 #include "painterscene.h"
 
@@ -22,8 +22,8 @@ public:
     ~Saver() {};
 
     void saveScene(PainterScene* scene, const QString& filePath, SaveType type = SaveType::Image);
-    void saveScenes(vector<PainterScene*>& scenes, const QString& filePath, SaveType type = SaveType::Image);
-    void saveProject(vector<PainterScene*>& scenes, const QString& filePath);
+    void saveScenes(QVector<PainterScene*>& scenes, const QString& filePath, SaveType type = SaveType::Image);
+    void saveProject(QVector<PainterScene*>& scenes, const QString& filePath);
 
 private:
     QImage* renderScene(PainterScene* scene);

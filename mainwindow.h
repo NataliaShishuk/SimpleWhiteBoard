@@ -37,7 +37,7 @@ protected:
 private:
     QTimer* timer;
     Saver* saver;
-    vector<PainterScene*> scenes;
+    QVector<PainterScene*> scenes;
     bool isGridVisible = false;
 
     size_t sceneId = 0;
@@ -59,6 +59,8 @@ private:
 
     void reloadCustomCursor();
 
+    void goToScene(int sceneId);
+
     void setDrawMenu();
     void setColorMenu();
     void setSizeMenu();
@@ -77,7 +79,7 @@ private slots:
 
      void nextScene();
      void prevScene();
-
+     void createScene();
 
      // select
      void onSelect();

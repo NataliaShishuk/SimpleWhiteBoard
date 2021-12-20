@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/arrow_back.png</file>
-        <file>icons/arrow_forward.png</file>
         <file>icons/icon.png</file>
         <file>icons/clear.png</file>
         <file>icons/draw.png</file>
@@ -46,5 +44,8 @@
         <file>icons/draw/parallelogram_filled.png</file>
         <file>icons/draw/parallelogram.png</file>
         <file>icons/save.png</file>
+        <file>icons/add_scene.png</file>
+        <file>icons/arrow_back.png</file>
+        <file>icons/arrow_forward.png</file>
     </qresource>
 </RCC>

@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(ui->previousSceneButton, SIGNAL(clicked()), this, SLOT(prevScene()));
     connect(ui->nextSceneButton, SIGNAL(clicked()), this, SLOT(nextScene()));
+    connect(ui->createSceneButton, SIGNAL(clicked()), this, SLOT(createScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
 
@@ -73,6 +74,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setSizeMenu();
     setSaveMenu();
     createUndoStackAndActions();
+
+    setCentralWidget(ui->graphicsView);
+
+    ui->headerGroupBox->setParent(centralWidget());
+    ui->footerGroupBox->setParent(centralWidget());
 }
 
 MainWindow::~MainWindow()
@@ -655,7 +661,13 @@ QPixmap MainWindow::drawPattern(int step, const QColor &color)
 void MainWindow::slotTimer()
 {
     timer->stop();
-    getCurrentScene()->setSceneRect(0, 0, ui->graphicsView->width(), ui->graphicsView->height());
+    getCurrentScene()->setSceneRect(0, 0, centralWidget()->width() - 2, centralWidget()->height() - 2);
+
+    ui->headerGroupBox->move(centralWidget()->width() / 2 - ui->headerGroupBox->width() / 2,
+                             10);
+
+    ui->footerGroupBox->move(centralWidget()->width() - ui->footerGroupBox->width() - 10,
+                             centralWidget()->height() - ui->footerGroupBox->height() - 10);
 }
 
 void MainWindow::onClean()
@@ -922,7 +934,7 @@ void MainWindow::clearScene()
     }
 }
 
-void MainWindow::nextScene()
+void MainWindow::goToScene(int sceneId)
 {
     PainterScene* scene = getCurrentScene();
 
@@ -932,16 +944,7 @@ void MainWindow::nextScene()
     PhigureLine phigureLine = scene->getPhigureLine();
     PhigureFill phigureFill = scene->getPhigureFill();
 
-    sceneId++;
-
-    if(sceneId >= scenes.size())
-    {
-        PainterScene* nextScene = new PainterScene();
-
-        nextScene->setSceneRect(scene->sceneRect());
-
-        scenes.push_back(nextScene);
-    }
+    this->sceneId = sceneId;
 
     scene = getCurrentScene();
 
@@ -960,36 +963,32 @@ void MainWindow::nextScene()
     createUndoStackAndActions();
 }
 
+void MainWindow::nextScene()
+{
+    if(sceneId + 1 < scenes.size())
+    {
+        goToScene(sceneId + 1);
+    }
+}
+
 void MainWindow::prevScene()
 {
     if(sceneId > 0)
     {
-        PainterScene* scene = getCurrentScene();
-
-        QColor color = scene->getPenColor();
-        int real = scene->getPenSize();
-        Phigure phigure = scene->getPhigure();
-        PhigureLine phigureLine = scene->getPhigureLine();
-        PhigureFill phigureFill = scene->getPhigureFill();
-
-        sceneId--;
-
-        scene = getCurrentScene();
-
-        scene->clearSelection();
-
-        scene->setPenSize(real);
-        scene->setPenColor(color);
-        scene->setPhigure(phigure);
-        scene->setPhigureLine(phigureLine);
-        scene->setPhigureFill(phigureFill);
-
-        ui->graphicsView->setScene(scene);
-
-        ui->sceneLabel->setText(tr((std::to_string(sceneId+1)).c_str()));
-
-        createUndoStackAndActions();
+        goToScene(sceneId - 1);
     }
+}
+
+void MainWindow::createScene()
+{
+    PainterScene* currentScene = getCurrentScene();
+    PainterScene* nextScene = new PainterScene();
+
+    nextScene->setSceneRect(currentScene->sceneRect());
+
+    scenes.push_back(nextScene);
+
+    goToScene(scenes.size() - 1);
 }
 
 void MainWindow::onSelect()
