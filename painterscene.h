@@ -54,6 +54,8 @@ public:
 
     void clearScene();
 
+    bool hasChanged() {return is_changed && !items().empty();}
+
     // undo-redo
     QUndoStack* undoStack;
 
@@ -77,6 +79,8 @@ protected:
     QPainterPath path;
 
     Qt::PenStyle getCurrentPenStyle();
+
+    bool is_changed;
 };
 
 #endif

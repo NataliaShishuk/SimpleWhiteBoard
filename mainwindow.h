@@ -70,7 +70,7 @@ private:
     void onDraw(Phigure phigure, PhigureLine style = PhigureLine::SolidLine, PhigureFill fill = PhigureFill::Border);
     void setPenColor(QColor color);
     void setPenSize(qreal size);
-    void saveCurrentScene(SaveType type);
+    bool saveCurrentScene(SaveType type);
     void createUndoStackAndActions();
 
     QPixmap drawPattern(int step, const QColor &color);
@@ -139,10 +139,10 @@ private slots:
      void onLargeSize();
 
      // save
-     void saveAsImage();
-     void saveAsPdf();
-     void saveAllAsImage();
-     void saveAllAsPdf();
+     bool saveAsImage();
+     bool saveAsPdf();
+     bool saveAllAsImage();
+     bool saveAllAsPdf();
 
      // grid
      void onSetGrid();

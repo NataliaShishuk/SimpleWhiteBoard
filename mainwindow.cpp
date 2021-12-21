@@ -597,7 +597,7 @@ void MainWindow::setPenSize(qreal size)
     reloadCustomCursor();
 }
 
-void MainWindow::saveCurrentScene(SaveType type)
+bool MainWindow::saveCurrentScene(SaveType type)
 {
     QString title("Save Scene ");
     QString fileName(("scene-" + std::to_string(sceneId + 1)).c_str());
@@ -624,7 +624,14 @@ void MainWindow::saveCurrentScene(SaveType type)
 
     QString filePath = QFileDialog::getSaveFileName(this, title, fileName, extensions);
 
+    if(filePath.isEmpty() || filePath.isNull())
+    {
+        return false;
+    }
+
     saver->saveScene(scene, filePath, type);
+
+    return true;
 }
 
 void MainWindow::createUndoStackAndActions()
@@ -866,26 +873,33 @@ void MainWindow::onLargeSize()
     setPenSize(5);
 }
 
-void MainWindow::saveAsImage()
+bool MainWindow::saveAsImage()
 {
-    saveCurrentScene(SaveType::Image);
+    return saveCurrentScene(SaveType::Image);
 }
 
-void MainWindow::saveAsPdf()
+bool MainWindow::saveAsPdf()
 {
-    saveCurrentScene(SaveType::PDF);
+    return saveCurrentScene(SaveType::PDF);
 }
 
-void MainWindow::saveAllAsImage()
+bool MainWindow::saveAllAsImage()
 {
     QString title("Save All Scenes As Images");
 
     QString folderPath = QFileDialog::getExistingDirectory(this, title);
 
+    if(folderPath.isEmpty() || folderPath.isNull())
+    {
+        return false;
+    }
+
     saver->saveScenes(scenes, folderPath, SaveType::Image);
+
+    return true;
 }
 
-void MainWindow::saveAllAsPdf()
+bool MainWindow::saveAllAsPdf()
 {
     QString title("Save All Scenes As Pdf");
     QString fileName("scenes");
@@ -893,7 +907,14 @@ void MainWindow::saveAllAsPdf()
 
     QString filePath = QFileDialog::getSaveFileName(this, title, fileName, extensions);
 
+    if(filePath.isEmpty() || filePath.isNull())
+    {
+        return false;
+    }
+
     saver->saveScenes(scenes, filePath, SaveType::PDF);
+
+    return true;
 }
 
 void MainWindow::onSetGrid()
@@ -1018,19 +1039,53 @@ void MainWindow::onSelect()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    auto result = QMessageBox::question(
-                this,
-                "Exit",
-                "Do you really want to exit?",
-                QMessageBox::Yes | QMessageBox::No);
+    bool hasUnsavedChanges = false;
 
-    if(result == QMessageBox::Yes)
+    for (PainterScene* scene : qAsConst(scenes))
     {
-        event->accept();
+        if(scene->hasChanged())
+        {
+            hasUnsavedChanges = true;
+            break;
+        }
+    }
+
+    if(hasUnsavedChanges)
+    {
+        auto result = QMessageBox::question(
+                    this,
+                    "Exit",
+                    "Do you want to save your changes to this file?",
+                    "Save",
+                    "Don't Save",
+                    "Cancel",
+                    0,
+                    2);
+
+        if(result == 0)
+        {
+            if(saveAllAsPdf())
+            {
+                event->accept();
+            }
+            else
+            {
+                event->ignore();
+            }
+
+        }
+        else if(result == 1)
+        {
+            event->accept();
+        }
+        else
+        {
+            event->ignore();
+        }
     }
     else
     {
-        event->ignore();
+        event->accept();
     }
 }
 

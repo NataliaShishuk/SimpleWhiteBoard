@@ -7,7 +7,8 @@ PainterScene::PainterScene(QObject *parent)
       pen_size(2),
       pen_color(Qt::black),
       phigure_line(SolidLine),
-      phigure_fill(Border)
+      phigure_fill(Border),
+      is_changed(false)
 {
     this->currentPhigure = nullptr;
     this->undoStack = new QUndoStack();
@@ -83,6 +84,8 @@ void PainterScene::clearScene()
     undoStack->push(new ClearSceneCommand(this));
 
     clear();
+
+    is_changed = false;
 }
 
 QGraphicsItem *PainterScene::createCopy(QGraphicsItem *item)
@@ -407,6 +410,11 @@ void PainterScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
     if(currentPhigure != nullptr)
     {
+        if(phigure != Phigure::Select)
+        {
+            is_changed = true;
+        }
+
         currentPhigure->setAcceptHoverEvents(true);
     }
 }
