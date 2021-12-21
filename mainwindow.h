@@ -10,6 +10,7 @@
 #include <QCursor>
 #include <QUndoStack>
 #include <QActionGroup>
+#include <QPushButton>
 
 #include "painterscene.h"
 #include "saver.h"
