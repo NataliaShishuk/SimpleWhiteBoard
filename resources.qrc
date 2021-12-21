@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/icon.png</file>
         <file>icons/clear.png</file>
         <file>icons/draw.png</file>
         <file>icons/color.png</file>
@@ -8,7 +7,6 @@
         <file>cursors/target.png</file>
         <file>icons/draw/circle.png</file>
         <file>icons/draw/line.png</file>
-        <file>icons/draw/pen.png</file>
         <file>icons/draw/rectangle.png</file>
         <file>icons/draw/rectangle_dashed.png</file>
         <file>icons/size.png</file>
@@ -47,5 +45,7 @@
         <file>icons/add_scene.png</file>
         <file>icons/arrow_back.png</file>
         <file>icons/arrow_forward.png</file>
+        <file>icons/icon.png</file>
+        <file>icons/draw/pen.png</file>
     </qresource>
 </RCC>

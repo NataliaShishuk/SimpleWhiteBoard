@@ -43,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->nextSceneButton, SIGNAL(clicked()), this, SLOT(nextScene()));
     connect(ui->createSceneButton, SIGNAL(clicked()), this, SLOT(createScene()));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearScene()));
-    connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveInImage()));
 
     QActionGroup* menuActionGroup = new QActionGroup(this);
 
@@ -79,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->headerGroupBox->setParent(centralWidget());
     ui->footerGroupBox->setParent(centralWidget());
+
+    goToScene(0);
 }
 
 MainWindow::~MainWindow()
@@ -958,7 +959,26 @@ void MainWindow::goToScene(int sceneId)
 
     ui->graphicsView->setScene(scene);
 
-    ui->sceneLabel->setText(tr((std::to_string(sceneId + 1)).c_str()));
+    bool isPrevNextButtonsVisible = scenes.size() != 1;
+
+    ui->previousSceneButton->setVisible(isPrevNextButtonsVisible);
+    ui->nextSceneButton->setVisible(isPrevNextButtonsVisible);
+    ui->sceneLabel->setVisible(isPrevNextButtonsVisible);
+
+    if(isPrevNextButtonsVisible)
+    {
+        int sceneNumber = sceneId + 1;
+
+        ui->sceneLabel->setText(tr((std::to_string(sceneNumber)).c_str()));
+
+        ui->previousSceneButton->setEnabled(sceneNumber > 1);
+        ui->nextSceneButton->setEnabled(sceneNumber < scenes.size());
+
+        ui->footerGroupBox->setMinimumWidth(215);
+
+        ui->footerGroupBox->move(centralWidget()->width() - ui->footerGroupBox->width() - 10,
+                                 centralWidget()->height() - ui->footerGroupBox->height() - 10);
+    }
 
     createUndoStackAndActions();
 }
