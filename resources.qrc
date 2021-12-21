@@ -1,26 +1,17 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/clear.png</file>
-        <file>icons/draw.png</file>
-        <file>icons/color.png</file>
         <file>cursors/pen.png</file>
         <file>cursors/target.png</file>
-        <file>icons/draw/circle.png</file>
         <file>icons/draw/line.png</file>
         <file>icons/draw/rectangle.png</file>
         <file>icons/draw/rectangle_dashed.png</file>
-        <file>icons/size.png</file>
-        <file>icons/eraser.png</file>
-        <file>icons/draw/circle_dashed.png</file>
         <file>icons/draw/line_dashed.png</file>
         <file>fonts/lato_regular.ttf</file>
         <file>fonts/lato_bold.ttf</file>
-        <file>icons/select.png</file>
         <file>icons/size/large.png</file>
         <file>icons/size/medium.png</file>
         <file>icons/size/normal.png</file>
         <file>icons/size/small.png</file>
-        <file>icons/draw/circle_filled.png</file>
         <file>icons/draw/rectangle_filled.png</file>
         <file>icons/draw/triangle.png</file>
         <file>icons/draw/triangle_dashed.png</file>
@@ -33,19 +24,28 @@
         <file>cursors/eraser_medium.png</file>
         <file>cursors/eraser_normal.png</file>
         <file>cursors/eraser_small.png</file>
-        <file>icons/save/pdf.png</file>
-        <file>icons/save/png.png</file>
-        <file>icons/redo.png</file>
-        <file>icons/undo.png</file>
-        <file>icons/grid.png</file>
         <file>icons/draw/parallelogram_dashed.png</file>
         <file>icons/draw/parallelogram_filled.png</file>
         <file>icons/draw/parallelogram.png</file>
+        <file>icons/draw/pen.png</file>
+        <file>icons/clear.png</file>
+        <file>icons/color.png</file>
+        <file>icons/eraser.png</file>
+        <file>icons/grid.png</file>
+        <file>icons/redo.png</file>
         <file>icons/save.png</file>
+        <file>icons/select.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/save/pdf.png</file>
+        <file>icons/save/png.png</file>
         <file>icons/add_scene.png</file>
         <file>icons/arrow_back.png</file>
         <file>icons/arrow_forward.png</file>
+        <file>icons/size.png</file>
+        <file>icons/draw.png</file>
         <file>icons/icon.png</file>
-        <file>icons/draw/pen.png</file>
+        <file>icons/draw/circle.png</file>
+        <file>icons/draw/circle_dashed.png</file>
+        <file>icons/draw/circle_filled.png</file>
     </qresource>
 </RCC>
